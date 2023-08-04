@@ -31,9 +31,9 @@ After doing the following steps, you should be setup and ready to develop locall
 1. Download the repo locally.
 2. Copy the `.env.example` into `.env`
 3. Fill in the `.env` file so that it fits your local development environment.
-4. Make sure to link the storage to public using `php artisan storage:link`.
-5. Get node packages with either `yarn` or the NPM equivalent.
-6. Run composer with `composer install` to set up all PHP packages
+4. Get node packages with either `yarn install` or the NPM equivalent.
+5. Run composer with `composer install` to set up all PHP packages
+6. Make sure to link the storage to public using `php artisan storage:link`.
 7. Make sure your database is running.
 8. Run database migrations with `php artisan migrate`.
 9. Start your website `php artisan serve`, and go to the URL shown.
