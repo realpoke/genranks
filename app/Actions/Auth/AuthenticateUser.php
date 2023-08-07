@@ -4,12 +4,12 @@ namespace App\Actions\Auth;
 
 use App\Contracts\Auth\AuthenticatesUserContract;
 use App\Livewire\Forms\Auth\LoginForm;
-use App\Traits\withLimits;
+use App\Traits\WithLimits;
 use Illuminate\Support\Facades\Auth;
 
 class AuthenticateUser implements AuthenticatesUserContract
 {
-    use withLimits;
+    use WithLimits;
 
     public function authenticate(LoginForm $form): bool
     {
