@@ -1,0 +1,6 @@
+*
+!app/
+!framework/
+!logs/
+!binaries/
+!.gitignore
