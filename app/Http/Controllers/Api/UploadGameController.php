@@ -16,7 +16,7 @@ class UploadGameController extends Controller
         $user = $request->user();
 
         $file = $request->file('file');
-        $fileName = time().'_'.$file->getClientOriginalName();
+        $fileName = $user->id.'_'.time().'_'.$file->getClientOriginalName();
         $filePath = $file->storeAs('', $fileName, 'replays');
 
         ProcessUploadedGame::dispatch($user, $filePath);
