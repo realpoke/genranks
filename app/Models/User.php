@@ -48,4 +48,12 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
     {
         return route('profile.show', ['user' => $this]);
     }
+
+    public function games()
+    {
+        return $this->belongsToMany(Game::class)
+            ->using(GameUser::class)
+            ->withPivot(GameUser::FIELDS)
+            ->withTimestamps();
+    }
 }
