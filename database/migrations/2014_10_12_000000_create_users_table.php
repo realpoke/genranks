@@ -15,6 +15,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('email')->unique();
+            $table->mediumInteger('rank')->unsigned()->nullable();
+            $table->mediumInteger('monthly_rank')->unsigned()->nullable();
+            $table->smallInteger('elo')->unsigned()->default(1500);
+            $table->smallInteger('monthly_elo')->unsigned()->default(1500);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->rememberToken();

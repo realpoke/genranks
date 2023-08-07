@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Traits\HasElo;
+use App\Traits\HasRank;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
@@ -13,12 +15,16 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 {
-    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles, HasElo, HasRank;
 
     protected $fillable = [
         'name',
         'email',
         'password',
+        'monthly_elo',
+        'elo',
+        'monthly_rank',
+        'rank',
     ];
 
     protected $hidden = [
