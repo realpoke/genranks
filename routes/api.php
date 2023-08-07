@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\Api\LoginController;
+use App\Http\Controllers\Api\LogoutController;
 use App\Http\Controllers\Api\MeController;
+use App\Http\Controllers\Api\UploadGameController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,4 +17,11 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/me', MeController::class);
+Route::post('/login', LoginController::class);
+
+Route::middleware('auth:sanctum')->group(function () {
+    Route::post('/logout', LogoutController::class);
+
+    Route::post('/upload/game', UploadGameController::class);
+    Route::get('/me', MeController::class);
+});
