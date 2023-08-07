@@ -84,3 +84,7 @@ To obtain the required secrets, keys, and IDs for the mentioned social media pla
     Set the Redirect URI.
 
 Once you have obtained the required secrets, keys, and IDs for each social media platform, you can add them to your `.env` file.
+
+---
+
+**Note:** GenRanks is not affiliated with or endorsed by Electronic Arts Inc. or any of its subsidiaries.
