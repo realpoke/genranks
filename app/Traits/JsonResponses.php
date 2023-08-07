@@ -7,10 +7,10 @@ use Illuminate\Http\JsonResponse;
 trait JsonResponses
 {
     protected function success(
-        $message,
-        $data = null,
-        $code = 200,
-        $status = 'Request was successful.'
+        string $message,
+        array $data = null,
+        int $code = 200,
+        string $status = 'Request was successful.'
     ): JsonResponse {
         return response()->json([
             'status' => $status,
@@ -20,11 +20,11 @@ trait JsonResponses
     }
 
     protected function error(
-        $message = null,
-        $data = null,
-        $code = 500,
-        $status = 'Error has occurred...'
+        string $message,
+        array $data = null,
+        int $code = 500,
+        string $status = 'Error has occurred...'
     ): JsonResponse {
-        return $this->success($data, $message, $code, $status);
+        return $this->success($message, $data, $code, $status);
     }
 }
