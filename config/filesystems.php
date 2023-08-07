@@ -42,6 +42,12 @@ return [
             'throw' => false,
         ],
 
+        'replays' => [
+            'driver' => 'local',
+            'root' => storage_path('replays'),
+            'throw' => false,
+        ],
+
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
