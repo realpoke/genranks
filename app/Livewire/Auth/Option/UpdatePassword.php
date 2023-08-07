@@ -5,12 +5,12 @@ namespace App\Livewire\Auth\Option;
 use App\Contracts\Auth\Option\UpdatesPasswordContract;
 use App\Livewire\Forms\Auth\Option\UpdatePasswordForm;
 use App\Traits\FormAttributes;
-use App\Traits\withLimits;
+use App\Traits\WithLimits;
 use Livewire\Component;
 
 class UpdatePassword extends Component
 {
-    use FormAttributes, withLimits;
+    use FormAttributes, WithLimits;
 
     public UpdatePasswordForm $form;
 

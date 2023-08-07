@@ -4,14 +4,14 @@ namespace App\Livewire\Auth;
 
 use App\Contracts\Auth\LogoutUserContract;
 use App\Contracts\Auth\SendsEmailVerificationContract;
-use App\Traits\withLimits;
+use App\Traits\WithLimits;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 #[Layout('components.layouts.auth')]
 class Verify extends Component
 {
-    use withLimits;
+    use WithLimits;
 
     public function resend(SendsEmailVerificationContract $sender)
     {

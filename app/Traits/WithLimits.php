@@ -6,7 +6,7 @@ use DanHarrin\LivewireRateLimiting\Exceptions\TooManyRequestsException;
 use DanHarrin\LivewireRateLimiting\WithRateLimiting;
 use Illuminate\Validation\ValidationException;
 
-trait withLimits
+trait WithLimits
 {
     use WithRateLimiting;
 

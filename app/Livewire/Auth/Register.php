@@ -5,14 +5,14 @@ namespace App\Livewire\Auth;
 use App\Contracts\Auth\CreatesNewUserContract;
 use App\Livewire\Forms\Auth\RegisterForm;
 use App\Traits\FormAttributes;
-use App\Traits\withLimits;
+use App\Traits\WithLimits;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 #[Layout('components.layouts.auth')]
 class Register extends Component
 {
-    use FormAttributes, withLimits;
+    use FormAttributes, WithLimits;
 
     public RegisterForm $form;
 

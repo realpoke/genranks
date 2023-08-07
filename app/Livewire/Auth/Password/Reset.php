@@ -5,14 +5,14 @@ namespace App\Livewire\Auth\Password;
 use App\Contracts\Auth\Password\ResetsUserPasswordContract;
 use App\Livewire\Forms\Auth\Password\ResetForm;
 use App\Traits\FormAttributes;
-use App\Traits\withLimits;
+use App\Traits\WithLimits;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 #[Layout('components.layouts.auth')]
 class Reset extends Component
 {
-    use FormAttributes, withLimits;
+    use FormAttributes, WithLimits;
 
     public ResetForm $form;
 

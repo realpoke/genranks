@@ -5,14 +5,14 @@ namespace App\Livewire\Auth;
 use App\Contracts\Auth\AuthenticatesUserContract;
 use App\Livewire\Forms\Auth\LoginForm;
 use App\Traits\FormAttributes;
-use App\Traits\withLimits;
+use App\Traits\WithLimits;
 use Livewire\Attributes\Layout;
 use Livewire\Component;
 
 #[Layout('components.layouts.auth')]
 class Login extends Component
 {
-    use FormAttributes, withLimits;
+    use FormAttributes, WithLimits;
 
     public LoginForm $form;
 

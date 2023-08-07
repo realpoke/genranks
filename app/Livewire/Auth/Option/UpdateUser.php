@@ -6,14 +6,14 @@ use App\Contracts\Auth\Option\UpdatesUserContract;
 use App\Livewire\Forms\Auth\Option\UpdateUserForm;
 use App\Livewire\Partials\NavigationMenu;
 use App\Traits\FormAttributes;
-use App\Traits\withLimits;
+use App\Traits\WithLimits;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
 class UpdateUser extends Component
 {
-    use FormAttributes, withLimits;
+    use FormAttributes, WithLimits;
 
     public UpdateUserForm $form;
 

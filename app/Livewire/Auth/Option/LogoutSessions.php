@@ -5,7 +5,7 @@ namespace App\Livewire\Auth\Option;
 use App\Contracts\Auth\Option\LogoutSessionsContract;
 use App\Livewire\Forms\Auth\Option\LogoutSessionsForm;
 use App\Traits\FormAttributes;
-use App\Traits\withLimits;
+use App\Traits\WithLimits;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -15,7 +15,7 @@ use Livewire\Component;
 
 class LogoutSessions extends Component
 {
-    use FormAttributes, withLimits;
+    use FormAttributes, WithLimits;
 
     public LogoutSessionsForm $form;
 
