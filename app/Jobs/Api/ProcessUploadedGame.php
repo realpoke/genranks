@@ -26,7 +26,7 @@ class ProcessUploadedGame implements ShouldQueue
 
     public function handle(): void
     {
-        sleep(10);
-        Storage::delete($this->filePath);
+        sleep(3);
+        Storage::disk('replays')->delete($this->filePath);
     }
 }
