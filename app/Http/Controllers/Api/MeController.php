@@ -14,6 +14,6 @@ class MeController extends Controller
 
     public function __invoke(Request $request): JsonResponse
     {
-        return $this->success(['me' => new UserResource($request->user())]);
+        return $this->success('Your user data.', ['me' => new UserResource($request->user())]);
     }
 }
