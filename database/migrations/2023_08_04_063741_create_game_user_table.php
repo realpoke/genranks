@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('game_id')->constrained();
             $table->tinyInteger('elo_change')->default(0);
             $table->boolean('winner')->default(false);
-            $table->json('stats');
+            $table->json('stats')->nullable();
             $table->timestamps();
         });
     }
