@@ -85,6 +85,15 @@ To obtain the required secrets, keys, and IDs for the mentioned social media pla
 
 Once you have obtained the required secrets, keys, and IDs for each social media platform, you can add them to your `.env` file.
 
+## Proprietary Binary Code
+
+As part of our development process, we are utilizing proprietary binary code for ELO calculation and replay parsing. However, to ensure the security of our intellectual property, the actual proprietary binaries are not shared in this repository. Instead, we provide dummy binaries that simulate the behavior for development purposes.
+
+## Contribution
+
+Contributions to the development of the website are highly valued. If you're a team member working on this project, you can contribute to the codebase, testing, bug fixing, and feature implementation. The use of dummy binaries helps facilitate collaborative development without exposing the actual proprietary code.
+
+
 ---
 
 **Note:** GenRanks is not affiliated with or endorsed by Electronic Arts Inc. or any of its subsidiaries.
