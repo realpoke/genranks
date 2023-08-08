@@ -15,7 +15,10 @@ use App\Actions\Auth\Password\ResetUserPassword;
 use App\Actions\Auth\Password\SendPasswordResetLink;
 use App\Actions\Auth\SendEmailVerification;
 use App\Actions\Auth\VerifyEmail;
+use App\Actions\Gentool\CreateGame;
+use App\Actions\Gentool\GetUsers;
 use App\Actions\GetMarkdownFile;
+use App\Actions\ReplayParser;
 use App\Contracts\Auth\AuthenticatesUserContract;
 use App\Contracts\Auth\CreatesNewUserContract;
 use App\Contracts\Auth\LogoutUserContract;
@@ -29,7 +32,10 @@ use App\Contracts\Auth\Password\ResetsUserPasswordContract;
 use App\Contracts\Auth\Password\SendsPasswordResetLinkContract;
 use App\Contracts\Auth\SendsEmailVerificationContract;
 use App\Contracts\Auth\VerifiesEmailContract;
+use App\Contracts\Gentool\CreatesGameContract;
+use App\Contracts\Gentool\GetsUsersContract;
 use App\Contracts\GetsMarkdownFileContract;
+use App\Contracts\ReplaysParserContract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
@@ -55,6 +61,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(DeletesTokenContract::class, DeleteToken::class);
         $this->app->bind(GetsMarkdownFileContract::class, GetMarkdownFile::class);
         $this->app->bind(VerifiesEmailContract::class, VerifyEmail::class);
+        $this->app->bind(ReplaysParserContract::class, ReplayParser::class);
+        $this->app->bind(CreatesGameContract::class, CreateGame::class);
+        $this->app->bind(GetsUsersContract::class, GetUsers::class);
     }
 
     /**
