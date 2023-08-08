@@ -15,22 +15,38 @@ class GentoolFetch extends Command
 
     protected $description = 'Fetch GenTool replays and parse them into games and player stats.';
 
-    // TODO: Set contracts in app service provider.
-    public function handle(
+    protected GetsUsersContract $userGetter;
+
+    protected CreatesGameContract $gameCreator;
+
+    public function __construct(
         GetsUsersContract $userGetter,
-        CreatesGameContract $gameCreator,
+        CreatesGameContract $gameCreator
     ) {
+        $this->userGetter = $userGetter;
+        $this->gameCreator = $gameCreator;
+
+        parent::__construct();
+    }
+
+    // TODO: Set contracts in app service provider.
+    public function handle()
+    {
         Cache::put('gentool_fetch_command_running', true);
+        Cache::put('gentool_fetch_command_progress', 0);
         $this->info('Fetching data from GenTool!');
 
-        $users = $userGetter->users(
+        $users = $this->userGetter->users(
             Carbon::now()->addDays(-$this->option('day'))
         );
         $this->info('Fetching from '.$users->count().' users.');
+        $progress = $this->output->createProgressBar($users->count());
+        $progress->setFormat('%current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s% %memory:6s% %message%');
+        $this->gameCreator->create($users, $progress);
 
-        $gameCreator->create($users);
-
+        $progress->finish();
         Cache::forget('gentool_fetch_command_running');
+        Cache::forget('gentool_fetch_command_progress');
         $this->info('Data fetching done!');
     }
 }

@@ -14,6 +14,7 @@ class UploadGameRequest extends FormRequest
     public function rules(): array
     {
         return [
+            // TODO: Fix mime types and think more about the size
             'file' => 'required|file|max:2048',
             // 'file' => 'required|file|mimes:rep|max:2048',
         ];

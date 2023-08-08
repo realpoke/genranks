@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Actions;
+namespace App\Actions\Gentool;
 
 use App\Contracts\Gentool\GetsUsersContract;
 use Carbon\CarbonInterface;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Str;
 
 class GetUsers implements GetsUsersContract
 {
@@ -30,18 +29,33 @@ class GetUsers implements GetsUsersContract
         } catch (\Illuminate\Http\Client\ConnectionException $ex) {
             return collect();
         }
+
         $lines = explode(PHP_EOL, $response->getBody());
         $users = collect();
         foreach ($lines as $line) {
-            $link = Str::between($line, 'src="/icons/folder-icon.png" alt="[DIR]"></td><td><a href="', '/">');
+            $link = $this->stringBetween($line, 'src="/icons/folder-icon.png" alt="[DIR]"></td><td><a href="', '/">');
             if ($link == '') {
                 continue;
             }
 
-            $nickname = Str::between($line, $link.'/">', '/</a></td><td align="right">');
+            $nickname = $this->stringBetween($line, $link.'/">', '/</a></td><td align="right">');
             $users->put($nickname, $fullURL.'/'.$link);
         }
 
         return $users;
+    }
+
+    private function stringBetween(string $string, string $start, string $end): string
+    {
+        $string = ' '.$string;
+        $ini = strpos($string, $start);
+        if ($ini == 0) {
+            return '';
+        }
+
+        $ini += strlen($start);
+        $len = strpos($string, $end, $ini) - $ini;
+
+        return substr($string, $ini, $len);
     }
 }

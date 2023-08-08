@@ -14,11 +14,23 @@ namespace App\Models{
 /**
  * App\Models\Game
  *
+ * @property int $id
+ * @property array $data
+ * @property string $hash
+ * @property int $verifications
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Models\User> $users
  * @property-read int|null $users_count
  * @method static \Illuminate\Database\Eloquent\Builder|Game newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Game newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Game query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Game whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Game whereData($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Game whereHash($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Game whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Game whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|Game whereVerifications($value)
  */
 	class Game extends \Eloquent {}
 }
@@ -27,11 +39,27 @@ namespace App\Models{
 /**
  * App\Models\GameUser
  *
- * @property-read \App\Models\Game|null $game
- * @property-read \App\Models\User|null $user
+ * @property int $id
+ * @property int $user_id
+ * @property int $game_id
+ * @property int $elo_change
+ * @property int $winner
+ * @property string $stats
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Models\Game $game
+ * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Eloquent\Builder|GameUser newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|GameUser newQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|GameUser query()
+ * @method static \Illuminate\Database\Eloquent\Builder|GameUser whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|GameUser whereEloChange($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|GameUser whereGameId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|GameUser whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|GameUser whereStats($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|GameUser whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|GameUser whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|GameUser whereWinner($value)
  */
 	class GameUser extends \Eloquent {}
 }
@@ -42,7 +70,12 @@ namespace App\Models{
  *
  * @property int $id
  * @property string $name
+ * @property string $nickname
  * @property string $email
+ * @property int|null $rank
+ * @property int|null $monthly_rank
+ * @property int $elo
+ * @property int $monthly_elo
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property mixed $password
  * @property string|null $remember_token
@@ -65,11 +98,16 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
  * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereElo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmailVerifiedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereMonthlyElo($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereMonthlyRank($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereNickname($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereRank($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereRememberToken($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereUpdatedAt($value)
  */
