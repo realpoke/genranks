@@ -4,7 +4,7 @@
 
 /**
  * A helper file for Laravel, to provide autocomplete information to your IDE
- * Generated for Laravel 10.17.1.
+ * Generated for Laravel 10.18.0.
  *
  * This file should not be included in your code, only analyzed by your IDE!
  *
@@ -18318,6 +18318,20 @@
                         return $instance->asset($asset, $buildDirectory);
         }
                     /**
+         * Get the content of a given asset.
+         *
+         * @param string $asset
+         * @param string|null $buildDirectory
+         * @return string 
+         * @throws \Exception
+         * @static 
+         */ 
+        public static function content($asset, $buildDirectory = null)
+        {
+                        /** @var \Illuminate\Foundation\Vite $instance */
+                        return $instance->content($asset, $buildDirectory);
+        }
+                    /**
          * Get a unique hash representing the current manifest, or null if there is no manifest.
          *
          * @param string|null $buildDirectory
@@ -26638,12 +26652,14 @@ if (! function_exists('throw_if')) {
     /**
      * Throw the given exception if the given condition is true.
      *
+     * @template TException of \Throwable
+     *
      * @param  mixed  $condition
-     * @param  \Throwable|string  $exception
+     * @param  TException|class-string<TException>  $exception
      * @param  mixed  ...$parameters
      * @return mixed
      *
-     * @throws \Throwable
+     * @throws TException
      */
     function throw_if($condition, $exception = 'RuntimeException', ...$parameters)
     {
@@ -26663,12 +26679,14 @@ if (! function_exists('throw_unless')) {
     /**
      * Throw the given exception unless the given condition is true.
      *
+     * @template TException of \Throwable
+     *
      * @param  mixed  $condition
-     * @param  \Throwable|string  $exception
+     * @param  TException|class-string<TException>  $exception
      * @param  mixed  ...$parameters
      * @return mixed
      *
-     * @throws \Throwable
+     * @throws TException
      */
     function throw_unless($condition, $exception = 'RuntimeException', ...$parameters)
     {
