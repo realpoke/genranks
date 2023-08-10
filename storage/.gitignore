@@ -5,4 +5,5 @@
 !binaries/
 !replays/
 !binaries/*
+binaries/*_live
 !.gitignore
