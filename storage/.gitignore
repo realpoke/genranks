@@ -3,4 +3,6 @@
 !framework/
 !logs/
 !binaries/
+!replays/
+!binaries/*
 !.gitignore
