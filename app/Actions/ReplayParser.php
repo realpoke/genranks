@@ -18,17 +18,13 @@ class ReplayParser implements ReplaysParserContract
             return collect();
         }
 
-        if (Storage::disk('binaries')->missing('replay_parser')) {
-            Log::error('Did not find binary file: replay_parser!');
+        $replay = Storage::disk('replays')->path($file);
+        $binary = $this->getReplayParserBinary();
+
+        if ($binary === false) {
+            Log::error('Did not find replay parser!');
 
             return collect();
-        }
-
-        $replay = Storage::disk('replays')->path($file);
-        if (Storage::disk('binaries')->exists('replay_parser_live')) {
-            $binary = Storage::disk('binaries')->path('replay_parser_live');
-        } else {
-            $binary = Storage::disk('binaries')->path('replay_parser');
         }
 
         $processResult = Process::run([$binary, $replay]);
@@ -41,5 +37,24 @@ class ReplayParser implements ReplaysParserContract
 
         // TODO: Fix going over allowed memory allocation size in php
         return collect(json_decode($processResult->output(), true));
+    }
+
+    private function getReplayParserBinary(): string|bool
+    {
+        if (strtoupper(PHP_OS) === 'WINNT') {
+            if (Storage::disk('binaries')->exists('replay_parser_live.exe')) {
+                return Storage::disk('binaries')->path('replay_parser_live.exe');
+            } elseif (Storage::disk('binaries')->exists('replay_parser.exe')) {
+                return Storage::disk('binaries')->path('replay_parser.exe');
+            }
+        } else {
+            if (Storage::disk('binaries')->exists('replay_parser_live')) {
+                return Storage::disk('binaries')->path('replay_parser_live');
+            } elseif (Storage::disk('binaries')->exists('replay_parser')) {
+                return Storage::disk('binaries')->path('replay_parser');
+            }
+        }
+
+        return false;
     }
 }
