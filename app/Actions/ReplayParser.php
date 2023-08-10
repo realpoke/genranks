@@ -25,7 +25,11 @@ class ReplayParser implements ReplaysParserContract
         }
 
         $replay = Storage::disk('replays')->path($file);
-        $binary = Storage::disk('binaries')->path('replay_parser');
+        if (Storage::disk('binaries')->exists('replay_parser_live')) {
+            $binary = Storage::disk('binaries')->path('replay_parser_live');
+        } else {
+            $binary = Storage::disk('binaries')->path('replay_parser');
+        }
 
         $processResult = Process::run([$binary, $replay]);
 
