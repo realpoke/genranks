@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\LoginController;
 use App\Http\Controllers\Api\LogoutController;
 use App\Http\Controllers\Api\MeController;
+use App\Http\Controllers\Api\PingController;
 use App\Http\Controllers\Api\UploadGameController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::post('/login', LoginController::class);
+Route::get('/ping', PingController::class);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/logout', LogoutController::class);
