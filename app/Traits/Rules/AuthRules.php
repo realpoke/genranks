@@ -43,6 +43,18 @@ trait AuthRules
         return ['required', 'string', 'min:3', 'max:255'];
     }
 
+    public static function nicknameRules(Model $model = null): array
+    {
+        return ['required',
+            'string',
+            'min:3',
+            'max:255',
+            ($model ?
+            Rule::unique(User::class, 'nickname')->ignoreModel($model) :
+            Rule::unique(User::class, 'nickname')),
+        ];
+    }
+
     public static function tokenRules(): array
     {
         return ['required', 'string'];
