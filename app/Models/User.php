@@ -50,6 +50,13 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         return route('profile.show', ['user' => $this]);
     }
 
+    public function markEmailAsUnverified(): bool
+    {
+        $this->email_verified_at = null;
+
+        return $this->save();
+    }
+
     public function games()
     {
         return $this->belongsToMany(Game::class)
