@@ -16,6 +16,7 @@ use App\Actions\Auth\Password\SendPasswordResetLink;
 use App\Actions\Auth\SendEmailVerification;
 use App\Actions\Auth\VerifyEmail;
 use App\Actions\Gentool\CreateGame;
+use App\Actions\Gentool\CreatePlaceholderUser;
 use App\Actions\Gentool\GetUsers;
 use App\Actions\GetMarkdownFile;
 use App\Actions\ReplayParser;
@@ -33,6 +34,7 @@ use App\Contracts\Auth\Password\SendsPasswordResetLinkContract;
 use App\Contracts\Auth\SendsEmailVerificationContract;
 use App\Contracts\Auth\VerifiesEmailContract;
 use App\Contracts\Gentool\CreatesGameContract;
+use App\Contracts\Gentool\CreatesPlaceholderUserContract;
 use App\Contracts\Gentool\GetsUsersContract;
 use App\Contracts\GetsMarkdownFileContract;
 use App\Contracts\ReplaysParserContract;
@@ -64,6 +66,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ReplaysParserContract::class, ReplayParser::class);
         $this->app->bind(CreatesGameContract::class, CreateGame::class);
         $this->app->bind(GetsUsersContract::class, GetUsers::class);
+        $this->app->bind(CreatesPlaceholderUserContract::class, CreatePlaceholderUser::class);
     }
 
     /**
