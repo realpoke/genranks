@@ -12,7 +12,10 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        //
+        $schedule->command('gentool:fetch --day=1')
+            ->timezone('Europe/Copenhagen')
+            ->dailyAt('02:05')
+            ->withoutOverlapping();
     }
 
     /**
