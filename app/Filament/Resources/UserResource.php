@@ -6,12 +6,15 @@ use App\Filament\Resources\UserResource\Pages;
 use App\Models\User;
 use App\Traits\Rules\AuthRules;
 use Filament\Forms\Components\CheckboxList;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\DeleteAction;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\TernaryFilter;
 use Filament\Tables\Table;
 
 class UserResource extends Resource
@@ -31,8 +34,31 @@ class UserResource extends Resource
                 TextInput::make('name')
                     ->autofocus()
                     ->rules(AuthRules::nameRules()),
+                TextInput::make('nickname')
+                    ->rules(AuthRules::nicknameRules($form->getModelInstance())),
+                TextInput::make('rank')
+                    ->numeric()
+                    ->maxValue(16777215)
+                    ->minValue(1),
+                TextInput::make('monthly_rank')
+                    ->numeric()
+                    ->maxValue(16777215)
+                    ->minValue(1),
+                TextInput::make('elo')
+                    ->numeric()
+                    ->maxValue(32767)
+                    ->minValue(1),
+                TextInput::make('monthly_elo')
+                    ->numeric()
+                    ->maxValue(32767)
+                    ->minValue(1),
                 TextInput::make('email')
                     ->rules(AuthRules::emailRules($form->getModelInstance())),
+                DateTimePicker::make('email_verified_at')
+                    ->nullable()
+                    ->seconds(false)
+                    ->native(false)
+                    ->weekStartsOnMonday(),
                 TextInput::make('password')
                     ->password()
                     ->rules(AuthRules::passwordRules())
@@ -54,16 +80,14 @@ class UserResource extends Resource
             ->columns([
                 TextColumn::make('name')->searchable()->sortable(),
                 TextColumn::make('email')->searchable()->sortable(),
+                IconColumn::make('email_verified_at')->label('Verified')->boolean(),
                 TextColumn::make('roles.name'),
-                TextColumn::make('email_verified_at')->dateTime()->sortable(),
-                TextColumn::make('two_factor_confirmed_at')
-                    ->dateTime()
-                    ->sortable(),
                 TextColumn::make('created_at')->dateTime()->sortable(),
                 TextColumn::make('updated_at')->dateTime()->sortable(),
             ])
             ->filters([
-                //
+                TernaryFilter::make('email_verified_at')
+                    ->nullable(),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
