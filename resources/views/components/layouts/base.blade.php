@@ -10,6 +10,7 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css'])
+    @stack('scripts')
 </head>
 
 <body class="font-sans antialiased">
