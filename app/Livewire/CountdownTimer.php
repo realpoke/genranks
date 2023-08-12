@@ -11,8 +11,6 @@ class CountdownTimer extends Component
 {
     public $targetDateTime;
 
-    public $hasError = false;
-
     public $counterText = 'Updates in';
 
     public $doneText = 'Processing';
