@@ -37,10 +37,12 @@ class UserResource extends Resource
                 TextInput::make('nickname')
                     ->rules(AuthRules::nicknameRules($form->getModelInstance())),
                 TextInput::make('rank')
+                    ->nullable()
                     ->numeric()
                     ->maxValue(16777215)
                     ->minValue(1),
                 TextInput::make('monthly_rank')
+                    ->nullable()
                     ->numeric()
                     ->maxValue(16777215)
                     ->minValue(1),
