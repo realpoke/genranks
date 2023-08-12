@@ -31,8 +31,11 @@
     <div x-show="false">
         Loading...
     </div>
+    <div x-cloak x-show="error" class='relative'>
+        {{ $errorText }}
+    </div>
     <div>
-        <div x-cloak x-show="timer.show">
+        <div x-cloak x-show="timer.show && !error">
             {{ $counterText }}
             <span x-text="timer.hours">{{ $this->hours() }}</span>:<span
                 x-text="timer.minutes">{{ $this->minutes() }}</span>:<span
@@ -40,7 +43,7 @@
         </div>
     </div>
     <div>
-        <div x-cloak x-show="!timer.show" class='relative'>
+        <div x-cloak x-show="!timer.show && !error" class='relative'>
             {{ $doneText }}
             <x-icons icon='loading' class='inline animate-spin' />
         </div>

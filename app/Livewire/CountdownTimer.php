@@ -11,9 +11,13 @@ class CountdownTimer extends Component
 {
     public $targetDateTime;
 
+    public $hasError;
+
     public $counterText = 'Updates in';
 
     public $doneText = 'Processing';
+
+    public $errorText = 'Error!';
 
     #[Computed]
     public function days(): string
@@ -45,8 +49,9 @@ class CountdownTimer extends Component
         return $this->targetDateTime->diff(now());
     }
 
-    public function mount(Carbon $targetDateTime)
+    public function mount(Carbon $targetDateTime, $hasError = false)
     {
         $this->targetDateTime = $targetDateTime;
+        $this->hasError = $hasError;
     }
 }
