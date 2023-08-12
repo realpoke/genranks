@@ -2,9 +2,6 @@
 
 namespace App\Jobs\Api;
 
-use App\Actions\Gentool\CreateGame;
-use App\Actions\ReplayParser;
-use App\Contracts\Gentool\CreatesGameContract;
 use App\Contracts\ReplaysParserContract;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
@@ -22,23 +19,17 @@ class ProcessUploadedGame implements ShouldQueue
 
     protected $filePath;
 
-    protected CreatesGameContract $creator;
-
-    protected ReplaysParserContract $parser;
-
     public function __construct(
         User $user,
         string $filePath
     ) {
         $this->user = $user;
         $this->filePath = $filePath;
-        $this->creator = new CreateGame();
-        $this->parser = new ReplayParser();
     }
 
-    public function handle(): void
+    public function handle(ReplaysParserContract $parser): void
     {
-        $parsedData = $this->parser->parse($this->filePath);
+        $parsedData = $parser->parse($this->filePath);
         dump($parsedData);
         Storage::disk('replays')->delete($this->filePath);
     }
