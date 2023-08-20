@@ -44,7 +44,7 @@ namespace App\Models{
  * @property int $game_id
  * @property int $elo_change
  * @property int $winner
- * @property string $stats
+ * @property string|null $stats
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property-read \App\Models\Game $game
