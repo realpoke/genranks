@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Models\Game;
 use App\Models\GameUser;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Artisan;
 
 class ClearOldGames extends Command
 {
@@ -25,5 +26,7 @@ class ClearOldGames extends Command
         $oldGames->delete();
 
         $this->info('Cleared '.$oldGamesCount.' old games!');
+
+        Artisan::call(RemoveUsersWithoutVerifiedGames::class);
     }
 }
