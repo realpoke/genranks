@@ -19,6 +19,15 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles, HasElo, HasRank;
 
+    public static $allowedTableFields = [
+        'name',
+        'nickname',
+        'monthly_elo',
+        'elo',
+        'monthly_rank',
+        'rank',
+    ];
+
     protected $fillable = [
         'name',
         'nickname',
