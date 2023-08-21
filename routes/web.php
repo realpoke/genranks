@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GenLinkDownloadController;
 use App\Livewire\Landing;
 use App\Livewire\Markdown;
 use App\Livewire\Option;
@@ -20,6 +21,9 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', Landing::class)->name('home');
 
 Route::get('/doc/{markdown}', Markdown::class)->name('markdown.show');
+
+Route::get('/genlink/download', GenLinkDownloadController::class)
+    ->name('genlink.download');
 
 Route::get('/profile/{user}', Profile::class)->name('profile.show');
 Route::middleware(['auth'])->group(function () {
