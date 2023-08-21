@@ -97,7 +97,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User permission($permissions)
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
  * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
- * @method static \Illuminate\Database\Eloquent\Builder|User search($searchTerm)
+ * @method static \Illuminate\Database\Eloquent\Builder|User search(string $searchTerm)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereElo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
