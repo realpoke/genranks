@@ -22,6 +22,7 @@ return new class extends Migration
             $table->smallInteger('monthly_elo')->unsigned()->default(1500);
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->dateTime('claimed_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

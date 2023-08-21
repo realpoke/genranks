@@ -48,6 +48,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
 
     protected $casts = [
         'email_verified_at' => 'datetime',
+        'claimed_at' => 'datetime',
         'password' => 'hashed',
     ];
 

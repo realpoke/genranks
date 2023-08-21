@@ -50,7 +50,7 @@ class RolesAndPermissions extends Seeder
             return;
         }
         User::factory()
-            ->create(['name' => 'Admin', 'email' => 'admin@mail.com'])
+            ->create(['name' => 'Admin', 'email' => 'admin@mail.com', 'claimed_at' => now()])
             ->assignRole('admin');
     }
 }

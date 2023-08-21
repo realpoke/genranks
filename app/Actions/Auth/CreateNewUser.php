@@ -18,6 +18,7 @@ class CreateNewUser implements CreatesNewUserContract
             'email' => $form->email,
             'name' => $form->name,
             'password' => $form->password,
+            'claimed_at' => now(),
         ]);
 
         event(new Registered($user));
