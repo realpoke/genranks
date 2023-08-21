@@ -130,6 +130,10 @@
                     <x-navbars.responsive-nav-link wire:navigate href="{{ route('login') }}" :active="request()->routeIs('login')">
                         {{ __('Login') }}
                     </x-navbars.responsive-nav-link>
+
+                    <x-navbars.responsive-nav-link wire:navigate href="{{ route('register') }}" :active="request()->routeIs('register')">
+                        {{ __('Register') }}
+                    </x-navbars.responsive-nav-link>
                 </div>
             @endauth
         </div>
