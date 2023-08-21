@@ -2,10 +2,12 @@
 
 namespace App\Console\Commands\Gentool;
 
+use App\Console\Commands\ClearOldGames;
 use App\Contracts\Gentool\CreatesGameContract;
 use App\Contracts\Gentool\GetsUsersContract;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Cache;
 
 class GentoolFetch extends Command
@@ -48,5 +50,7 @@ class GentoolFetch extends Command
         Cache::forget('gentool_fetch_command_running');
         Cache::forget('gentool_fetch_command_progress');
         $this->info('Data fetching done!');
+
+        Artisan::call(ClearOldGames::class);
     }
 }
