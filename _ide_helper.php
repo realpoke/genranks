@@ -24029,8 +24029,9 @@ namespace  {
              * 
              *
              * @see \App\Providers\AppServiceProvider::boot()
-             * @param mixed $attributes
+             * @param array|string $attributes
              * @param string $searchTerm
+             * @return \Illuminate\Database\Eloquent\Builder|static 
              * @static 
              */ 
             public static function whereLike($attributes, $searchTerm)

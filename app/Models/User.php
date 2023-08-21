@@ -64,4 +64,9 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
             ->withPivot(GameUser::FIELDS)
             ->withTimestamps();
     }
+
+    public function scopeSearch($query, $searchTerm)
+    {
+        return $query->whereLike(['name', 'nickname'], $searchTerm);
+    }
 }
