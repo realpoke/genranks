@@ -80,6 +80,7 @@ namespace App\Models{
  * @property int $monthly_elo
  * @property \Illuminate\Support\Carbon|null $email_verified_at
  * @property mixed $password
+ * @property \Illuminate\Support\Carbon|null $claimed_at
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
@@ -100,6 +101,7 @@ namespace App\Models{
  * @method static \Illuminate\Database\Eloquent\Builder|User query()
  * @method static \Illuminate\Database\Eloquent\Builder|User role($roles, $guard = null)
  * @method static \Illuminate\Database\Eloquent\Builder|User search(string $searchTerm)
+ * @method static \Illuminate\Database\Eloquent\Builder|User whereClaimedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereElo($value)
  * @method static \Illuminate\Database\Eloquent\Builder|User whereEmail($value)
