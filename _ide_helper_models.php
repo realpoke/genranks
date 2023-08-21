@@ -24,7 +24,9 @@ namespace App\Models{
  * @property-read int|null $users_count
  * @method static \Illuminate\Database\Eloquent\Builder|Game newModelQuery()
  * @method static \Illuminate\Database\Eloquent\Builder|Game newQuery()
+ * @method static \Illuminate\Database\Eloquent\Builder|Game notVerified()
  * @method static \Illuminate\Database\Eloquent\Builder|Game query()
+ * @method static \Illuminate\Database\Eloquent\Builder|Game verified()
  * @method static \Illuminate\Database\Eloquent\Builder|Game whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Game whereData($value)
  * @method static \Illuminate\Database\Eloquent\Builder|Game whereHash($value)
