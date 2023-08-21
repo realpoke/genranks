@@ -14,6 +14,8 @@ class ClearOldGames extends Command
 
     public function handle()
     {
+        $this->info('Clearing old games...');
+
         $oldGames = Game::notVerified()->where('updated_at', '<=', now()->addDays(-1));
         $oldGamesCount = $oldGames->count();
 
