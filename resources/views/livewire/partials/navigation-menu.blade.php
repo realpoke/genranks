@@ -12,6 +12,10 @@
             </div>
 
             <div class="hidden space-x-4 sm:flex sm:items-center sm:ml-6">
+                <x-buttons.link class="inline-flex" download href="{{ route('genlink.download') }}">
+                    GenLink
+                    <x-icons class="ml-2" icon="download" />
+                </x-buttons.link>
                 @auth
                     <!-- Options Dropdown -->
                     <div class="relative ml-3">
@@ -96,15 +100,22 @@
         <!-- Responsive Options Options -->
         <div class="pt-4 pb-1 border-t border-gray-200 dark:border-gray-600">
             @auth
-                <div class="flex items-center justify-between px-4">
+                <div class="flex items-center justify-between px-4 mb-4">
                     <div>
                         <div class="text-base font-medium text-gray-800 dark:text-gray-200">{{ $name }}
                         </div>
                         <div class="text-sm font-medium text-gray-500">{{ $email }}</div>
                     </div>
                 </div>
+            @endauth
 
-                <div class="mt-3 space-y-1">
+            <div class="space-y-1">
+                <x-navbars.responsive-nav-link download href="{{ route('genlink.download') }}">
+                    {{ __('Download GenLink') }}
+                </x-navbars.responsive-nav-link>
+            </div>
+            @auth
+                <div class="space-y-1">
                     <x-navbars.responsive-nav-link wire:navigate href="{{ Auth::user()->route() }}" :active="request()->routeIs(Auth::user()->route())">
                         {{ __('Profile') }}
                     </x-navbars.responsive-nav-link>
