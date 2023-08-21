@@ -29,27 +29,11 @@ class CreateGame implements CreatesGameContract
         Collection $users,
         ProgressBar $progress = null
     ) {
-        $updateProgressTime = Carbon::now()->addMinute();
-        foreach ($users as $nickname => $userURL) {
-            $progress->setMessage('Processing: '.$nickname.' | calculating game(s)');
-            $user = $this->userCreator->create($nickname);
-            $gameLinks = $this->getGameLinks($userURL);
-            $progress->setMessage('Processing: '.$nickname.' | '.$gameLinks->count().' game(s)');
+        $chunkSize = 10; // Number of users to process in each chunk
+        $usersChunks = $users->chunk($chunkSize);
 
-            foreach ($gameLinks as $gameName => $gameURL) {
-                $game = $this->createGame($gameURL.'.rep');
-
-                if (is_null($game)) {
-                    continue;
-                }
-                $this->attachUserToGame($user, $game);
-            }
-
-            $progress->advance();
-            if (Carbon::now()->isAfter($updateProgressTime)) {
-                $updateProgressTime = Carbon::now()->addMinute();
-                Cache::put('gentool_fetch_command_progress', (int) ($progress->getProgressPercent() * 100));
-            }
+        foreach ($usersChunks as $usersChunk) {
+            $this->processUsersChunk($usersChunk, $progress);
         }
     }
 
@@ -72,6 +56,33 @@ class CreateGame implements CreatesGameContract
         }
 
         return $games;
+    }
+
+    private function processUsersChunk(Collection $usersChunk, ProgressBar $progress = null)
+    {
+        $updateProgressTime = Carbon::now()->addMinute();
+
+        foreach ($usersChunk as $nickname => $userURL) {
+            $progress->setMessage('Processing: '.$nickname.' | calculating game(s)');
+            $user = $this->userCreator->create($nickname);
+            $gameLinks = $this->getGameLinks($userURL);
+            $progress->setMessage('Processing: '.$nickname.' | '.$gameLinks->count().' game(s)');
+
+            foreach ($gameLinks as $gameName => $gameURL) {
+                $game = $this->createGame($gameURL.'.rep');
+
+                if (is_null($game)) {
+                    continue;
+                }
+                $this->attachUserToGame($user, $game);
+            }
+
+            $progress->advance();
+            if (Carbon::now()->isAfter($updateProgressTime)) {
+                $updateProgressTime = Carbon::now()->addMinute();
+                Cache::put('gentool_fetch_command_progress', (int) ($progress->getProgressPercent() * 100));
+            }
+        }
     }
 
     private function createGame(

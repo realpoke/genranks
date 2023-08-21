@@ -35,8 +35,21 @@ class ReplayParser implements ReplaysParserContract
             return collect();
         }
 
-        // TODO: Fix going over allowed memory allocation size in php
-        return collect(json_decode($processResult->output(), true));
+        // Decode JSON in smaller chunks
+        // Change the 2 in the line below to how big in mb the chunks can be
+        $jsonChunks = str_split($processResult->output(), 2 * 1024 * 1024); // Split into 2 MB chunks
+        $decodedData = collect();
+
+        foreach ($jsonChunks as $chunk) {
+            $decodedChunk = json_decode($chunk, true, 512, JSON_BIGINT_AS_STRING);
+            if ($decodedChunk !== null) {
+                $decodedData = $decodedData->merge($decodedChunk);
+            } else {
+                Log::error('Failed to decode JSON chunk: '.json_last_error_msg());
+            }
+        }
+
+        return $decodedData;
     }
 
     private function getReplayParserBinary(): string|bool
