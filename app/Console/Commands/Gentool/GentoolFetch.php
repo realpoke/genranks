@@ -31,7 +31,6 @@ class GentoolFetch extends Command
         parent::__construct();
     }
 
-    // TODO: Set contracts in app service provider.
     public function handle()
     {
         Cache::put('gentool_fetch_command_running', true);
