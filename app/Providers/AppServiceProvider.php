@@ -72,7 +72,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(GetsUsersContract::class, GetUsers::class);
         $this->app->bind(CreatesPlaceholderUserContract::class, CreatePlaceholderUser::class);
         $this->app->bind(GetsLatestGenLinkDownloadLinkContract::class, GetsLatestGenLinkDownloadLink::class);
-        $this->app->bind(GetGameWinner::class, GetsGameWinnerContract::class);
+        $this->app->bind(GetsGameWinnerContract::class, GetGameWinner::class);
     }
 
     /**
