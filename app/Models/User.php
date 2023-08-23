@@ -37,6 +37,7 @@ class User extends Authenticatable implements MustVerifyEmail, FilamentUser
         'elo',
         'monthly_rank',
         'rank',
+        'gt',
     ];
 
     protected $hidden = [

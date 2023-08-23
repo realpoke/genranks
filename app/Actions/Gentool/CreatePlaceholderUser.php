@@ -17,6 +17,7 @@ class CreatePlaceholderUser implements CreatesPlaceholderUserContract
                 'email' => $nickname.fake()->randomNumber(5, true).'@'.fake()->domainName(),
                 'password' => 'password',
                 'claimed_at' => null,
+                'gt' => true,
             ]
         );
     }
