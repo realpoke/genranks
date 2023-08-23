@@ -18,6 +18,7 @@ use App\Actions\Auth\VerifyEmail;
 use App\Actions\Gentool\CreateGame;
 use App\Actions\Gentool\CreatePlaceholderUser;
 use App\Actions\Gentool\GetUsers;
+use App\Actions\GetGameWinner;
 use App\Actions\GetMarkdownFile;
 use App\Actions\GetsLatestGenLinkDownloadLink;
 use App\Actions\ReplayParser;
@@ -37,6 +38,7 @@ use App\Contracts\Auth\VerifiesEmailContract;
 use App\Contracts\Gentool\CreatesGameContract;
 use App\Contracts\Gentool\CreatesPlaceholderUserContract;
 use App\Contracts\Gentool\GetsUsersContract;
+use App\Contracts\GetsGameWinnerContract;
 use App\Contracts\GetsLatestGenLinkDownloadLinkContract;
 use App\Contracts\GetsMarkdownFileContract;
 use App\Contracts\ReplaysParserContract;
@@ -70,6 +72,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(GetsUsersContract::class, GetUsers::class);
         $this->app->bind(CreatesPlaceholderUserContract::class, CreatePlaceholderUser::class);
         $this->app->bind(GetsLatestGenLinkDownloadLinkContract::class, GetsLatestGenLinkDownloadLink::class);
+        $this->app->bind(GetGameWinner::class, GetsGameWinnerContract::class);
     }
 
     /**
