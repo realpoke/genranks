@@ -30,6 +30,7 @@ class ProcessUploadedGame implements ShouldQueue
     public function handle(ReplaysParserContract $parser): void
     {
         $parsedData = $parser->parse($this->filePath);
+        // TODO: Unify storing and processing with Gentool games
         dump($parsedData);
         Storage::disk('replays')->delete($this->filePath);
     }

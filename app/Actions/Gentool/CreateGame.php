@@ -4,6 +4,7 @@ namespace App\Actions\Gentool;
 
 use App\Actions\ReplayParser;
 use App\Contracts\Gentool\CreatesGameContract;
+use App\Contracts\GetsGameWinnerContract;
 use App\Contracts\ReplaysParserContract;
 use App\Models\Game;
 use App\Models\User;
@@ -119,7 +120,7 @@ class CreateGame implements CreatesGameContract
             md5($data['Header']['Hash'].$data['Header']['Metadata']['Seed']);
     }
 
-    private function attachUserToGame(User $user, Game $game)
+    private function attachUserToGame(User $user, Game $game, GetsGameWinnerContract $calculator)
     {
         if (
             $game->verifications >= count($game->data['Header']['Metadata']['Players']) ||
@@ -128,13 +129,23 @@ class CreateGame implements CreatesGameContract
             return false;
         }
 
-        // TODO: Check if user is winner, and set winner in pivot
         // TODO: Add user stats in the user_game pivot
+        // TODO: Set the player_id for the user in the user_game pivot
         $game->users()->attach($user);
         $game->increment('verifications');
 
         if ($game->verifications >= count($game->data['Header']['Metadata']['Players'])) {
+            $users = $calculator->winner($game);
+            if ($users->isEmpty()) {
+                // TODO: Game winner was not possible to find, delete or un-verify game.
+                $game->update(['verifications' => 0]);
+            }
+            $users->each(function ($user) {
+                // TODO: All $users are winners, set winner in pivot
+                $game->users()->pivot->where('user_id', $user->id)->update(['winner' => true]);
+            });
             // TODO: Calculate elo for game
+            $game->calculateElo();
         }
     }
 
