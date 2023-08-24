@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Process;
 use Illuminate\Support\Facades\Storage;
+use Symfony\Component\HttpFoundation\Exception\JsonException;
 
 class ReplayParser implements ReplaysParserContract
 {
@@ -37,18 +38,12 @@ class ReplayParser implements ReplaysParserContract
             return collect();
         }
 
-        // Decode JSON in smaller chunks
-        // Change the 2 in the line below to how big in mb the chunks can be
-        $jsonChunks = str_split($processResult->output(), 2 * 1024 * 1024); // Split into 2 MB chunks
-        $decodedData = collect();
-
-        foreach ($jsonChunks as $chunk) {
-            $decodedChunk = json_decode($chunk, true, 512, JSON_BIGINT_AS_STRING);
-            if ($decodedChunk !== null) {
-                $decodedData = $decodedData->merge($decodedChunk);
-            } else {
-                Log::error('Failed to decode JSON chunk: '.json_last_error_msg());
-            }
+        // TODO: decode in chunks to avoid memory size issues.
+        try {
+            $decodedData = collect(json_decode($processResult->output(), true, 512, JSON_BIGINT_AS_STRING));
+        } catch (JsonException $e) {
+            $decodedData = collect();
+            Log::error('Failed to decode json for '.$replay.': '.$e->getMessage());
         }
 
         return $decodedData;
