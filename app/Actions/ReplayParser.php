@@ -27,7 +27,9 @@ class ReplayParser implements ReplaysParserContract
             return collect();
         }
 
-        $processResult = Process::run([$binary, $replay]);
+        $processResult = Process::env([
+            'PATH' => '/usr/local/bin:/usr/bin:/bin',
+        ])->run([$binary, $replay]);
 
         if (! $processResult->successful()) {
             Log::error($processResult->errorOutput());
