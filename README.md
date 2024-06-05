@@ -1,40 +1,7 @@
-# Project Template Guide
-
-Welcome to the Tallest template repository! This template is designed to help you kick-start your own projects based on my setup.
-TALL based template to make a website, including FilamentPHP as an admin panel.
-Utilizing actions and contracts as the flow for efficient development.
+# GenRanks
+TALLEST based website to make a C&C General's Zero-Hour leaderboard.
 
 **TailwindCSS, AlpineJS, Laravel, Livewire, FilamentPHP**
-
-## Getting Started
-
-To use this template and create your own project, follow these steps:
-
-1. Click the "Use this template" button at the top of the repository. You'll be prompted to create a new repository based on this template.
-
-2. Choose a name for your new repository and customize the repository details as needed.
-
-3. Clone your newly created repository to your local machine using Git:
-
-   ```sh
-   git clone https://github.com/your-username/your-repository.git
-   ```
-
-4. Navigate to the project directory:
-    ```sh
-    cd your-repository
-    ```
-
-5. Customize the project files, configuration, and content according to your needs. You can modify or add new files, update the README, and configure any settings.
-
-6. Commit your changes:
-    ```sh
-    git add .
-    git commit -m "Initial customization"
-    git push origin main
-    ```
-
-7. Start developing your project! You're now ready to build upon the template and create your unique application.
 
 ## Programming
 This is a quick start guide!
@@ -114,12 +81,15 @@ Here you find the documentation resources for the Tallest stack.
 
 These resources provide comprehensive guides, tutorials, and references for each technology in the Tallest stack. Feel free to explore and leverage these tools to build powerful and dynamic web applications.
 
-## Feedback and Support
+## Proprietary Binary Code
 
-If you encounter any issues or have questions, feel free to open an [issue](https://github.com/realpoke/tallest-template/issues) on this repository.
+As part of our development process, we are utilizing proprietary binary code for ELO calculation and replay parsing. However, to ensure the security of our intellectual property, the actual proprietary binaries are not shared in this repository. Instead, there is dummy binaries that simulate the behavior for development purposes.
 
-I hope this template helps you get started on your project. Happy coding!
+## Contribution
 
-## License
+Contributions to the development of the website are highly valued. If you're a team member working on this project, you can contribute to the codebase, testing, bug fixing, and feature implementation. The use of dummy binaries helps facilitate collaborative development without exposing the actual proprietary code.
 
-This project is licensed under the [MIT license](https://opensource.org/licenses/MIT) - see the LICENSE file for details.
+
+---
+
+**Note:** GenRanks is not affiliated with or endorsed by Electronic Arts Inc. or any of its subsidiaries.
