@@ -16,8 +16,6 @@ class ShowGame extends Component
 
     public function render()
     {
-        $this->game->validate();
-
         return view('livewire.show-game');
     }
 }
