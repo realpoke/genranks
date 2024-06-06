@@ -16,6 +16,7 @@ use App\Actions\Auth\Password\SendPasswordResetLink;
 use App\Actions\Auth\SendEmailVerification;
 use App\Actions\Auth\VerifyEmail;
 use App\Actions\GetMarkdownFile;
+use App\Actions\ReplayParser;
 use App\Contracts\Auth\AuthenticatesUserContract;
 use App\Contracts\Auth\CreatesNewUserContract;
 use App\Contracts\Auth\LogoutUserContract;
@@ -30,6 +31,7 @@ use App\Contracts\Auth\Password\SendsPasswordResetLinkContract;
 use App\Contracts\Auth\SendsEmailVerificationContract;
 use App\Contracts\Auth\VerifyEmailContract;
 use App\Contracts\GetsMarkdownFileContract;
+use App\Contracts\ParsesReplayContract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
@@ -55,6 +57,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(DeletesTokenContract::class, DeleteToken::class);
         $this->app->bind(GetsMarkdownFileContract::class, GetMarkdownFile::class);
         $this->app->bind(VerifyEmailContract::class, VerifyEmail::class);
+
+        $this->app->bind(ParsesReplayContract::class, ReplayParser::class);
     }
 
     /**
