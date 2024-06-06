@@ -15,7 +15,7 @@ class Game extends Model
 
     protected $fillable = [
         'hash',
-        'json',
+        'data',
         'uploader_id',
         'status',
     ];
