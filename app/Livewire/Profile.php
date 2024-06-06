@@ -13,4 +13,11 @@ class Profile extends Component
     {
         $this->user = $user;
     }
+
+    public function render()
+    {
+        return view('livewire.profile', [
+            'games' => $this->user->games()->latest()->paginate(12),
+        ]);
+    }
 }

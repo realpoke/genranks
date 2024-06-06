@@ -11,12 +11,19 @@ class Game extends Model
 {
     use HasFactory;
 
+    protected $with = ['uploader'];
+
     protected $fillable = [
         'hash',
         'json',
-        'uploader',
+        'uploader_id',
         'status',
     ];
+
+    public function route(): string
+    {
+        return route('game.show', ['game' => $this]);
+    }
 
     protected function casts(): array
     {
@@ -28,6 +35,6 @@ class Game extends Model
 
     public function uploader(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'uploader', 'id');
+        return $this->belongsTo(User::class, 'uploader_id');
     }
 }

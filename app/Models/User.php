@@ -73,6 +73,6 @@ class User extends Authenticatable
 
     public function games(): HasMany
     {
-        return $this->hasMany(Game::class, 'uploader', 'id');
+        return $this->hasMany(Game::class, 'uploader_id');
     }
 }

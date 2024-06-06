@@ -21,7 +21,7 @@ class GameFactory extends Factory
     {
         return [
             'hash' => Hash::make(Str::random()),
-            'uploader' => User::first(),
+            'uploader_id' => User::first()->id,
         ];
     }
 }

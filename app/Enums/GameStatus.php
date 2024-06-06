@@ -13,4 +13,22 @@ enum GameStatus: string
     case FAILED = 'failed processing';
     case VALID = 'valid';
     case INVALID = 'invalid';
+
+    public function classes(): string
+    {
+        return match ($this) {
+            self::AWAITING => 'bg-amber-300',
+            self::PROCESSING => 'bg-amber-300 animate-ping',
+            self::FAILED, self::INVALID => 'bg-rose-700',
+            self::VALID => 'bg-emerald-500',
+        };
+    }
+
+    public function animation(): ?string
+    {
+        return match ($this) {
+            self::AWAITING, self::PROCESSING => 'animate-ping',
+            default => 'opacity-25',
+        };
+    }
 }

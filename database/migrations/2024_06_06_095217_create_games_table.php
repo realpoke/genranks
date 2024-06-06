@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('games', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(User::class, 'uploader');
+            $table->foreignIdFor(User::class, 'uploader_id')->onDelete('cascade');
             $table->enum('status', GameStatus::values())->default(GameStatus::AWAITING);
             $table->string('hash')->nullable();
             $table->json('data')->nullable();
