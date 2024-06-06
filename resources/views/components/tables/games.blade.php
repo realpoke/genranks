@@ -10,7 +10,7 @@
                         </a>
                     </p>
                     <p class="flex mt-1 text-xs leading-5 text-gray-500">
-                        {{ $game->hash ?: 'Generating hash' }}
+                        {{ $game->hash ?: 'Generating hash...' }}
                     </p>
                 </div>
             </div>
