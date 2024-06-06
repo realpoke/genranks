@@ -30,7 +30,7 @@ class Game extends Model
     protected function casts(): array
     {
         return [
-            'json' => 'array',
+            'data' => 'array',
             'status' => GameStatus::class,
         ];
     }
