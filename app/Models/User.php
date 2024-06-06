@@ -71,6 +71,13 @@ class User extends Authenticatable
         return $this->can('viewAny:filament');
     }
 
+    public function setupGame(string $fileName): bool
+    {
+        $newGame = $this->games()->create(['file' => $fileName]);
+
+        return ! is_null($newGame);
+    }
+
     public function games(): HasMany
     {
         return $this->hasMany(Game::class, 'uploader_id');

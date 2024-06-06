@@ -17,6 +17,7 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(User::class, 'uploader_id')->onDelete('cascade');
             $table->enum('status', GameStatus::values())->default(GameStatus::AWAITING);
+            $table->string('file');
             $table->string('hash')->nullable();
             $table->json('data')->nullable();
             $table->timestamps();
