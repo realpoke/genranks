@@ -18,7 +18,7 @@ enum GameStatus: string
     {
         return match ($this) {
             self::AWAITING => 'bg-amber-300',
-            self::PROCESSING => 'bg-amber-300 animate-ping',
+            self::PROCESSING => 'bg-amber-300',
             self::FAILED, self::INVALID => 'bg-rose-700',
             self::VALID => 'bg-emerald-500',
         };
