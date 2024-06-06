@@ -8,6 +8,9 @@
                     <x-navbars.nav-link wire:navigate href="{{ route('home') }}" :active="request()->routeIs('home')">
                         {{ __('Welcome') }}
                     </x-navbars.nav-link>
+                    <x-navbars.nav-link wire:navigate href="{{ route('game.index') }}" :active="request()->routeIs('game.*')">
+                        {{ __('Games') }}
+                    </x-navbars.nav-link>
                 </div>
             </div>
 
@@ -90,6 +93,9 @@
         <div class="pt-2 pb-3 space-y-1">
             <x-navbars.responsive-nav-link wire:navigate href="{{ route('home') }}" :active="request()->routeIs('home')">
                 {{ __('Welcome') }}
+            </x-navbars.responsive-nav-link>
+            <x-navbars.responsive-nav-link wire:navigate href="{{ route('game.index') }}" :active="request()->routeIs('game.*')">
+                {{ __('Games') }}
             </x-navbars.responsive-nav-link>
         </div>
 
