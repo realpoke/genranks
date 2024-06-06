@@ -17,7 +17,7 @@ enum GameStatus: string
     public function classes(): string
     {
         return match ($this) {
-            self::AWAITING => 'bg-amber-300',
+            self::AWAITING => 'bg-sky-500',
             self::PROCESSING => 'bg-amber-300',
             self::FAILED, self::INVALID => 'bg-rose-700',
             self::VALID => 'bg-emerald-500',
