@@ -18,6 +18,7 @@ class Game extends Model
         'data',
         'uploader_id',
         'status',
+        'file',
     ];
 
     public function route(): string
