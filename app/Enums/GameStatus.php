@@ -11,6 +11,7 @@ enum GameStatus: string
     case AWAITING = 'awaiting processing';
     case PROCESSING = 'processing';
     case FAILED = 'failed processing';
+    case VALIDATING = 'validating';
     case VALID = 'valid';
     case INVALID = 'invalid';
 
@@ -18,7 +19,7 @@ enum GameStatus: string
     {
         return match ($this) {
             self::AWAITING => 'bg-sky-500',
-            self::PROCESSING => 'bg-amber-300',
+            self::PROCESSING, self::VALIDATING => 'bg-amber-300',
             self::FAILED, self::INVALID => 'bg-rose-700',
             self::VALID => 'bg-emerald-500',
         };
@@ -27,7 +28,7 @@ enum GameStatus: string
     public function animation(): ?string
     {
         return match ($this) {
-            self::AWAITING, self::PROCESSING => 'animate-ping',
+            self::AWAITING, self::PROCESSING, self::VALIDATING => 'animate-ping',
             default => 'opacity-25',
         };
     }
