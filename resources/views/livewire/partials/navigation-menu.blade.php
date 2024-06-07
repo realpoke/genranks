@@ -127,7 +127,7 @@
                     </x-navbars.responsive-nav-link>
 
                     <!-- Authentication -->
-                    <x-navbars.responsive-nav-link wire:click="logout">
+                    <x-navbars.responsive-nav-link class="cursor-pointer" wire:click="logout">
                         {{ __('Log Out') }}
                     </x-navbars.responsive-nav-link>
                 </div>
