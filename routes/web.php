@@ -15,3 +15,4 @@ Route::get('/profile/{user}', Profile::class)->name('profile.show');
 
 Route::get('/games', Game::class)->name('game.index');
 Route::get('/game/{game}', ShowGame::class)->name('game.show');
+Route::redirect('/game', '/games');
