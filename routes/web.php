@@ -2,6 +2,7 @@
 
 use App\Livewire\Game;
 use App\Livewire\Landing;
+use App\Livewire\Leaderboard;
 use App\Livewire\Markdown;
 use App\Livewire\Profile;
 use App\Livewire\ShowGame;
@@ -16,3 +17,5 @@ Route::get('/profile/{user}', Profile::class)->name('profile.show');
 Route::get('/games', Game::class)->name('game.index');
 Route::get('/game/{game}', ShowGame::class)->name('game.show');
 Route::redirect('/game', '/games');
+
+Route::get('/leaderboard', Leaderboard::class)->name('leaderboard.index');
