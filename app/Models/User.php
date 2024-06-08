@@ -74,6 +74,11 @@ class User extends Authenticatable
         return $this->can('viewAny:filament');
     }
 
+    public function scopeRanked($query)
+    {
+        return $query->whereNotNull('rank');
+    }
+
     public function setupGame(string $fileName): bool
     {
         $newGame = $this->games()->create(['file' => $fileName]);
