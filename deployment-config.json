@@ -1,0 +1,11 @@
+[
+    {
+        "name": "cncranks.com",
+        "ip": "165.22.69.115",
+        "username": "cncranks",
+        "port": "22",
+        "path": "/var/www/html",
+        "beforeHooks": "php artisan migrate --force && php artisan optimize:clear",
+        "afterHooks": "php artisan queue:restart && php artisan optimize"
+    }
+]
