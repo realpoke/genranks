@@ -17,6 +17,8 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->smallInteger('elo')->unsigned()->default(1500);
+            $table->mediumInteger('rank')->unsigned()->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Traits\HasElo;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,7 +15,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    use HasApiTokens, HasFactory, HasRoles, Notifiable;
+    use HasApiTokens, HasElo, HasFactory, HasRoles, Notifiable;
 
     private static $defaultRole = 'user';
 
@@ -27,6 +28,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'elo',
+        'rank',
     ];
 
     /**

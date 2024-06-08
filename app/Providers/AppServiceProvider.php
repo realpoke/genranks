@@ -15,6 +15,7 @@ use App\Actions\Auth\Password\ResetUserPassword;
 use App\Actions\Auth\Password\SendPasswordResetLink;
 use App\Actions\Auth\SendEmailVerification;
 use App\Actions\Auth\VerifyEmail;
+use App\Actions\calculateElo;
 use App\Actions\GetMarkdownFile;
 use App\Actions\ReplayParser;
 use App\Contracts\Auth\AuthenticatesUserContract;
@@ -30,6 +31,7 @@ use App\Contracts\Auth\Password\ResetsUserPasswordContract;
 use App\Contracts\Auth\Password\SendsPasswordResetLinkContract;
 use App\Contracts\Auth\SendsEmailVerificationContract;
 use App\Contracts\Auth\VerifyEmailContract;
+use App\Contracts\CalculatesElo;
 use App\Contracts\GetsMarkdownFileContract;
 use App\Contracts\ParsesReplayContract;
 use Illuminate\Database\Eloquent\Builder;
@@ -59,6 +61,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(VerifyEmailContract::class, VerifyEmail::class);
 
         $this->app->bind(ParsesReplayContract::class, ReplayParser::class);
+
+        $this->app->bind(CalculatesElo::class, calculateElo::class);
     }
 
     /**
