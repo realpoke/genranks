@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\GameStatus;
+use App\Jobs\UpdateEloAndRank;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -133,12 +134,48 @@ class Game extends Model
             return GameStatus::VALIDATING; // Keep looking for ohter users upload
         }
 
-        // TODO: Find winner in other function when game is valid
+        $this->processWinner();
 
         Log::debug('Validate other game too');
         $otherGame->update(['status' => GameStatus::VALID]); // Validate other game too
 
         return GameStatus::VALID;
+    }
+
+    private function processWinner(Game ...$games): bool
+    {
+        if (count($games) !== 2) {
+            return false;
+        }
+
+        $winCounts = [];
+        $playerData = [];
+
+        foreach ($games as $game) {
+            $data = $game->data;
+            $replayOwnerSlot = (int) $data['Header']['ReplayOwnerSlot'];
+            $playerIndex = ($replayOwnerSlot / 100) % 10 - 1;
+
+            foreach ($data['Summary'] as $summary) {
+                $playerData[$playerIndex] = $game->uploader; // Directly store the user
+                if ($summary['Win']) {
+                    $winCounts[$playerIndex] = ($winCounts[$playerIndex] ?? 0) + 1;
+                }
+            }
+        }
+
+        $winnerIndex = array_search(1, $winCounts);
+        if ($winnerIndex !== false && count($winCounts) === 1) {
+            $playerA = $playerData[0] ?? null;
+            $playerB = $playerData[1] ?? null;
+            if ($playerA && $playerB) {
+                UpdateEloAndRank::dispatch($playerA, $playerB, $winnerIndex == 0);
+
+                return true; // Successful update
+            }
+        }
+
+        return false; // Indicate failure or inability to determine winner
     }
 
     private function generateGameHash(): ?string
