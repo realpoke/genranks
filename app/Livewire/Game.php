@@ -10,11 +10,6 @@ class Game extends Component
 {
     use WithPagination;
 
-    public function showGame(ModelsGame $game)
-    {
-        return $this->redirect($game->route(), navigate: true);
-    }
-
     public function render()
     {
         return view('livewire.game', [
