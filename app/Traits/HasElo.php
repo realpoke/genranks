@@ -4,6 +4,23 @@ namespace App\Traits;
 
 trait HasElo
 {
+    public function newElo(int $newElo): bool
+    {
+        if ($newElo == $this->elo) {
+            return true;
+        }
+
+        if ($newElo > $this->elo) {
+            return $this->giveElo($newElo - $this->elo);
+        }
+
+        if ($newElo < $this->elo) {
+            return $this->takeElo($this->elo - $newElo);
+        }
+
+        return false;
+    }
+
     public function giveElo(int $elo): bool
     {
         return $this->changeElo(abs($elo));
