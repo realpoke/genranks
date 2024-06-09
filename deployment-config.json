@@ -5,7 +5,7 @@
         "username": "cncranks",
         "port": "22",
         "path": "/var/www/html",
-        "beforeHooks": "php artisan migrate --force && php artisan optimize:clear",
-        "afterHooks": "php artisan queue:restart && php artisan optimize"
+        "beforeHooks": "",
+        "afterHooks": "php artisan migrate --force && php artisan queue:restart && php artisan optimize"
     }
 ]
