@@ -87,13 +87,13 @@ jobs:
           port: ${{ matrix.server.port }}
           envs: GITHUB_SHA
           script: |
-            mkdir -p "${{ matrix.server.path }}/releases/${GITHUB_SHA}"
-            tar xzf ${{ matrix.server.path }}/artifacts/${GITHUB_SHA}.tar.gz -C "${{ matrix.server.path }}/releases/${GITHUB_SHA}"
-            rm -rf ${{ matrix.server.path }}/releases/${GITHUB_SHA}/storage
+            sudo mkdir -p "${{ matrix.server.path }}/releases/${GITHUB_SHA}"
+            sudo tar xzf ${{ matrix.server.path }}/artifacts/${GITHUB_SHA}.tar.gz -C "${{ matrix.server.path }}/releases/${GITHUB_SHA}"
+            sudo rm -rf ${{ matrix.server.path }}/releases/${GITHUB_SHA}/storage
 
-            mkdir -p ${{ matrix.server.path }}/storage/{app,public,framework,logs}
-            mkdir -p ${{ matrix.server.path }}/storage/framework/{cache,sessions,testing,views}
-            mkdir -p ${{ matrix.server.path }}/storage/framework/cache/data
+            sudo mkdir -p ${{ matrix.server.path }}/storage/{app,public,framework,logs}
+            sudo mkdir -p ${{ matrix.server.path }}/storage/framework/{cache,sessions,testing,views}
+            sudo mkdir -p ${{ matrix.server.path }}/storage/framework/cache/data
             sudo chmod -R 774 ${{ matrix.server.path }}
             sudo chown -R www-data:www-data "${{ matrix.server.path }}"
 
