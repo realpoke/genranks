@@ -1,10 +1,10 @@
 [
     {
-        "name": "cncranks.com",
-        "ip": "165.22.69.115",
-        "username": "cncranks",
+        "name": "genranks.com",
+        "ip": "genranks.com",
+        "username": "genranks",
         "port": "22",
-        "path": "/var/www/html",
+        "path": "/var/www/genranks",
         "beforeHooks": "",
         "afterHooks": "php artisan migrate --force && php artisan queue:restart && php artisan optimize"
     }
