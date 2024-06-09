@@ -245,5 +245,6 @@ crontab -e
 
 ## After uploading your project start the supervisor
 ```bash
-sudo supervisorctl start laravel-worker-default:*,laravel-worker-sequential:*
+sudo supervisorctl start laravel-worker-default:*
+sudo supervisorctl start laravel-worker-sequential:*
 ```
