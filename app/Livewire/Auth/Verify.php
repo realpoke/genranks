@@ -24,6 +24,8 @@ class Verify extends Component
 
     public function logout(LogoutUserContract $outlogger)
     {
-        $outlogger();
+        $loggedOut = $outlogger();
+
+        $this->redirectRoute('home', navigate: true);
     }
 }

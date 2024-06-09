@@ -32,6 +32,6 @@ class Register extends Component
 
         $creator($this->form);
 
-        return redirect()->intended(route('home'));
+        return $this->redirectIntended(route('home'), navigate: true);
     }
 }

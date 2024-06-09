@@ -28,7 +28,9 @@ class NavigationMenu extends Component
 
     public function logout(LogoutUserContract $logouter)
     {
-        $logouter();
+        $loggedOut = $logouter();
+
+        $this->redirectRoute('home', navigate: true);
     }
 
     public function mount()

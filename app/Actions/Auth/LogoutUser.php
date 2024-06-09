@@ -16,6 +16,6 @@ class LogoutUser implements LogoutUserContract
             request()->session()->regenerateToken();
         }
 
-        redirect()->route('home');
+        return true;
     }
 }
