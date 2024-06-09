@@ -199,7 +199,7 @@ killasgroup=true
 user=genranks
 numprocs=1
 redirect_stderr=true
-stdout_logfile=/var/www/genranks/current/worker.log
+stdout_logfile=/var/www/genranks/worker.log
 stopwaitsecs=3600
 ```
 
@@ -220,7 +220,7 @@ killasgroup=true
 user=genranks
 numprocs=1
 redirect_stderr=true
-stdout_logfile=/var/www/genranks/current/worker-sequential.log
+stdout_logfile=/var/www/genranks/worker-sequential.log
 stopwaitsecs=3600
 ```
 
