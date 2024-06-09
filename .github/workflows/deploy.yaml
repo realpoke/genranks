@@ -108,7 +108,7 @@ jobs:
     - name: Run Before Hooks
       uses: appleboy/ssh-action@master
       env:
-        RELEASE_PATH: /var/www/html/releases/${{ github.sha }}
+        RELEASE_PATH: ${{ matrix.server.path }}/releases/${{ github.sha }}
       with:
         host: ${{ matrix.server.ip }}
         username: ${{ matrix.server.username }}
