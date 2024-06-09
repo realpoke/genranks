@@ -105,6 +105,8 @@ jobs:
       matrix:
         server: ${{ fromJson(needs.create-deployment-artifacts.outputs.deployment-matrix) }}
     steps:
+    - name: Create .env file
+      run: printf "%s" "$LARAVEL_ENV" > ${{ matrix.server.path }}/releases/${{ github.sha }}/.env
     - name: Run Before Hooks
       uses: appleboy/ssh-action@master
       env:
