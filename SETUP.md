@@ -229,7 +229,6 @@ stopwaitsecs=3600
 ```bash
 sudo supervisorctl reread
 sudo supervisorctl update
-sudo supervisorctl start "laravel-worker-*:*"
 ```
 
 ## Setup Cronjobs
