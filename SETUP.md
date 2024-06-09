@@ -224,7 +224,7 @@ stdout_logfile=/var/www/genranks/worker-sequential.log
 stopwaitsecs=3600
 ```
 
-**Start Supervisor**:
+**Prepare Supervisor**:
 
 ```bash
 sudo supervisorctl reread
@@ -241,4 +241,9 @@ crontab -e
 
 ```code
 * * * * * cd /var/www/genranks/current/ && php artisan schedule:run >> /dev/null 2>&1
+```
+
+## After uploading your project start the supervisor
+```bash
+sudo supervisorctl start laravel-worker-default:*,laravel-worker-sequential:*
 ```
