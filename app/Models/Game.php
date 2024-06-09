@@ -169,7 +169,7 @@ class Game extends Model
             $playerA = $playerData[0] ?? null;
             $playerB = $playerData[1] ?? null;
             if ($playerA && $playerB) {
-                UpdateEloAndRank::dispatch($playerA, $playerB, $winnerIndex == 0);
+                UpdateEloAndRank::dispatch($playerA, $playerB, $winnerIndex == 0)->onQueue('sequential');
 
                 return true; // Successful update
             }
