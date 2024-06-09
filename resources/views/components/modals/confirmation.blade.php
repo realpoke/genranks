@@ -1,6 +1,6 @@
 @props(['id' => null, 'maxWidth' => null])
 
-<x-modal :id="$id" :maxWidth="$maxWidth" {{ $attributes }}>
+<x-modals.dialog :id="$id" :maxWidth="$maxWidth" {{ $attributes }}>
     <div class="px-4 pt-5 pb-4 bg-white dark:bg-gray-800 sm:p-6 sm:pb-4">
         <div class="sm:flex sm:items-start">
             <div
@@ -27,4 +27,4 @@
     <div class="flex flex-row justify-end px-6 py-4 text-right bg-gray-100 dark:bg-gray-800">
         {{ $footer }}
     </div>
-</x-modal>
+</x-modals.dialog>

@@ -1,4 +1,8 @@
-@props(['title' => __('Confirm Password'), 'content' => __('For your security, please confirm your password to continue.'), 'button' => __('Confirm')])
+@props([
+    'title' => __('Confirm Password'),
+    'content' => __('For your security, please confirm your password to continue.'),
+    'button' => __('Confirm'),
+])
 
 @php
     $confirmableId = md5($attributes->wire('then'));

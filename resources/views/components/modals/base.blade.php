@@ -2,7 +2,7 @@
 
 @php
     $id = $id ?? md5($attributes->wire('model'));
-    
+
     $maxWidth = [
         'sm' => 'sm:max-w-sm',
         'md' => 'sm:max-w-md',
