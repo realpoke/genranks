@@ -89,6 +89,7 @@ jobs:
           script: |
             sudo mkdir -p "${{ matrix.server.path }}/releases/${GITHUB_SHA}"
             sudo tar xzf ${{ matrix.server.path }}/artifacts/${GITHUB_SHA}.tar.gz -C "${{ matrix.server.path }}/releases/${GITHUB_SHA}"
+            sudo printf "%s" "$LARAVEL_ENV" > ${RELEASE_PATH}/.env
             sudo rm -rf ${{ matrix.server.path }}/releases/${GITHUB_SHA}/storage
 
             sudo mkdir -p ${{ matrix.server.path }}/storage/{app,public,framework,logs}
@@ -105,10 +106,6 @@ jobs:
       matrix:
         server: ${{ fromJson(needs.create-deployment-artifacts.outputs.deployment-matrix) }}
     steps:
-    - name: Create directory and .env file
-      run: |
-        mkdir -p /var/www/html/releases/${{ github.sha }}
-        printf "%s" "$LARAVEL_ENV" > /var/www/html/releases/${{ github.sha }}/.env
     - name: Run Before Hooks
       uses: appleboy/ssh-action@master
       env:
