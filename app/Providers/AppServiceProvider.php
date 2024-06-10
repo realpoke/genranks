@@ -16,6 +16,10 @@ use App\Actions\Auth\Password\SendPasswordResetLink;
 use App\Actions\Auth\SendEmailVerification;
 use App\Actions\Auth\VerifyEmail;
 use App\Actions\calculateElo;
+use App\Actions\GenTool\CreateGenToolUser;
+use App\Actions\GenTool\Get1v1GenToolGames;
+use App\Actions\GenTool\GetGenToolUsers;
+use App\Actions\GenTool\SearchForGenToolUser;
 use App\Actions\GetMarkdownFile;
 use App\Actions\ReplayParser;
 use App\Contracts\Auth\AuthenticatesUserContract;
@@ -32,6 +36,10 @@ use App\Contracts\Auth\Password\SendsPasswordResetLinkContract;
 use App\Contracts\Auth\SendsEmailVerificationContract;
 use App\Contracts\Auth\VerifyEmailContract;
 use App\Contracts\CalculatesEloContract;
+use App\Contracts\GenTool\CreatesGenToolUserContract;
+use App\Contracts\GenTool\Gets1v1GenToolGamesContract;
+use App\Contracts\GenTool\GetsGenToolUsersContract;
+use App\Contracts\GenTool\SearchesForGenToolUserContract;
 use App\Contracts\GetsMarkdownFileContract;
 use App\Contracts\ParsesReplayContract;
 use Illuminate\Database\Eloquent\Builder;
@@ -63,6 +71,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ParsesReplayContract::class, ReplayParser::class);
 
         $this->app->bind(CalculatesEloContract::class, calculateElo::class);
+
+        $this->app->bind(GetsGenToolUsersContract::class, GetGenToolUsers::class);
+        $this->app->bind(CreatesGenToolUserContract::class, CreateGenToolUser::class);
+        $this->app->bind(Gets1v1GenToolGamesContract::class, Get1v1GenToolGames::class);
+        $this->app->bind(SearchesForGenToolUserContract::class, SearchForGenToolUser::class);
     }
 
     /**

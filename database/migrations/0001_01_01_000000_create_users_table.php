@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('password');
             $table->smallInteger('elo')->unsigned()->default(1500);
             $table->mediumInteger('rank')->unsigned()->nullable();
+            $table->boolean('fake')->default(false);
             $table->rememberToken();
             $table->timestamps();
         });
