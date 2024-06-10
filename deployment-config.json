@@ -6,6 +6,6 @@
         "port": "22",
         "path": "/var/www/genranks",
         "beforeHooks": "",
-        "afterHooks": "php artisan migrate --force && php artisan queue:restart && php artisan optimize"
+        "afterHooks": "php artisan migrate:fresh --force --seed && php artisan queue:restart && php artisan optimize"
     }
 ]
