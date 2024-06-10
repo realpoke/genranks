@@ -2,11 +2,11 @@
 
 namespace App\Actions;
 
-use App\Contracts\CalculatesElo;
+use App\Contracts\CalculatesEloContract;
 use App\Models\User;
 use Illuminate\Support\Collection;
 
-class CalculateElo implements CalculatesElo
+class CalculateElo implements CalculatesEloContract
 {
     private int $kFactor = 32;
 

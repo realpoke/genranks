@@ -5,7 +5,7 @@ namespace App\Contracts;
 use App\Models\User;
 use Illuminate\Support\Collection;
 
-interface CalculatesElo
+interface CalculatesEloContract
 {
     public function __invoke(User $playerA, User $playerB, bool $playerAWon): Collection;
 }

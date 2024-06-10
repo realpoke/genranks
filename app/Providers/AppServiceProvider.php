@@ -31,7 +31,7 @@ use App\Contracts\Auth\Password\ResetsUserPasswordContract;
 use App\Contracts\Auth\Password\SendsPasswordResetLinkContract;
 use App\Contracts\Auth\SendsEmailVerificationContract;
 use App\Contracts\Auth\VerifyEmailContract;
-use App\Contracts\CalculatesElo;
+use App\Contracts\CalculatesEloContract;
 use App\Contracts\GetsMarkdownFileContract;
 use App\Contracts\ParsesReplayContract;
 use Illuminate\Database\Eloquent\Builder;
@@ -62,7 +62,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(ParsesReplayContract::class, ReplayParser::class);
 
-        $this->app->bind(CalculatesElo::class, calculateElo::class);
+        $this->app->bind(CalculatesEloContract::class, calculateElo::class);
     }
 
     /**
