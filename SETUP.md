@@ -243,8 +243,15 @@ crontab -e
 * * * * * cd /var/www/genranks/current/ && php artisan schedule:run >> /dev/null 2>&1
 ```
 
-## After uploading your project start the supervisor
+## After uploading your project
+
+**start the supervisor**
 ```bash
 sudo supervisorctl start laravel-worker-default:*
 sudo supervisorctl start laravel-worker-sequential:*
+```
+
+**Upload binaries**
+```bash
+scp -i .ssh/key ./replay_parser_live genranks@genranks.com:/storage/binaries
 ```
