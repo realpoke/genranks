@@ -2,7 +2,7 @@
 
 namespace App\Jobs;
 
-use App\Contracts\CalculatesElo;
+use App\Contracts\CalculatesEloContract;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -27,7 +27,7 @@ class UpdateEloAndRank implements ShouldQueue
         $this->playerAWon = $playerAWon;
     }
 
-    public function handle(CalculatesElo $eloCalculator)
+    public function handle(CalculatesEloContract $eloCalculator)
     {
         $newRatings = $eloCalculator($this->playerA, $this->playerB, $this->playerAWon);
 
