@@ -144,6 +144,7 @@ class Game extends Model
 
     private function processWinner(Game ...$games): bool
     {
+        Log::debug('Processing winner');
         if (count($games) !== 2) {
             return false;
         }
@@ -151,6 +152,7 @@ class Game extends Model
         $winCounts = [];
         $playerData = [];
 
+        Log::debug('Checking games');
         foreach ($games as $game) {
             $data = $game->data;
             $replayOwnerSlot = (int) $data['Header']['ReplayOwnerSlot'];
@@ -164,16 +166,19 @@ class Game extends Model
             }
         }
 
+        Log::debug('Getting winner');
         $winnerIndex = array_search(1, $winCounts);
         if ($winnerIndex !== false && count($winCounts) === 1) {
             $playerA = $playerData[0] ?? null;
             $playerB = $playerData[1] ?? null;
             if ($playerA && $playerB) {
                 UpdateEloAndRank::dispatch($playerA, $playerB, $winnerIndex == 0)->onQueue('sequential');
+                Log::debug('Update ELO and ranks');
 
                 return true; // Successful update
             }
         }
+        Log::debug('Players not found in game');
 
         return false; // Indicate failure or inability to determine winner
     }
