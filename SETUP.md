@@ -81,6 +81,22 @@ FLUSH PRIVILEGES;
 exit;
 ```
 
+## Increse sort_buffer_size
+
+```bash
+sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
+[mysqld]
+sort_buffer_size = 10M
+```
+
+Restart and check mysql
+```bash
+sudo systemctl restart mysql
+sudo mysql
+SHOW VARIABLES LIKE 'sort_buffer_size';
+exit;
+```
+
 ## Setting Up Nginx
 
 ```bash
