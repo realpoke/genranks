@@ -5,6 +5,7 @@ namespace App\Console\Commands;
 use App\Enums\GameStatus;
 use App\Models\Game;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Log;
 
 class ValidateGames extends Command
 {
@@ -27,6 +28,7 @@ class ValidateGames extends Command
      */
     public function handle()
     {
+        Log::debug('Validating games...');
         $games = Game::where('status', GameStatus::VALIDATING)->get();
 
         foreach ($games as $game) {
