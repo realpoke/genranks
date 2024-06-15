@@ -7,4 +7,4 @@ use Illuminate\Support\Facades\Schedule;
 
 Schedule::command(UploadRandomUser::class)->everyTwoMinutes()->withoutOverlapping();
 Schedule::command(ClearReplays::class)->everyThirtyMinutes()->withoutOverlapping();
-Schedule::command(ClearGames::class)->everyThirtyMinutes()->withoutOverlapping();
+Schedule::command(ClearGames::class, ['--cleanusers'])->everyThirtyMinutes()->withoutOverlapping();
