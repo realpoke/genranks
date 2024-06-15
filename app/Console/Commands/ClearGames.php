@@ -27,7 +27,7 @@ class ClearGames extends Command
      */
     public function handle()
     {
-        $oldGames = Game::failed()->where('updated_at', '<=', Carbon::now()->addDays(-1))->get();
+        $oldGames = Game::failed()->where('updated_at', '<=', Carbon::now()->subHour())->get();
 
         $oldGames->each->delete();
 
