@@ -35,22 +35,61 @@ class ProcessReplay implements ShouldQueue
      */
     public function handle(ParsesReplayContract $parser): void
     {
-        $gameSetup = $this->user->setupGame($this->fileName);
-
-        if (! $gameSetup) {
-            return;
-        }
-
-        $game = Game::without('uploader')->where('file', $this->fileName)->first();
-
-        if (is_null($game)) {
-            Storage::disk('replays')->delete($this->fileName);
-
-            return;
-        }
-        $game->update(['status' => GameStatus::PROCESSING]);
-        $game->updateData($parser($this->fileName));
-
+        $replayData = $parser($this->fileName);
         Storage::disk('replays')->delete($this->fileName);
+
+        if ($replayData->isEmpty()) {
+            return;
+        }
+
+        $gameFound = Game::where('hash', $replayData->get('hash'))->first();
+
+        if (! is_null($gameFound)) {
+            dump('Found game');
+
+            if ($gameFound->users->contains($this->user)) {
+                dump('Exists for same user');
+
+                return;
+            }
+
+            dump('Attaching');
+            $this->user->games()->attach($gameFound->id, [
+                'header' => $replayData->get('header'),
+            ]);
+
+            dump('Updating summary');
+            // If a winner is in the new replay replace it.
+            $updatedSummary = collect($gameFound->summary)->map(function ($existingData) use ($replayData) {
+                $newPlayer = $replayData->firstWhere('Name', $existingData['Name']);
+
+                if ($newPlayer && $existingData['Win'] === false && $newPlayer['Win'] === true) {
+                    $existingData['Win'] = true;
+                }
+
+                return $existingData;
+            });
+
+            dump('Updating game');
+            $updated = $gameFound->update([
+                'summary' => $updatedSummary,
+                'status' => GameStatus::VALIDATING,
+            ]);
+
+            dump('Sending to validation');
+            ValidateGame::dispatch($gameFound)->onQueue('sequential');
+
+            return;
+        }
+
+        dump('Creating new game');
+        $game = $this->user->games()->create([
+            'hash' => $replayData->get('hash'),
+            'summary' => $replayData->get('summary'),
+            'meta' => $replayData->get('meta'),
+            'players' => $replayData->get('players'),
+        ], [
+            'header' => $replayData->get('header'),
+        ]);
     }
 }

@@ -7,7 +7,7 @@ namespace App\Models;
 use App\Traits\HasElo;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -80,15 +80,11 @@ class User extends Authenticatable
         return $query->whereNotNull('rank');
     }
 
-    public function setupGame(string $fileName): bool
+    public function games(): BelongsToMany
     {
-        $newGame = $this->games()->create(['file' => $fileName]);
-
-        return ! is_null($newGame);
-    }
-
-    public function games(): HasMany
-    {
-        return $this->hasMany(Game::class, 'uploader_id');
+        return $this->belongsToMany(Game::class)
+            ->using(GameUser::class)
+            ->withPivot(GameUser::FIELDS)
+            ->withTimestamps();
     }
 }

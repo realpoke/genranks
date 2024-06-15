@@ -1,7 +1,6 @@
 <?php
 
 use App\Console\Commands\GenTool\UploadRandomUser;
-use App\Console\Commands\ValidateGames;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -18,7 +17,6 @@ return Application::configure(basePath: dirname(__DIR__))
         },
     )
     ->withCommands([
-        ValidateGames::class,
         UploadRandomUser::class,
     ])
     ->withMiddleware(function (Middleware $middleware) {

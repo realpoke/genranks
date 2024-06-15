@@ -22,6 +22,7 @@ use App\Actions\GenTool\GetGenToolUsers;
 use App\Actions\GenTool\SearchForGenToolUser;
 use App\Actions\GetMarkdownFile;
 use App\Actions\ReplayParser;
+use App\Actions\ValidateGame;
 use App\Contracts\Auth\AuthenticatesUserContract;
 use App\Contracts\Auth\CreatesNewUserContract;
 use App\Contracts\Auth\LogoutUserContract;
@@ -42,6 +43,7 @@ use App\Contracts\GenTool\GetsGenToolUsersContract;
 use App\Contracts\GenTool\SearchesForGenToolUserContract;
 use App\Contracts\GetsMarkdownFileContract;
 use App\Contracts\ParsesReplayContract;
+use App\Contracts\ValidatesGameContract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
 use Illuminate\Support\ServiceProvider;
@@ -69,7 +71,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(VerifyEmailContract::class, VerifyEmail::class);
 
         $this->app->bind(ParsesReplayContract::class, ReplayParser::class);
-
+        $this->app->bind(ValidatesGameContract::class, ValidateGame::class);
         $this->app->bind(CalculatesEloContract::class, calculateElo::class);
 
         $this->app->bind(GetsGenToolUsersContract::class, GetGenToolUsers::class);

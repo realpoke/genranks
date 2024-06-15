@@ -1,7 +1,7 @@
 <x-layouts.container>
     <x-sections.card>
         <div class="flex justify-between">
-            <h1 class="text-4xl text-gray-900 dark:text-gray-100">{{ $game->uploader->name }}</h1>
+            <h1 class="text-4xl text-gray-900 dark:text-gray-100">Blank</h1>
             <div class="mt-1 flex items-center gap-x-1.5">
                 <div class="flex-none h-2 w-2 rounded-full {{ $game->status->classes() }}">
                     <div

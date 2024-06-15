@@ -38,15 +38,81 @@ class ReplayParser implements ParsesReplayContract
             return collect();
         }
 
-        // TODO: decode in chunks to avoid memory size issues.
         try {
             $decodedData = collect(json_decode($processResult->output(), true, 512, JSON_BIGINT_AS_STRING));
         } catch (JsonException $e) {
-            $decodedData = collect();
             Log::error('Failed to decode json for '.$replay.': '.$e->getMessage());
+
+            return collect();
         }
 
-        return $decodedData;
+        $gameHash = $this->generateGameHash($decodedData);
+        if (is_null($gameHash)) {
+            Log::error('Failed to generate game hash');
+
+            return collect();
+        }
+
+        return $this->cleanData($decodedData, $gameHash);
+    }
+
+    private function cleanData(Collection $data, string $hash): Collection
+    {
+        $summary = collect($data['Summary']);
+
+        $header = collect($data['Header'])->only([
+            'VersionMinor',
+            'VersionMajor',
+            'ReplayOwnerSlot',
+            'GameSpeed',
+        ]);
+        // Calculate the new field 'ArrayReplayOwnerSlot'
+        $arrayReplayOwnerSlot = 3000 + 100 * $header->get('ReplayOwnerSlot');
+        $header = $header->put('ArrayReplayOwnerSlot', $arrayReplayOwnerSlot);
+
+        $meta = collect($data['Header']['Metadata'])->only([
+            'MapFile',
+            'MapCRC',
+            'MapSize',
+            'Seed',
+            'C',
+            'SR',
+            'StartingCredits',
+            'O',
+        ]);
+
+        $players = collect($data['Header']['Metadata']['Players'])->map(function ($player) {
+            return collect($player)->except([
+                'IP',
+                'Port',
+                'Unknown',
+            ])->all();
+        });
+
+        return collect([
+            'hash' => $hash,
+            'summary' => $summary->all(),
+            'header' => $header->all(),
+            'meta' => $meta->all(),
+            'players' => $players->all(),
+        ]);
+    }
+
+    private function generateGameHash(Collection $data): ?string
+    {
+        try {
+            $hash = md5(
+                $data['Body'][32]['TimeCode'].
+                $data['Body'][50]['TimeCode'].
+                $data['Header']['Hash'].
+                $data['Header']['Metadata']['MapSize'].
+                $data['Header']['Metadata']['Seed']
+            );
+        } catch (\Throwable $th) {
+            return null;
+        }
+
+        return $hash;
     }
 
     private function getReplayParserBinary(): string|bool

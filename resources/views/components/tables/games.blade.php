@@ -6,7 +6,7 @@
                     <p class="text-sm font-semibold leading-6 text-gray-900">
                         <a wire:navigate href="{{ $game->route() }}">
                             <span class="absolute inset-x-0 bottom-0 -top-px"></span>
-                            {{ $game->uploader->name }}
+                            Blank
                         </a>
                     </p>
                     <p class="flex mt-1 text-xs leading-5 text-gray-500">

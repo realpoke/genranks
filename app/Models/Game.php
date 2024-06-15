@@ -3,28 +3,28 @@
 namespace App\Models;
 
 use App\Enums\GameStatus;
-use App\Jobs\UpdateEloAndRank;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Game extends Model
 {
     use HasFactory;
 
-    protected $with = ['uploader'];
-
     private static $maxValidationAttempts = 6;
 
-    protected $fillable = [
-        'hash',
-        'data',
-        'uploader_id',
+    public static $allowedTableFields = [
         'status',
-        'file',
-        'validation_attempts',
+        'hash',
+    ];
+
+    protected $fillable = [
+        'status',
+        'hash',
+        'summary',
+        'meta',
+        'players',
     ];
 
     public function route(): string
@@ -35,174 +35,23 @@ class Game extends Model
     protected function casts(): array
     {
         return [
-            'data' => 'array',
+            'summary' => 'array',
+            'meta' => 'array',
+            'players' => 'array',
             'status' => GameStatus::class,
         ];
     }
 
-    public function updateData(Collection $data): bool
+    public function users(): BelongsToMany
     {
-        if ($data->isEmpty()) {
-            $this->update(['status' => GameStatus::FAILED]);
-
-            return false;
-        }
-
-        // Check if game is valid or invalid; 1v1, length, etc
-        return $this->update([
-            'status' => GameStatus::VALIDATING,
-            'data' => $data->toArray(),
-        ]);
+        return $this->belongsToMany(User::class)
+            ->using(GameUser::class)
+            ->withPivot(GameUser::FIELDS)
+            ->withTimestamps();
     }
 
-    public function validate(): bool
+    public function scopeSearch(Builder $query, string $searchTerm): Builder
     {
-        if ($this->status == GameStatus::VALID || $this->status == GameStatus::INVALID) {
-            Log::debug('Game already valid or invalid');
-
-            return true; // Game already valid
-        }
-
-        if ($this->status != GameStatus::VALIDATING || $this->validation_attempts > self::$maxValidationAttempts) {
-            Log::debug('Too many validation attempts');
-
-            return $this->update(['status' => GameStatus::INVALID]); // Too many validation attempts
-        }
-        $checkStatus = $this->validCheck();
-
-        $this->increment('validation_attempts');
-
-        return $this->update(['status' => $checkStatus]); // Set valid to valid check
-    }
-
-    private function validCheck(): GameStatus
-    {
-        if (is_null($this->hash)) {
-            $newHash = $this->generateGameHash();
-            if (is_null($newHash)) {
-                Log::debug('Cant generate hash. Game not valid');
-
-                return GameStatus::INVALID; // Can't generate hash. Game not valid
-            }
-            $this->update(['hash' => $newHash]);
-        }
-
-        // Make sure after validation same hash and Header->ReplayOwnerSlot can't be uploaded again
-        $sameHashGames = Game::where('hash', $this->hash)->get();
-        foreach ($sameHashGames as $game) {
-            if ($game->data['Header']['ReplayOwnerSlot'] && ($game->status == GameStatus::VALID || ($game->status == GameStatus::INVALID && $game->validation_attempts > self::$maxValidationAttempts))) {
-                Log::debug('Same hash and Header->ReplayOwnerSlot is valid or invalid because of too many attempts. Invalid this game');
-
-                return GameStatus::INVALID; // Same hash and Header->ReplayOwnerSlot is valid or invalid. Invalid this game
-            }
-        }
-
-        // Check there are two players and they don't have a team
-        $metaPlayers = $this->data['Header']['Metadata']['Players'];
-        if (count($metaPlayers) != 2) { // Two players
-            Log::debug('Not exactly two players. Game not valid');
-
-            return GameStatus::INVALID; // Not exactly two players. Game not valid
-        }
-        foreach ($metaPlayers as $player) {
-            if ($player['Type'] != 'H' || $player['Team'] != '-1') { // Humans and no team
-                Log::debug('None-human players. Game not valid');
-
-                return GameStatus::INVALID; // None-human players. Game not valid
-            }
-        }
-
-        // Check both player replays are uploaded
-        $otherGame = Game::where('hash', $this->hash)->where('status', GameStatus::VALIDATING)->whereNot('id', $this->id)->first();
-        if (is_null($otherGame)) {
-            Log::debug('Could not find other players upload. Keep looking');
-
-            return GameStatus::VALIDATING; // Could not find other players upload. Keep looking
-        }
-
-        if ($otherGame->uploader->id == $this->uploader->id) {
-            Log::debug('Other game has same uploader and hash. Invalid other game');
-            $otherGame->update(['status' => GameStatus::INVALID]); // Other game has same uploader and hash. Invalid other game
-
-            return GameStatus::VALIDATING; // Keep looking for other users upload
-        }
-
-        if ($otherGame->data['Header']['ReplayOwnerSlot'] == $this->data['Header']['ReplayOwnerSlot']) {
-            Log::debug('Other game has same Header->ReplayOwnerSlot and hash. Invalid other game');
-            $otherGame->update(['status' => GameStatus::INVALID]); // Other game has same Header->ReplayOwnerSlot and hash. Invalid other game
-
-            return GameStatus::VALIDATING; // Keep looking for ohter users upload
-        }
-
-        $this->processWinner();
-
-        Log::debug('Validate other game too');
-        $otherGame->update(['status' => GameStatus::VALID]); // Validate other game too
-
-        return GameStatus::VALID;
-    }
-
-    private function processWinner(Game ...$games): bool
-    {
-        Log::debug('Processing winner');
-        if (count($games) !== 2) {
-            return false;
-        }
-
-        $winCounts = [];
-        $playerData = [];
-
-        Log::debug('Checking games');
-        foreach ($games as $game) {
-            $data = $game->data;
-            $replayOwnerSlot = (int) $data['Header']['ReplayOwnerSlot'];
-            $playerIndex = ($replayOwnerSlot / 100) % 10 - 1;
-
-            foreach ($data['Summary'] as $summary) {
-                $playerData[$playerIndex] = $game->uploader; // Directly store the user
-                if ($summary['Win']) {
-                    $winCounts[$playerIndex] = ($winCounts[$playerIndex] ?? 0) + 1;
-                }
-            }
-        }
-
-        Log::debug('Getting winner');
-        $winnerIndex = array_search(1, $winCounts);
-        if ($winnerIndex !== false && count($winCounts) === 1) {
-            $playerA = $playerData[0] ?? null;
-            $playerB = $playerData[1] ?? null;
-            if ($playerA && $playerB) {
-                UpdateEloAndRank::dispatch($playerA, $playerB, $winnerIndex == 0)->onQueue('sequential');
-                Log::debug('Update ELO and ranks');
-
-                return true; // Successful update
-            }
-        }
-        Log::debug('Players not found in game');
-
-        return false; // Indicate failure or inability to determine winner
-    }
-
-    private function generateGameHash(): ?string
-    {
-        $d = $this->data;
-        try {
-            $hash = md5(
-                $d['Body'][32]['TimeCode'].
-                $d['Body'][50]['TimeCode'].
-                $d['Header']['Hash'].
-                $d['Header']['Metadata']['MapSize'].
-                $d['Header']['Metadata']['Seed']
-            );
-        } catch (\Throwable $th) {
-            return null;
-        }
-
-        return $hash;
-    }
-
-    public function uploader(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'uploader_id');
+        return $query->whereLike(['hash'], $searchTerm);
     }
 }
