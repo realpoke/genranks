@@ -50,6 +50,33 @@ class Game extends Model
             ->withTimestamps();
     }
 
+    public function scopeUnverified(Builder $query): Builder
+    {
+        return $query->whereIn('status', [
+            GameStatus::AWAITING->value,
+            GameStatus::FAILED->value,
+            GameStatus::VALIDATING->value,
+            GameStatus::CALCULATING->value,
+            GameStatus::INVALID->value,
+        ]);
+    }
+
+    public function scopeVerified(Builder $query): Builder
+    {
+        return $query->whereIn('status', [
+            GameStatus::VALID->value,
+            GameStatus::DRAW->value,
+        ]);
+    }
+
+    public function scopeFailed(Builder $query): Builder
+    {
+        return $query->whereIn('status', [
+            GameStatus::FAILED->value,
+            GameStatus::INVALID->value,
+        ]);
+    }
+
     public function scopeSearch(Builder $query, string $searchTerm): Builder
     {
         return $query->whereLike(['hash'], $searchTerm);
