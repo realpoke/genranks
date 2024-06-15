@@ -81,6 +81,11 @@ class User extends Authenticatable
         return $query->whereNotNull('rank');
     }
 
+    public function scopeFake(Builder $query): Builder
+    {
+        return $query->where('fake', true);
+    }
+
     public function games(): BelongsToMany
     {
         return $this->belongsToMany(Game::class)
