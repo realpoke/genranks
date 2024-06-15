@@ -143,10 +143,12 @@ jobs:
         port: ${{ matrix.server.port }}
         envs: GITHUB_SHA, RELEASE_PATH, ACTIVE_RELEASE_PATH, STORAGE_PATH, BASE_PATH, LARAVEL_ENV
         script: |
-          printf "%s" "$LARAVEL_ENV" > "${BASE_PATH}/.env"
-          ln -s -f ${BASE_PATH}/.env $RELEASE_PATH
-          ln -s -f $STORAGE_PATH $RELEASE_PATH
-          ln -s -n -f $RELEASE_PATH $ACTIVE_RELEASE_PATH
+          sudo printf "%s" "$LARAVEL_ENV" > "${BASE_PATH}/.env"
+          sudo ln -s -f ${BASE_PATH}/.env $RELEASE_PATH
+          sudo ln -s -f $STORAGE_PATH $RELEASE_PATH
+          sudo ln -s -n -f $RELEASE_PATH $ACTIVE_RELEASE_PATH
+          sudo chmod -R 774 ${BASE_PATH}
+          sudo chown -R www-data:www-data "${BASE_PATH}"
           sudo service php8.3-fpm reload
 
   run-after-hooks:
@@ -191,5 +193,5 @@ jobs:
         port: ${{ matrix.server.port }}
         envs: RELEASES_PATH, ARTIFACTS_PATH
         script: |
-          cd $RELEASES_PATH && ls -t -1 | tail -n +4 | xargs rm -rf
-          cd $ARTIFACTS_PATH && ls -t -1 | tail -n +4 | xargs rm -rf
+          cd $RELEASES_PATH && ls -t -1 | tail -n +3 | xargs rm -rf
+          cd $ARTIFACTS_PATH && ls -t -1 | tail -n +3 | xargs rm -rf
