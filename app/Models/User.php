@@ -6,6 +6,7 @@ namespace App\Models;
 
 use App\Traits\HasElo;
 use Filament\Panel;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -75,7 +76,7 @@ class User extends Authenticatable
         return $this->can('viewAny:filament');
     }
 
-    public function scopeRanked($query)
+    public function scopeRanked(Builder $query): Builder
     {
         return $query->whereNotNull('rank');
     }
