@@ -57,6 +57,7 @@ class ProcessReplay implements ShouldQueue
             $this->user->games()->attach($gameFound->id, [
                 'header' => $replayData->get('header'),
             ]);
+            $gameFound->refresh(); // Make sure the data is updated with both users.
 
             dump('Updating summary');
             // If a winner is in the new replay replace it.
