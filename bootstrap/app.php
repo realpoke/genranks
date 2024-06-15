@@ -1,5 +1,7 @@
 <?php
 
+use App\Console\Commands\ClearGames;
+use App\Console\Commands\ClearReplays;
 use App\Console\Commands\GenTool\UploadRandomUser;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -18,6 +20,8 @@ return Application::configure(basePath: dirname(__DIR__))
     )
     ->withCommands([
         UploadRandomUser::class,
+        ClearReplays::class,
+        ClearGames::class,
     ])
     ->withMiddleware(function (Middleware $middleware) {
         //
