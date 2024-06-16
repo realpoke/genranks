@@ -43,7 +43,7 @@ class ValidateGame implements ValidatesGameContract
         }
 
         // Check both player replays are uploaded
-        if ($game->users->count() == 2) {
+        if ($game->users->count() != 2) {
             Log::debug('Not two users attached');
 
             return GameStatus::INVALID;
