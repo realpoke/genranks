@@ -13,7 +13,7 @@ class ValidateGame implements ValidatesGameContract
     public function __invoke(Game $game): bool
     {
         if ($game->status != GameStatus::VALIDATING) {
-            Log::debug('Too many validation attempts');
+            Log::debug('Status was not validating, we should not be here.');
 
             return $game->update(['status' => GameStatus::INVALID]); // We are not validating, we should not be here
         }
