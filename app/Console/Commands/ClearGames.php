@@ -30,7 +30,7 @@ class ClearGames extends Command
     {
         $cleanUsers = $this->option('cleanusers');
 
-        $oldGames = Game::failed()->where('updated_at', '<=', Carbon::now()->subHour());
+        $oldGames = Game::unverified()->where('updated_at', '<=', Carbon::now()->subHour());
 
         $oldGames->delete();
 
