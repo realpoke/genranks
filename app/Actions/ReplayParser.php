@@ -67,7 +67,7 @@ class ReplayParser implements ParsesReplayContract
             'GameSpeed',
         ]);
         // Calculate the new field 'ArrayReplayOwnerSlot'
-        $arrayReplayOwnerSlot = 3000 + 100 * $header->get('ReplayOwnerSlot');
+        $arrayReplayOwnerSlot = (int) ($header->get('ReplayOwnerSlot') - 3000) / 100;
         $header = $header->put('ArrayReplayOwnerSlot', $arrayReplayOwnerSlot);
 
         $meta = collect($data['Header']['Metadata'])->only([
