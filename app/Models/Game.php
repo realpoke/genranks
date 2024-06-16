@@ -54,7 +54,6 @@ class Game extends Model
     {
         return $query->whereIn('status', [
             GameStatus::AWAITING->value,
-            GameStatus::FAILED->value,
             GameStatus::VALIDATING->value,
             GameStatus::CALCULATING->value,
             GameStatus::INVALID->value,
@@ -72,7 +71,6 @@ class Game extends Model
     public function scopeFailed(Builder $query): Builder
     {
         return $query->whereIn('status', [
-            GameStatus::FAILED->value,
             GameStatus::INVALID->value,
         ]);
     }

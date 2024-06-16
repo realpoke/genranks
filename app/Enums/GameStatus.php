@@ -9,7 +9,6 @@ enum GameStatus: string
     use EnumArray;
 
     case AWAITING = 'awaiting processing';
-    case FAILED = 'failed processing';
     case VALIDATING = 'validating';
     case VALID = 'valid';
     case DRAW = 'draw';
@@ -21,7 +20,7 @@ enum GameStatus: string
         return match ($this) {
             self::AWAITING, self::CALCULATING => 'bg-sky-500',
             self::VALIDATING, self::DRAW => 'bg-amber-300',
-            self::FAILED, self::INVALID => 'bg-rose-700',
+            self::INVALID => 'bg-rose-700',
             self::VALID => 'bg-emerald-500',
         };
     }
