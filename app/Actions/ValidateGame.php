@@ -24,6 +24,10 @@ class ValidateGame implements ValidatesGameContract
 
     private function validCheck(Game $game): GameStatus
     {
+        Log::debug($game);
+        Log::debug($game->players);
+        Log::debug($game->users);
+
         // Check there are two players and they don't have a team
         if (count($game->players) != 2) { // Two players
             Log::debug('Not exactly two players. Game not valid');
