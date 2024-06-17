@@ -69,6 +69,7 @@ class ValidateGame implements ValidatesGameContract
             return GameStatus::INVALID;
         }
 
+        // TODO: Get correlating user to players and send users instead of players
         UpdateEloAndRank::dispatch($playerA, $playerB, $playerAWon)->onQueue('sequential');
 
         return GameStatus::CALCULATING;

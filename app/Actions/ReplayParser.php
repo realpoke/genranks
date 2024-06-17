@@ -70,6 +70,7 @@ class ReplayParser implements ParsesReplayContract
         $arrayReplayOwnerSlot = (int) ($header->get('ReplayOwnerSlot') - 3000) / 100;
         $header = $header->put('ArrayReplayOwnerSlot', $arrayReplayOwnerSlot);
 
+        // TODO: Make map hash, with map name and size so we can have a map list later
         $meta = collect($data['Header']['Metadata'])->only([
             'MapFile',
             'MapCRC',

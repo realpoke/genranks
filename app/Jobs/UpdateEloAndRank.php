@@ -35,6 +35,8 @@ class UpdateEloAndRank implements ShouldQueue
             return;
         }
 
+        // TODO: Get game and update changed_elo for the specified game
+
         // TODO: Database transaction this so if one fails both should be reverted
         $this->playerA->newElo($newRatings->get('playerANewElo'));
         $this->playerB->newElo($newRatings->get('playerBNewElo'));
