@@ -6,7 +6,7 @@
                     <p class="text-sm font-semibold leading-6 text-gray-900">
                         <a wire:navigate href="{{ $game->route() }}">
                             <span class="absolute inset-x-0 bottom-0 -top-px"></span>
-                            Blank
+                            {{ $game->players[0]['Name'] ?? 'UNKNOWN' }} VS {{ $game->players[1]['Name'] ?? 'UNKNOWN' }}
                         </a>
                     </p>
                     <p class="flex mt-1 text-xs leading-5 text-gray-500">
