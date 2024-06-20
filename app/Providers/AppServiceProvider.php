@@ -15,7 +15,7 @@ use App\Actions\Auth\Password\ResetUserPassword;
 use App\Actions\Auth\Password\SendPasswordResetLink;
 use App\Actions\Auth\SendEmailVerification;
 use App\Actions\Auth\VerifyEmail;
-use App\Actions\calculateElo;
+use App\Actions\CalculateElo;
 use App\Actions\GenTool\CreateGenToolUser;
 use App\Actions\GenTool\Get1v1GenToolGames;
 use App\Actions\GenTool\GetGenToolUsers;
@@ -72,7 +72,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(ParsesReplayContract::class, ReplayParser::class);
         $this->app->bind(ValidatesGameContract::class, ValidateGame::class);
-        $this->app->bind(CalculatesEloContract::class, calculateElo::class);
+        $this->app->bind(CalculatesEloContract::class, CalculateElo::class);
 
         $this->app->bind(GetsGenToolUsersContract::class, GetGenToolUsers::class);
         $this->app->bind(CreatesGenToolUserContract::class, CreateGenToolUser::class);
