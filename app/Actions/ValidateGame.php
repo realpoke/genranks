@@ -24,10 +24,6 @@ class ValidateGame implements ValidatesGameContract
 
     private function validCheck(Game $game): GameStatus
     {
-        Log::debug($game);
-        Log::debug($game->players);
-        Log::debug($game->users);
-
         // Check there are two players and they don't have a team
         if (count($game->players) != 2) { // Two players
             Log::debug('Not exactly two players. Game not valid');
@@ -35,7 +31,7 @@ class ValidateGame implements ValidatesGameContract
             return GameStatus::INVALID; // Not exactly two players. Game not valid
         }
         foreach ($game->players as $player) {
-            if ($player['Type'] != 'H' || $player['Team'] != '-1') { // Humans and no team
+            if ($player['Type'] != 'H') { // Humans
                 Log::debug('None-human players. Game not valid');
 
                 return GameStatus::INVALID; // None-human players. Game not valid
@@ -62,16 +58,45 @@ class ValidateGame implements ValidatesGameContract
         $playerBWon = $playerB['Win'];
 
         if ($playerAWon === false && $playerBWon === false) {
+            Log::debug('No winner, draw');
+
             return GameStatus::DRAW;
         }
 
         if ($playerAWon === true && $playerBWon === true) {
+            Log::debug('Both players won, game invalid');
+
             return GameStatus::INVALID;
         }
 
-        // TODO: Get correlating user to players and send users instead of players
-        UpdateEloAndRank::dispatch($playerA, $playerB, $playerAWon)->onQueue('sequential');
+        Log::debug('Attaching users to game');
+        foreach ($game->users as $user) {
+            Log::debug('User: '.$user);
+            $replayOwnerSlot = $user->pivot->header['ArrayReplayOwnerSlot'];
+            Log::debug('User: '.$user->id.' Replay owner slot: '.$replayOwnerSlot);
 
-        return GameStatus::CALCULATING;
+            if ($replayOwnerSlot === 0) {
+                Log::debug('Player A is the owner');
+                // Match found for Player A
+                $playerAUser = $user;
+            } elseif ($replayOwnerSlot === 1) {
+                Log::debug('Player A is the owner');
+                // Match found for Player B
+                $playerBUser = $user;
+            }
+        }
+
+        // Ensure both players are found before dispatching the job
+        if ($playerAUser && $playerBUser) {
+            Log::debug('Dispatching update elo and rank job');
+            UpdateEloAndRank::dispatch($playerAUser, $playerBUser, $playerAWon)->onQueue('sequential');
+
+            return GameStatus::VALID;
+        }
+
+        // If players are not found
+        Log::error('Players not found for game: '.$game->id);
+
+        return GameStatus::INVALID;
     }
 }

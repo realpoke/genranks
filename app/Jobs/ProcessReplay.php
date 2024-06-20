@@ -64,16 +64,22 @@ class ProcessReplay implements ShouldQueue
             $gameFound->refresh(); // Make sure the data is updated with both users.
 
             Log::debug('Updating summary');
+            Log::debug($gameFound->summary);
+            Log::debug($replayData->get('summary'));
             // If a winner is in the new replay replace it.
             $updatedSummary = collect($gameFound->summary)->map(function ($existingData) use ($replayData) {
-                $newPlayer = $replayData->firstWhere('Name', $existingData['Name']);
+                // Find the new player data in the replay data
+                $newPlayer = collect($replayData)->firstWhere('Name', $existingData['Name']);
 
-                if ($newPlayer && $existingData['Win'] === false && $newPlayer['Win'] === true) {
-                    $existingData['Win'] = true;
+                // If the new player data exists, update the existing data
+                if ($newPlayer) {
+                    // Update the 'Win' field to true if either is true
+                    $existingData['Win'] = $existingData['Win'] || $newPlayer['Win'];
                 }
 
                 return $existingData;
             });
+            Log::debug('New summary: '.$updatedSummary);
 
             Log::debug('Updating game');
             $updated = $gameFound->update([
