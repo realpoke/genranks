@@ -2,37 +2,43 @@
 
 namespace App\Traits;
 
+use App\Models\Game;
+
 trait HasElo
 {
-    public function newElo(int $newElo): bool
+    public function newElo(int $newElo, ?Game $game = null): bool
     {
         if ($newElo == $this->elo) {
             return true;
         }
 
         if ($newElo > $this->elo) {
-            return $this->giveElo($newElo - $this->elo);
+            return $this->giveElo($newElo - $this->elo, $game);
         }
 
         if ($newElo < $this->elo) {
-            return $this->takeElo($this->elo - $newElo);
+            return $this->takeElo($this->elo - $newElo, $game);
         }
 
         return false;
     }
 
-    public function giveElo(int $elo): bool
+    public function giveElo(int $elo, ?Game $game = null): bool
     {
-        return $this->changeElo(abs($elo));
+        return $this->changeElo(abs($elo), $game);
     }
 
-    public function takeElo(int $elo): bool
+    public function takeElo(int $elo, ?Game $game = null): bool
     {
-        return $this->changeElo(-abs($elo));
+        return $this->changeElo(-abs($elo), $game);
     }
 
-    private function changeElo(int $changeElo): bool
+    private function changeElo(int $changeElo, ?Game $game = null): bool
     {
+
+        if (! is_null($game)) {
+            $this->games()->updateExistingPivot($game->id, ['elo_change' => $changeElo]);
+        }
         $oldElo = $this->elo;
         $this->elo = $oldElo + $changeElo;
 

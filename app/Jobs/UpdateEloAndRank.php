@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Contracts\CalculatesEloContract;
+use App\Models\Game;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -18,13 +19,16 @@ class UpdateEloAndRank implements ShouldQueue
 
     protected User $playerB;
 
+    protected Game $game;
+
     protected bool $playerAWon;
 
-    public function __construct(User $playerA, User $playerB, bool $playerAWon)
+    public function __construct(User $playerA, User $playerB, bool $playerAWon, ?Game $game = null)
     {
         $this->playerA = $playerA;
         $this->playerB = $playerB;
         $this->playerAWon = $playerAWon;
+        $this->game = $game;
     }
 
     public function handle(CalculatesEloContract $eloCalculator)
@@ -35,10 +39,8 @@ class UpdateEloAndRank implements ShouldQueue
             return;
         }
 
-        // TODO: Get game and update changed_elo for the specified game
-
         // TODO: Database transaction this so if one fails both should be reverted
-        $this->playerA->newElo($newRatings->get('playerANewElo'));
-        $this->playerB->newElo($newRatings->get('playerBNewElo'));
+        $this->playerA->newElo($newRatings->get('playerANewElo'), $this->game);
+        $this->playerB->newElo($newRatings->get('playerBNewElo'), $this->game);
     }
 }

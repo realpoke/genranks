@@ -89,7 +89,7 @@ class ValidateGame implements ValidatesGameContract
         // Ensure both players are found before dispatching the job
         if ($playerAUser && $playerBUser) {
             Log::debug('Dispatching update elo and rank job');
-            UpdateEloAndRank::dispatch($playerAUser, $playerBUser, $playerAWon)->onQueue('sequential');
+            UpdateEloAndRank::dispatch($playerAUser, $playerBUser, $playerAWon, $game)->onQueue('sequential');
 
             return GameStatus::VALID;
         }
