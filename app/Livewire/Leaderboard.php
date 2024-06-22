@@ -18,7 +18,7 @@ class Leaderboard extends Component
     public function render()
     {
         return view('livewire.leaderboard', [
-            'users' => User::latest()->ranked()->paginate(12),
+            'users' => User::orderBy('rank')->ranked()->paginate(12),
         ]);
     }
 }
