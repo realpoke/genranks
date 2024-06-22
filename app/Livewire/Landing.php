@@ -29,7 +29,7 @@ class Landing extends Component
         });
 
         $this->activeUsers = Cache::remember('active-users', 60, function () {
-            return User::where('updated_at', '>', now()->subDays(7))->count();
+            return User::where('updated_at', '>', now()->subDays(30))->count();
         });
 
         $this->topCommanders = User::ranked()->orderBy('elo', 'desc')->take(3)->get();
