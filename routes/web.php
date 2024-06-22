@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\GenLinkDownloadController;
 use App\Livewire\Game;
 use App\Livewire\Landing;
 use App\Livewire\Leaderboard;
@@ -21,3 +22,5 @@ Route::redirect('/game', '/games');
 Route::get('/leaderboard', Leaderboard::class)->name('leaderboard.index');
 
 Route::redirect('/discord', 'https://discord.com/users/123792843851431937')->name('discord');
+
+Route::get('/genlink/download', GenLinkDownloadController::class)->name('genlink.download');
