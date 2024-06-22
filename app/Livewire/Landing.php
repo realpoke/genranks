@@ -21,7 +21,9 @@ class Landing extends Component
     public function mount()
     {
         $this->eloChanged = Cache::remember('elo-changed', 60, function () {
-            return GameUser::where('updated_at', '>', now()->subDay())->sum('elo_change');
+            return GameUser::where('updated_at', '>', now()->subDay())
+                ->where('elo_change', '>', 0)
+                ->sum('elo_change');
         });
 
         $this->gamesProcessed = Cache::remember('games-processed', 60, function () {
