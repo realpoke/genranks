@@ -34,11 +34,13 @@ class Landing extends Component
             return User::where('updated_at', '>', now()->subDays(30))->count();
         });
 
-        $this->topCommanders = User::ranked()->orderBy('elo', 'desc')->take(3)->get();
+        $this->topCommanders = Cache::remember('top-commanders', 60, function () {
+            return User::ranked()->orderBy('elo', 'desc')->take(3)->get();
+        });
     }
 
     public function render()
     {
-        return view('livewire.landing', ['topCommanders' => $this->topCommanders]);
+        return view('livewire.landing');
     }
 }
