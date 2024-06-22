@@ -19,3 +19,5 @@ Route::get('/game/{game}', ShowGame::class)->name('game.show');
 Route::redirect('/game', '/games');
 
 Route::get('/leaderboard', Leaderboard::class)->name('leaderboard.index');
+
+Route::redirect('/discord', 'https://discord.com/users/123792843851431937');
