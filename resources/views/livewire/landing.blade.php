@@ -3,8 +3,8 @@
         <div class="px-6 pb-32 mx-auto max-w-7xl pt-36 sm:pt-60 lg:px-8 lg:pt-32">
             <div class="max-w-2xl mx-auto gap-x-14 lg:mx-0 lg:flex lg:max-w-none lg:items-center">
                 <div class="relative w-full max-w-xl lg:shrink-0 xl:max-w-2xl">
-                    <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Dominate the Battlefield: C&C
-                        Generals Zero Hour Leaderboard</h1>
+                    <h1 class="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl">Dominate the Battlefield:
+                        GenRanks</h1>
                     <p class="mt-6 text-lg leading-8 text-gray-600 sm:max-w-md lg:max-w-none">Compete with the best and
                         climb
                         the ranks in Command & Conquer Generals Zero Hour. Showcase your strategic prowess, track your
