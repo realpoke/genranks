@@ -11,7 +11,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ProcessReplay implements ShouldQueue
@@ -36,7 +35,6 @@ class ProcessReplay implements ShouldQueue
      */
     public function handle(ParsesReplayContract $parser): void
     {
-        Log::debug('Parsing replay: '.$this->fileName);
         $replayData = $parser($this->fileName);
         Storage::disk('replays')->delete($this->fileName);
 
@@ -47,15 +45,12 @@ class ProcessReplay implements ShouldQueue
         $gameFound = Game::where('hash', $replayData->get('hash'))->first();
 
         if (! is_null($gameFound)) {
-            Log::debug('Found game');
 
             if ($gameFound->users->contains($this->user)) {
-                Log::debug('Exists for same user');
 
                 return;
             }
 
-            Log::debug('Attaching');
             $this->user->games()->attach($gameFound->id, [
                 'header' => $replayData->get('header'),
             ]);
@@ -63,9 +58,6 @@ class ProcessReplay implements ShouldQueue
             // TODO: Make sure this is actaully needed
             $gameFound->refresh(); // Make sure the data is updated with both users.
 
-            Log::debug('Updating summary');
-            Log::debug($gameFound->summary);
-            Log::debug($replayData->get('summary'));
             // If a winner is in the new replay replace it.
             $updatedSummary = collect($gameFound->summary)->map(function ($existingData) use ($replayData) {
                 // Find the new player data in the replay data
@@ -79,21 +71,17 @@ class ProcessReplay implements ShouldQueue
 
                 return $existingData;
             });
-            Log::debug('New summary: '.$updatedSummary);
 
-            Log::debug('Updating game');
             $updated = $gameFound->update([
                 'summary' => $updatedSummary,
                 'status' => GameStatus::VALIDATING,
             ]);
 
-            Log::debug('Sending to validation');
             ValidateGame::dispatch($gameFound)->onQueue('sequential');
 
             return;
         }
 
-        Log::debug('Creating new game');
         $game = $this->user->games()->create([
             'hash' => $replayData->get('hash'),
             'summary' => $replayData->get('summary'),

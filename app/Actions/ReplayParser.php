@@ -47,7 +47,6 @@ class ReplayParser implements ParsesReplayContract
         }
 
         $gameHash = $this->generateGameHash($decodedData);
-        Log::debug('Game hash: '.$gameHash);
 
         if (is_null($gameHash)) {
             Log::error('Failed to generate game hash');
