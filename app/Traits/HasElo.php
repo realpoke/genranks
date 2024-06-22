@@ -65,7 +65,7 @@ trait HasElo
 
     private function setInitialRank(int $elo): bool
     {
-        $usersToUpdate = $this->getUsersToUpdate(0, $elo);
+        $usersToUpdate = $this->queryUsersToUpdate(0, $elo);
         $bestRank = $usersToUpdate->min('rank');
 
         if ($bestRank !== null) {
@@ -73,7 +73,7 @@ trait HasElo
             $usersToUpdate->increment('rank');
         } else {
             $maxRank = self::where('id', '!=', $this->id)
-                ->whereNotNull('rank')
+                ->ranked()
                 ->max('rank');
             $this->rank = $maxRank === null ? 1 : ($maxRank + 1);
         }
@@ -83,36 +83,36 @@ trait HasElo
 
     private function rankUp(int $oldElo, int $newElo): bool
     {
-        $usersToUpdate = $this->getUsersToUpdate($oldElo, $newElo);
+        $usersToUpdate = $this->queryUsersToUpdate($oldElo, $newElo);
+        $rankChange = $usersToUpdate->count();
         $usersToUpdate->increment('rank');
 
-        $this->rank = $this->rank - $usersToUpdate->get()->count();
+        $this->rank = $this->rank - $rankChange;
 
         return $this->save();
     }
 
     private function rankDown(int $oldElo, int $newElo): bool
     {
-
-        $usersToUpdate = $this->getUsersToUpdate($oldElo, $newElo);
+        $usersToUpdate = $this->queryUsersToUpdate($oldElo, $newElo);
+        $rankChange = $usersToUpdate->count();
         $usersToUpdate->decrement('rank');
 
-        $this->rank = $this->rank + $usersToUpdate->get()->count();
+        $this->rank = $this->rank + $rankChange;
 
         return $this->save();
     }
 
-    private function getUsersToUpdate(int $oldElo, int $newElo): \Illuminate\Database\Eloquent\Builder
+    private function queryUsersToUpdate(int $oldElo, int $newElo): \Illuminate\Database\Eloquent\Builder
     {
         $query = self::where('id', '!=', $this->id)
-            ->whereNotNull('rank');
+            ->ranked();
 
         if ($this->rank === null) {
             return $query->where('elo', '<=', $newElo);
         }
 
         $eloRange = [min($oldElo, $newElo), max($oldElo, $newElo)];
-
         if ($oldElo < $newElo) {
             return $query->where('rank', '<', $this->rank)
                 ->whereBetween('elo', $eloRange);
