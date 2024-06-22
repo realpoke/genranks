@@ -17,6 +17,8 @@ class RolesAndPermissionsSeeder extends Seeder
     {
         app()[PermissionRegistrar::class]->forgetCachedPermissions();
 
+        $this->command->info('Seeding roles and permissions');
+
         $generateData = [
             'user' => [],
             'admin' => [
@@ -28,8 +30,10 @@ class RolesAndPermissionsSeeder extends Seeder
         ];
 
         foreach ($generateData as $role => $permissions) {
+            $this->command->info("Seeding role: $role");
             $role = Role::findOrCreate($role);
             foreach ($permissions as $permission) {
+                $this->command->info("Seeding permission: $permission");
                 Permission::findOrCreate('viewAny:'.$permission);
                 Permission::findOrCreate('view:'.$permission);
                 Permission::findOrCreate('create:'.$permission);
@@ -39,8 +43,10 @@ class RolesAndPermissionsSeeder extends Seeder
                 Permission::findOrCreate('forceDelete:'.$permission);
                 Permission::findOrCreate('set:'.$permission);
 
+                $this->command->info("Giving permission to role: $role->name");
                 $role->givePermissionTo(Permission::whereLike('name', $permission)->get());
             }
+            $this->command->info("Done seeding role: $role->name");
         }
 
         if (User::whereEmail('admin@mail.com')->exists()) {
