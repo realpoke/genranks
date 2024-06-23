@@ -42,7 +42,7 @@ class UploadRandomUser extends Command
             if ($users->isEmpty()) {
                 $this->info('No users found.');
 
-                break;
+                continue;
             }
 
             $userValue = $users->random();
@@ -54,7 +54,7 @@ class UploadRandomUser extends Command
             if ($games->isEmpty()) {
                 $this->info('No 1v1 games found.');
 
-                break;
+                continue;
             }
 
             // Create or find fake user
@@ -86,7 +86,7 @@ class UploadRandomUser extends Command
                 if ($opponentGames->isEmpty()) {
                     $this->info('No opponent 1v1 games found.');
 
-                    break 2;
+                    continue 2;
                 }
                 $userOpponent = $userCreator($userNickname)->first();
                 $this->info('Opponent created: '.$userNickname);
