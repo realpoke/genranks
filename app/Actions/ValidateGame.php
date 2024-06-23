@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Contracts\ValidatesGameContract;
 use App\Enums\GameStatus;
+use App\Jobs\GiveUserStats;
 use App\Jobs\UpdateEloAndRank;
 use App\Models\Game;
 use Illuminate\Support\Facades\Log;
@@ -22,6 +23,8 @@ class ValidateGame implements ValidatesGameContract
 
     private function validCheck(Game $game): GameStatus
     {
+        // TODO: Chcek map is in the pool of validated maps
+
         // Check there are two players and they don't have a team
         if (count($game->players) != 2) { // Two players
             return GameStatus::INVALID; // Not exactly two players. Game not valid
@@ -71,6 +74,7 @@ class ValidateGame implements ValidatesGameContract
         // Ensure both players are found before dispatching the job
         if ($playerAUser && $playerBUser) {
             UpdateEloAndRank::dispatch($playerAUser, $playerBUser, $playerAWon, $game)->onQueue('sequential');
+            GiveUserStats::dispatch($game);
 
             return GameStatus::VALID;
         }

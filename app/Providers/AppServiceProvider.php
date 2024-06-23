@@ -21,6 +21,7 @@ use App\Actions\GenTool\Get1v1GenToolGames;
 use App\Actions\GenTool\GetGenToolUsers;
 use App\Actions\GenTool\SearchForGenToolUser;
 use App\Actions\GetMarkdownFile;
+use App\Actions\GiveUserStats;
 use App\Actions\ReplayParser;
 use App\Actions\ValidateGame;
 use App\Contracts\Auth\AuthenticatesUserContract;
@@ -42,6 +43,7 @@ use App\Contracts\GenTool\Gets1v1GenToolGamesContract;
 use App\Contracts\GenTool\GetsGenToolUsersContract;
 use App\Contracts\GenTool\SearchesForGenToolUserContract;
 use App\Contracts\GetsMarkdownFileContract;
+use App\Contracts\GivesUserStatsContract;
 use App\Contracts\ParsesReplayContract;
 use App\Contracts\ValidatesGameContract;
 use Illuminate\Database\Eloquent\Builder;
@@ -78,6 +80,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CreatesGenToolUserContract::class, CreateGenToolUser::class);
         $this->app->bind(Gets1v1GenToolGamesContract::class, Get1v1GenToolGames::class);
         $this->app->bind(SearchesForGenToolUserContract::class, SearchForGenToolUser::class);
+        $this->app->bind(GivesUserStatsContract::class, GiveUserStats::class);
     }
 
     /**
