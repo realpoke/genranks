@@ -35,7 +35,7 @@ class Landing extends Component
         });
 
         $this->topCommanders = Cache::remember('top-commanders', 60, function () {
-            return User::ranked()->orderBy('elo', 'desc')->take(3)->get();
+            return User::ranked()->orderBy('rank', 'desc')->take(3)->get();
         });
     }
 
