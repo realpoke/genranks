@@ -77,9 +77,9 @@
 
                                         <div class="flex items-center gap-x-3">
                                             @if ($comparisonData[$category]['totalSpentPercentage'] > 25)
-                                                <x-icons class="text-red-500" icon="trend-down" />
+                                                <x-icons class="text-red-500" icon="arrow-down-circle" />
                                             @elseif ($comparisonData[$category]['totalSpentPercentage'] < -25)
-                                                <x-icons class="text-green-500" icon="trend-up" />
+                                                <x-icons class="text-green-500" icon="arrow-up-circle" />
                                             @else
                                                 <x-icons class="text-gray-600" icon="activity" />
                                             @endif
@@ -88,9 +88,9 @@
 
                                         <div class="flex items-center gap-x-3">
                                             @if ($comparisonData[$category]['totalCountPercentage'] > 25)
-                                                <x-icons class="text-red-500" icon="trend-down" />
+                                                <x-icons class="text-red-500" icon="arrow-down-circle" />
                                             @elseif ($comparisonData[$category]['totalCountPercentage'] < -25)
-                                                <x-icons class="text-green-500" icon="trend-up" />
+                                                <x-icons class="text-green-500" icon="arrow-up-circle" />
                                             @else
                                                 <x-icons class="text-gray-600" icon="activity" />
                                             @endif
@@ -150,9 +150,9 @@
 
                                         <div class="flex items-center gap-x-3">
                                             @if ($comparisonData[$category]['totalSpentPercentage'] < -25)
-                                                <x-icons class="text-red-500" icon="trend-down" />
+                                                <x-icons class="text-red-500" icon="arrow-down-circle" />
                                             @elseif ($comparisonData[$category]['totalSpentPercentage'] > 25)
-                                                <x-icons class="text-green-500" icon="trend-up" />
+                                                <x-icons class="text-green-500" icon="arrow-up-circle" />
                                             @else
                                                 <x-icons class="text-gray-600" icon="activity" />
                                             @endif
@@ -161,9 +161,9 @@
 
                                         <div class="flex items-center gap-x-3">
                                             @if ($comparisonData[$category]['totalCountPercentage'] < -25)
-                                                <x-icons class="text-red-500" icon="trend-down" />
+                                                <x-icons class="text-red-500" icon="arrow-down-circle" />
                                             @elseif ($comparisonData[$category]['totalCountPercentage'] > 25)
-                                                <x-icons class="text-green-500" icon="trend-up" />
+                                                <x-icons class="text-green-500" icon="arrow-up-circle" />
                                             @else
                                                 <x-icons class="text-gray-600" icon="activity" />
                                             @endif
