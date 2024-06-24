@@ -75,7 +75,7 @@
 
                                     <div class="flex items-center gap-x-3">
                                         <x-icons class="text-gray-600" icon="activity" />
-                                        Total Spent: {{ $game->summary[0]['MoneySpent'] }}
+                                        Total Spent: {{ number_format($game->summary[0]['MoneySpent']) }}
                                     </div>
                                 </li>
                                 @foreach ($categories as $category)
@@ -91,7 +91,8 @@
                                                 @else
                                                     <x-icons class="text-gray-600" icon="activity" />
                                                 @endif
-                                                Total Spent: {{ $comparisonData[$category]['firstTotalSpent'] }}
+                                                Total Spent:
+                                                {{ number_format($comparisonData[$category]['firstTotalSpent']) }}
                                             </div>
                                         @endif
 
@@ -103,7 +104,8 @@
                                             @else
                                                 <x-icons class="text-gray-600" icon="activity" />
                                             @endif
-                                            Total Count: {{ $comparisonData[$category]['firstTotalCount'] }}
+                                            Total Count:
+                                            {{ number_format($comparisonData[$category]['firstTotalCount']) }}
                                         </div>
                                     </li>
                                 @endforeach
@@ -150,7 +152,7 @@
 
                                     <div class="flex items-center gap-x-3">
                                         <x-icons class="text-gray-600" icon="activity" />
-                                        Total Spent: {{ $game->summary[1]['MoneySpent'] }}
+                                        Total Spent: {{ number_format($game->summary[1]['MoneySpent']) }}
                                     </div>
                                 </li>
                                 @foreach ($categories as $category)
@@ -166,7 +168,8 @@
                                                 @else
                                                     <x-icons class="text-gray-600" icon="activity" />
                                                 @endif
-                                                Total Spent: {{ $comparisonData[$category]['secondTotalSpent'] }}
+                                                Total Spent:
+                                                {{ number_format($comparisonData[$category]['secondTotalSpent']) }}
                                             </div>
                                         @endif
 
@@ -178,7 +181,8 @@
                                             @else
                                                 <x-icons class="text-gray-600" icon="activity" />
                                             @endif
-                                            Total Count: {{ $comparisonData[$category]['secondTotalCount'] }}
+                                            Total Count:
+                                            {{ number_format($comparisonData[$category]['secondTotalCount']) }}
                                         </div>
                                     </li>
                                 @endforeach
