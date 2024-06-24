@@ -76,10 +76,18 @@
                             <ul role="list" class="mt-10 space-y-4 text-sm leading-6 text-gray-600">
                                 <li class="flex flex-col gap-y-3">
                                     <div class="font-bold">Overall</div>
-
+                                    <!-- TODO: Add K/D ratio and CASH/MINUTE ratio -->
                                     <div class="flex items-center gap-x-3">
                                         <x-icons class="text-gray-600" icon="activity" />
                                         Total Spent: {{ number_format($game->summary[0]['MoneySpent']) }}
+                                    </div>
+                                    <div class="flex items-center gap-x-3">
+                                        <x-icons class="text-gray-600" icon="activity" />
+                                        Cash Per Minute: {{ number_format($game->summary[0]['MoneySpent']) }}
+                                    </div>
+                                    <div class="flex items-center gap-x-3">
+                                        <x-icons class="text-gray-600" icon="activity" />
+                                        Kill Death Ratio: {{ number_format($game->summary[0]['MoneySpent']) }}
                                     </div>
                                 </li>
                                 @foreach ($categories as $category)
