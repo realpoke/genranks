@@ -54,7 +54,7 @@
                                 </div>
                             @endif
                             <p class="mt-2 text-xs text-gray-600">
-                                {{ $users->first()->name }}<br>
+                                {{ $game->summary[0]['Name'] }}<br>
 
                                 @if ($game->status == 'valid')
                                     Rank: {{ $users->first()->rank }}/{{ $users->first()->elo }}
@@ -119,7 +119,7 @@
                                 </div>
                             @endif
                             <p class="mt-2 text-xs text-gray-600">
-                                {{ $users->last()->name }}<br>
+                                {{ $game->summary[1]['Name'] }}<br>
 
                                 @if ($game->status == 'valid')
                                     Rank: {{ $users->last()->rank }}/{{ $users->last()->elo }}
