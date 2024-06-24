@@ -203,6 +203,8 @@
                                 while using the leaderboard, please contact our support team. Provide as
                                 much detail as possible to help us
                                 resolve the issue promptly.</p>
+
+                            <p class="mt-2 -mb-3 text-xs text-gray-400">{{ $game->hash }}</p>
                         </div>
                         <a href="{{ route('discord') }}"
                             class="rounded-md px-3.5 py-2 text-sm font-semibold leading-6 text-indigo-600 ring-1 ring-inset ring-indigo-200 hover:ring-indigo-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Discord
