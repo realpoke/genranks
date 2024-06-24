@@ -82,16 +82,18 @@
                                     <li class="flex flex-col gap-y-3">
                                         <div class="font-bold">{{ $category }}</div>
 
-                                        <div class="flex items-center gap-x-3">
-                                            @if ($comparisonData[$category]['totalSpentPercentage'] > 25)
-                                                <x-icons class="text-red-500" icon="arrow-down-circle" />
-                                            @elseif ($comparisonData[$category]['totalSpentPercentage'] < -25)
-                                                <x-icons class="text-green-500" icon="arrow-up-circle" />
-                                            @else
-                                                <x-icons class="text-gray-600" icon="activity" />
-                                            @endif
-                                            Total Spent: {{ $comparisonData[$category]['firstTotalSpent'] }}
-                                        </div>
+                                        @if ($category != 'PowersUsed')
+                                            <div class="flex items-center gap-x-3">
+                                                @if ($comparisonData[$category]['totalSpentPercentage'] > 25)
+                                                    <x-icons class="text-red-500" icon="arrow-down-circle" />
+                                                @elseif ($comparisonData[$category]['totalSpentPercentage'] < -25)
+                                                    <x-icons class="text-green-500" icon="arrow-up-circle" />
+                                                @else
+                                                    <x-icons class="text-gray-600" icon="activity" />
+                                                @endif
+                                                Total Spent: {{ $comparisonData[$category]['firstTotalSpent'] }}
+                                            </div>
+                                        @endif
 
                                         <div class="flex items-center gap-x-3">
                                             @if ($comparisonData[$category]['totalCountPercentage'] > 25)
@@ -155,16 +157,18 @@
                                     <li class="flex flex-col gap-y-3">
                                         <div class="font-bold">{{ $category }}</div>
 
-                                        <div class="flex items-center gap-x-3">
-                                            @if ($comparisonData[$category]['totalSpentPercentage'] < -25)
-                                                <x-icons class="text-red-500" icon="arrow-down-circle" />
-                                            @elseif ($comparisonData[$category]['totalSpentPercentage'] > 25)
-                                                <x-icons class="text-green-500" icon="arrow-up-circle" />
-                                            @else
-                                                <x-icons class="text-gray-600" icon="activity" />
-                                            @endif
-                                            Total Spent: {{ $comparisonData[$category]['secondTotalSpent'] }}
-                                        </div>
+                                        @if ($category != 'PowersUsed')
+                                            <div class="flex items-center gap-x-3">
+                                                @if ($comparisonData[$category]['totalSpentPercentage'] < -25)
+                                                    <x-icons class="text-red-500" icon="arrow-down-circle" />
+                                                @elseif ($comparisonData[$category]['totalSpentPercentage'] > 25)
+                                                    <x-icons class="text-green-500" icon="arrow-up-circle" />
+                                                @else
+                                                    <x-icons class="text-gray-600" icon="activity" />
+                                                @endif
+                                                Total Spent: {{ $comparisonData[$category]['secondTotalSpent'] }}
+                                            </div>
+                                        @endif
 
                                         <div class="flex items-center gap-x-3">
                                             @if ($comparisonData[$category]['totalCountPercentage'] < -25)
