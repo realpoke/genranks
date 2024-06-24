@@ -61,6 +61,14 @@
                                 @endif
                             </p>
                             <ul role="list" class="mt-10 space-y-4 text-sm leading-6 text-gray-600">
+                                <li class="flex flex-col gap-y-3">
+                                    <div class="font-bold">Overall</div>
+
+                                    <div class="flex items-center gap-x-3">
+                                        <x-icons class="text-gray-600" icon="activity" />
+                                        Total Spent: {{ $game->summary[0]['MoneySpent'] }}
+                                    </div>
+                                </li>
                                 @foreach ($categories as $category)
                                     <li class="flex flex-col gap-y-3">
                                         <div class="font-bold">{{ $category }}</div>
@@ -126,6 +134,14 @@
                                 @endif
                             </p>
                             <ul role="list" class="mt-10 space-y-4 text-sm leading-6 text-gray-600">
+                                <li class="flex flex-col gap-y-3">
+                                    <div class="font-bold">Overall</div>
+
+                                    <div class="flex items-center gap-x-3">
+                                        <x-icons class="text-gray-600" icon="activity" />
+                                        Total Spent: {{ $game->summary[1]['MoneySpent'] }}
+                                    </div>
+                                </li>
                                 @foreach ($categories as $category)
                                     <li class="flex flex-col gap-y-3">
                                         <div class="font-bold">{{ $category }}</div>
