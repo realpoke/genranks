@@ -4,7 +4,9 @@
             <h2 class="text-base font-semibold leading-7 text-indigo-400">
                 {{ collect(explode('/', $game->meta['MapFile']))->last() }}</h2>
             <p class="mt-2 text-4xl font-bold tracking-tight text-white sm:text-5xl">
-                {{ $game->summary[0]['Name'] }} VS {{ $game->summary[1]['Name'] }}</p>
+                {{ $game->summary[0]['Name'] }} <span class="text-lg font-normal">VS</span>
+                {{ $game->summary[1]['Name'] }}
+            </p>
         </div>
         <div class="relative mt-6">
             <p class="max-w-2xl mx-auto text-lg leading-8 text-white/60">
