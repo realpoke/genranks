@@ -3,10 +3,17 @@
         <div class="max-w-4xl mx-auto">
             <h2 class="text-base font-semibold leading-7 text-indigo-400">
                 {{ collect(explode('/', $game->meta['MapFile']))->last() }}</h2>
-            <p class="mt-2 text-4xl font-bold tracking-tight text-white sm:text-5xl">
-                {{ $game->summary[0]['Name'] }} <span class="text-lg font-normal">VS</span>
-                {{ $game->summary[1]['Name'] }}
-            </p>
+            <div class="flex items-baseline space-x-4">
+                <p class="flex-1 mt-2 text-4xl font-bold tracking-tight text-right text-white sm:text-5xl">
+                    {{ $game->summary[0]['Name'] }}
+                </p>
+                <p class="mt-2 text-sm font-normal tracking-tight text-white sm:text-lg">
+                    VS
+                </p>
+                <p class="flex-1 mt-2 text-4xl font-bold tracking-tight text-left text-white sm:text-5xl">
+                    {{ $game->summary[1]['Name'] }}
+                </p>
+            </div>
         </div>
         <div class="relative mt-6">
             <p class="max-w-2xl mx-auto text-lg leading-8 text-white/60">
