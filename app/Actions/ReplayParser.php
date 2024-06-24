@@ -66,6 +66,8 @@ class ReplayParser implements ParsesReplayContract
             'VersionMajor',
             'ReplayOwnerSlot',
             'GameSpeed',
+            'TimeStampBegin',
+            'TimeStampEnd',
         ]);
         // Calculate the new field 'ArrayReplayOwnerSlot'
         $arrayReplayOwnerSlot = (int) ($header->get('ReplayOwnerSlot') - 3000) / 100;
