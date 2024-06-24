@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Exception\JsonException;
 
 class ReplayParser implements ParsesReplayContract
 {
+    // TODO: Find the surrender order in the replay body to better determine the winner
     public function __invoke(string $file): Collection
     {
         if (Storage::disk('replays')->missing($file)) {
