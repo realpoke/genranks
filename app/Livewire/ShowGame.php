@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\Game;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Carbon;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
@@ -17,6 +18,8 @@ class ShowGame extends Component
 
     public array $comparisonData = [];
 
+    public $time;
+
     public function mount(Game $game)
     {
         $this->game = $game;
@@ -27,6 +30,11 @@ class ShowGame extends Component
     {
         $this->categories = ['UnitsCreated', 'BuildingsBuilt', 'UpgradesBuilt', 'PowersUsed'];
         $this->comparisonData = $this->computeComparisonData($this->categories);
+        $begin = Carbon::createFromTimestamp($this->game->meta['TimeStampBegin']);
+        $end = Carbon::createFromTimestamp($this->game->meta['TimeStampEnd']);
+
+        // Calculate the difference
+        $this->time = $begin->diffForHumans($end, true);
 
         return view('livewire.show-game');
     }

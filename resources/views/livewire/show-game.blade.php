@@ -16,8 +16,12 @@
             </div>
         </div>
         <div class="relative mt-6">
-            <p class="max-w-2xl mx-auto text-lg leading-8 text-white/60">
-                {{ $game->hash }}</p>
+            <p class="flex items-baseline justify-center max-w-2xl mx-auto text-lg leading-8 text-white/60">
+                <x-icons icon="dollar-sign" class="h-3 -mr-1" />
+                {{ number_format($game->meta['StartingCredits']) }}
+                <x-icons icon="clock" class="h-3 ml-4 -mr-1" />
+                {{ $time }}
+            </p>
             <svg viewBox="0 0 1208 1024"
                 class="absolute -top-10 left-1/2 -z-10 h-[64rem] -translate-x-1/2 [mask-image:radial-gradient(closest-side,white,transparent)] sm:-top-12 md:-top-20 lg:-top-12 xl:top-0">
                 <ellipse cx="604" cy="512" fill="url(#6d1bd035-0dd1-437e-93fa-59d316231eb0)" rx="604"
