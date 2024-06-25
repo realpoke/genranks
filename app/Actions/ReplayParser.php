@@ -11,7 +11,6 @@ use Symfony\Component\HttpFoundation\Exception\JsonException;
 
 class ReplayParser implements ParsesReplayContract
 {
-    // TODO: Find the surrender order in the replay body to better determine the winner
     public function __invoke(string $file): Collection
     {
         if (Storage::disk('replays')->missing($file)) {
@@ -55,7 +54,57 @@ class ReplayParser implements ParsesReplayContract
             return collect();
         }
 
+        $decodedData = $this->findSurrenderOrder($decodedData);
+
         return $this->cleanData($decodedData, $gameHash);
+    }
+
+    private function findSurrenderOrder(Collection $data): Collection
+    {
+        Log::debug('Finding surrender order');
+
+        // Extract the 'Win' attribute from each player and get unique values
+        $winValues = collect($data['Summary'])->pluck('Win')->unique();
+        Log::debug('Initial Win Statuses:');
+        foreach (collect($data['Summary']) as $player) {
+            $winStatus = $player['Win'] ? 'true' : 'false';
+            Log::debug("Player {$player['Name']} Win: {$winStatus}");
+        }
+
+        // Check if there is only one unique value in the 'Win' attributes
+        if ($winValues->count() !== 1) {
+            Log::debug('Not all players have the same win status.');
+
+            return $data;
+        }
+
+        $surrenderedPlayer = null;
+        Log::debug('Summary: '.collect($data['Summary']));
+
+        // Process the body to find surrender commands
+        foreach ($data['Body'] as $command) {
+            if ($command['OrderName'] == 'Surrender' && $command['Arguments'][0] == true) {
+                $surrenderedPlayer = $command['PlayerName'];
+                break;
+            }
+        }
+
+        // Only update the summary if a surrender command was found
+        if ($surrenderedPlayer !== null) {
+            $data['Summary'] = collect($data['Summary'])->map(function ($player) use ($surrenderedPlayer) {
+                if ($player['Name'] == $surrenderedPlayer) {
+                    $player['Win'] = false;
+                } else {
+                    $player['Win'] = true;
+                }
+
+                return $player;
+            })->toArray();
+        }
+
+        Log::debug('Summary after surrender: '.collect($data['Summary']));
+
+        return $data;
     }
 
     private function cleanData(Collection $data, string $hash): Collection
