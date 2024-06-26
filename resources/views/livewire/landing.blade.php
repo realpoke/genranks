@@ -138,17 +138,20 @@
                         <dl class="w-64 space-y-8 xl:w-80">
                             <div class="flex flex-col-reverse gap-y-4">
                                 <dt class="text-base leading-7 text-gray-600">Games processed</dt>
-                                <dd class="text-5xl font-semibold tracking-tight text-gray-900">{{ $gamesProcessed }}
+                                <dd class="text-5xl font-semibold tracking-tight text-gray-900">
+                                    {{ format_number($gamesProcessed) }}
                                 </dd>
                             </div>
                             <div class="flex flex-col-reverse gap-y-4">
                                 <dt class="text-base leading-7 text-gray-600">Active users</dt>
-                                <dd class="text-5xl font-semibold tracking-tight text-gray-900">{{ $activeUsers }}
+                                <dd class="text-5xl font-semibold tracking-tight text-gray-900">
+                                    {{ format_number($activeUsers) }}
                                 </dd>
                             </div>
                             <div class="flex flex-col-reverse gap-y-4">
                                 <dt class="text-base leading-7 text-gray-600">Elo exchanged last 24 hours</dt>
-                                <dd class="text-5xl font-semibold tracking-tight text-gray-900">{{ $eloChanged }}
+                                <dd class="text-5xl font-semibold tracking-tight text-gray-900">
+                                    {{ format_number($eloChanged) }}
                                 </dd>
                             </div>
                         </dl>
