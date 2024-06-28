@@ -24,7 +24,6 @@ class ValidateGame implements ValidatesGameContract
     private function validCheck(Game $game): GameStatus
     {
         // TODO: Fix spectator in games
-        // TODO: Chcek map is in the pool of validated maps
 
         // Check there are two players and they don't have a team
         if (count($game->players) != 2) { // Two players
@@ -73,11 +72,13 @@ class ValidateGame implements ValidatesGameContract
         }
 
         // Ensure both players are found before dispatching the job
-        if ($playerAUser && $playerBUser) {
+        if ($playerAUser && $playerBUser && $game->map->ranked) {
             UpdateEloAndRank::dispatch($playerAUser, $playerBUser, $playerAWon, $game)->onQueue('sequential');
-            GiveUserStats::dispatch($game);
+            GiveUserStats::dispatch($game); // TODO: Think about if we should give stats for none-ranked games
 
             return GameStatus::VALID;
+        } else {
+            return GameStatus::UNRANKED;
         }
 
         // If players are not found

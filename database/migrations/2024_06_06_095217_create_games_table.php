@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\GameStatus;
+use App\Models\Map;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -19,6 +20,7 @@ return new class extends Migration
             $table->json('summary');
             $table->json('meta');
             $table->json('players');
+            $table->foreignIdFor(Map::class)->constrained()->onDelete('cascade')->nullable();
             $table->timestamps();
         });
     }

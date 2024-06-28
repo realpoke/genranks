@@ -6,6 +6,7 @@ use App\Enums\GameStatus;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Game extends Model
@@ -25,6 +26,7 @@ class Game extends Model
         'summary',
         'meta',
         'players',
+        'map',
     ];
 
     public function route(): string
@@ -48,6 +50,11 @@ class Game extends Model
             ->using(GameUser::class)
             ->withPivot(GameUser::FIELDS)
             ->withTimestamps();
+    }
+
+    public function map(): BelongsTo
+    {
+        return $this->belongsTo(Map::class);
     }
 
     public function scopeUnverified(Builder $query): Builder

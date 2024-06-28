@@ -39,6 +39,7 @@ class MapHashSeeder extends Seeder
             $map = Map::firstOrCreate([
                 'name' => $mapName,
                 'hash' => $hasher($mapName, $mapMeta[0], $mapMeta[1]),
+                'ranked' => true,
             ]);
 
             $this->command->info("Map: {$mapName} added");
