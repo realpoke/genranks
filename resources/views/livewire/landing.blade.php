@@ -139,19 +139,19 @@
                             <div class="flex flex-col-reverse gap-y-4">
                                 <dt class="text-base leading-7 text-gray-600">Games processed</dt>
                                 <dd class="text-5xl font-semibold tracking-tight text-gray-900">
-                                    {{ format_number($gamesProcessed) }}
+                                    {{ number_format($gamesProcessed) }}
                                 </dd>
                             </div>
                             <div class="flex flex-col-reverse gap-y-4">
                                 <dt class="text-base leading-7 text-gray-600">Active users</dt>
                                 <dd class="text-5xl font-semibold tracking-tight text-gray-900">
-                                    {{ format_number($activeUsers) }}
+                                    {{ number_format($activeUsers) }}
                                 </dd>
                             </div>
                             <div class="flex flex-col-reverse gap-y-4">
                                 <dt class="text-base leading-7 text-gray-600">Elo exchanged last 24 hours</dt>
                                 <dd class="text-5xl font-semibold tracking-tight text-gray-900">
-                                    {{ format_number($eloChanged) }}
+                                    {{ number_format($eloChanged) }}
                                 </dd>
                             </div>
                         </dl>
