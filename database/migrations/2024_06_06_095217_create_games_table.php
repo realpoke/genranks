@@ -20,7 +20,7 @@ return new class extends Migration
             $table->json('summary');
             $table->json('meta');
             $table->json('players');
-            $table->foreignIdFor(Map::class)->constrained()->onDelete('cascade')->nullable();
+            $table->foreignIdFor(Map::class)->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
     }
