@@ -65,6 +65,7 @@ class Game extends Model
         return $query->whereIn('status', [
             GameStatus::VALID->value,
             GameStatus::DRAW->value,
+            GameStatus::UNRANKED->value,
         ]);
     }
 
