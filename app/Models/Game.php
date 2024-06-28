@@ -26,7 +26,7 @@ class Game extends Model
         'summary',
         'meta',
         'players',
-        'map',
+        'map_id',
     ];
 
     public function route(): string
