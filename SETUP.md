@@ -89,11 +89,18 @@ sudo nano /etc/mysql/mysql.conf.d/mysqld.cnf
 sort_buffer_size = 10M
 ```
 
+Turning off Bin logging
+```bash
+[mysqld]
+disable_log_bin
+```
+
 Restart and check mysql
 ```bash
 sudo systemctl restart mysql
 sudo mysql
 SHOW VARIABLES LIKE 'sort_buffer_size';
+SHOW GLOBAL VARIABLES LIKE 'log_bin';
 exit;
 ```
 
