@@ -16,6 +16,7 @@ use App\Actions\Auth\Password\SendPasswordResetLink;
 use App\Actions\Auth\SendEmailVerification;
 use App\Actions\Auth\VerifyEmail;
 use App\Actions\CalculateElo;
+use App\Actions\CreateMapHash;
 use App\Actions\GenTool\CreateGenToolUser;
 use App\Actions\GenTool\Get1v1GenToolGames;
 use App\Actions\GenTool\GetGenToolUsers;
@@ -38,6 +39,7 @@ use App\Contracts\Auth\Password\SendsPasswordResetLinkContract;
 use App\Contracts\Auth\SendsEmailVerificationContract;
 use App\Contracts\Auth\VerifyEmailContract;
 use App\Contracts\CalculatesEloContract;
+use App\Contracts\CreatesMapHashContract;
 use App\Contracts\GenTool\CreatesGenToolUserContract;
 use App\Contracts\GenTool\Gets1v1GenToolGamesContract;
 use App\Contracts\GenTool\GetsGenToolUsersContract;
@@ -75,6 +77,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ParsesReplayContract::class, ReplayParser::class);
         $this->app->bind(ValidatesGameContract::class, ValidateGame::class);
         $this->app->bind(CalculatesEloContract::class, CalculateElo::class);
+        $this->app->bind(CreatesMapHashContract::class, CreateMapHash::class);
 
         $this->app->bind(GetsGenToolUsersContract::class, GetGenToolUsers::class);
         $this->app->bind(CreatesGenToolUserContract::class, CreateGenToolUser::class);
