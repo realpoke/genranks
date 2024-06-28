@@ -23,6 +23,7 @@ class ValidateGame implements ValidatesGameContract
 
     private function validCheck(Game $game): GameStatus
     {
+        // TODO: Fix spectator in games
         // TODO: Chcek map is in the pool of validated maps
 
         // Check there are two players and they don't have a team
