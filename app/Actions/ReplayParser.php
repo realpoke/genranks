@@ -54,9 +54,56 @@ class ReplayParser implements ParsesReplayContract
             return collect();
         }
 
+        $decodedData = $this->removeObservers($decodedData);
+
         $decodedData = $this->findSurrenderOrder($decodedData);
 
         return $this->cleanData($decodedData, $gameHash);
+    }
+
+    // Remove observers from summary and Header->Metadata->Players
+    private function removeObservers(Collection $data): Collection
+    {
+        Log::debug('Removing observers');
+        Log::debug('Initial header:');
+        Log::debug(collect($data['Header']['Metadata']['Players']));
+
+        // Ensure the header players are treated as a collection
+        $headerPlayers = collect($data['Header']['Metadata']['Players']);
+
+        // Filter out observers from the header players
+        $filteredHeaderPlayers = $headerPlayers->filter(function ($player) {
+            return $player['Faction'] != '-2';
+        });
+
+        Log::debug('Final Header:');
+        Log::debug($filteredHeaderPlayers);
+
+        Log::debug('Initial Summary:');
+        Log::debug(collect($data['Summary']));
+
+        // Ensure the summary is treated as a collection
+        $summary = collect($data['Summary']);
+
+        // Filter out summary players who are not in the filtered header players
+        $filteredSummary = $summary->filter(function ($summaryPlayer) use ($filteredHeaderPlayers) {
+            return $filteredHeaderPlayers->contains(function ($headerPlayer) use ($summaryPlayer) {
+                return $summaryPlayer['Name'] == $headerPlayer['Name'];
+            });
+        });
+
+        Log::debug('Final Summary:');
+        Log::debug($filteredSummary);
+
+        // Update the data with the filtered collections
+        $data->put('Header', array_merge($data['Header'], [
+            'Metadata' => array_merge($data['Header']['Metadata'], [
+                'Players' => $filteredHeaderPlayers->values()->toArray(),
+            ]),
+        ]));
+        $data->put('Summary', $filteredSummary->values()->toArray());
+
+        return $data;
     }
 
     private function findSurrenderOrder(Collection $data): Collection
