@@ -71,8 +71,14 @@ class ValidateGame implements ValidatesGameContract
             }
         }
 
-        // Ensure both players are found before dispatching the job
-        if ($playerAUser && $playerBUser && $game->map->ranked) {
+        if (! $playerAUser || ! $playerBUser) {
+            Log::error('Players not found for game: '.$game->id);
+
+            return GameStatus::INVALID;
+        }
+
+        Log::debug('Map ranked: '.($game->map?->ranked));
+        if ($playerAUser && $playerBUser && $game->map?->ranked) {
             UpdateEloAndRank::dispatch($playerAUser, $playerBUser, $playerAWon, $game)->onQueue('sequential');
             GiveUserStats::dispatch($game); // TODO: Think about if we should give stats for none-ranked games
 
