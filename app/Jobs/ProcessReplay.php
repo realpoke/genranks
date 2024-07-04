@@ -21,13 +21,19 @@ class ProcessReplay implements ShouldQueue
 
     protected $fileName;
 
+    protected $anticheat;
+
     /**
      * Create a new job instance.
      */
-    public function __construct(User $user, string $fileName)
-    {
+    public function __construct(
+        User $user,
+        string $fileName,
+        bool $anticheat = false
+    ) {
         $this->user = $user;
         $this->fileName = $fileName;
+        $this->anticheat = $anticheat;
     }
 
     /**
@@ -53,6 +59,7 @@ class ProcessReplay implements ShouldQueue
 
             $this->user->games()->attach($gameFound->id, [
                 'header' => $replayData->get('header'),
+                'anticheat' => $this->anticheat,
             ]);
 
             // TODO: Make sure this is actaully needed
@@ -89,6 +96,7 @@ class ProcessReplay implements ShouldQueue
             'players' => $replayData->get('players'),
         ], [
             'header' => $replayData->get('header'),
+            'anticheat' => $this->anticheat,
         ]);
     }
 }
