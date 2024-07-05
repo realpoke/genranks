@@ -87,4 +87,10 @@ class Game extends Model
     {
         return $query->whereLike(['hash'], $searchTerm);
     }
+
+    public function tournaments(): BelongsToMany
+    {
+        return $this->belongsToMany(Tournament::class)
+            ->using(GameTournament::class);
+    }
 }
