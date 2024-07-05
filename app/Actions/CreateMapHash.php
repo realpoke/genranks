@@ -3,7 +3,6 @@
 namespace App\Actions;
 
 use App\Contracts\CreatesMapHashContract;
-use Illuminate\Support\Facades\Hash;
 
 class CreateMapHash implements CreatesMapHashContract
 {
@@ -12,6 +11,6 @@ class CreateMapHash implements CreatesMapHashContract
         string $mapCRC,
         string $mapSize,
     ): string {
-        return Hash::make($mapFile.$mapCRC.$mapSize);
+        return md5($mapFile.$mapCRC.$mapSize);
     }
 }
