@@ -18,6 +18,7 @@ class Tournament extends Model
         'minimum_elo',
         'invite_only',
         'status',
+        'host_id',
     ];
 
     protected function casts(): array
