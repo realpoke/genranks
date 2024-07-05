@@ -80,8 +80,6 @@
                             @endif
                             <p class="mt-2 text-xs text-gray-600">
                                 {{ $game->summary[0]['Name'] }}<br>
-                                {{ collect($game->summary[0]) }}
-                                looooooooooooooo
 
                                 @if ($done && $users->first()->rank)
                                     Rank: {{ $users->first()->rank }}/{{ $users->first()->elo }}
