@@ -11,7 +11,8 @@ class CreateGenToolUser implements CreatesGenToolUserContract
     public function __invoke(string ...$nicknames): Collection
     {
         return collect($nicknames)->map(function ($nickname): User {
-            $gentoolId = collect(explode('_', $nickname))->last();
+            $collectedNickname = collect(explode('_', $nickname));
+            $gentoolId = $collectedNickname->pop();
             $existingUser = User::whereJsonContains('gentool_ids', $gentoolId)->first();
 
             if ($existingUser) {
@@ -20,9 +21,9 @@ class CreateGenToolUser implements CreatesGenToolUserContract
 
             return User::Create(
                 [
-                    'name' => $nickname,
+                    'name' => $collectedNickname->join(''),
                     'gentool_ids' => [$gentoolId],
-                    'email' => $nickname.fake()->randomNumber(5, true).'@'.fake()->safeEmailDomain(),
+                    'email' => $collectedNickname->join('').fake()->randomNumber(5, true).'@'.fake()->safeEmailDomain(),
                     'password' => bcrypt(fake()->password),
                     'fake' => true,
                 ]
