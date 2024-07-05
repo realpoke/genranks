@@ -69,16 +69,22 @@ class ValidateGame implements ValidatesGameContract
             }
         }
 
-        if (! $playerAUser || ! $playerBUser) {
+        if (! $playerAUser || ! $playerBUser) { // TODO: This crashes if one of the players is not valid
             Log::error('Players not found for game: '.$game->id);
 
             return GameStatus::INVALID;
         }
 
-        Log::debug('Map ranked: '.($game->map?->ranked) ? 'true' : 'false');
+        Log::debug('Map ranked: '.($game->map?->ranked));
         if ($playerAUser && $playerBUser && $game->map?->ranked) {
             UpdateEloAndRank::dispatch($playerAUser, $playerBUser, $playerAWon, $game)->onQueue('sequential');
             GiveUserStats::dispatch($game); // TODO: Think about if we should give stats for none-ranked games
+
+            // TODO: Remove when we have enough maps in the pool and added to the database seeder
+            Log::debug('Map already in pool and ranked: '.$game->meta['MapHash']);
+            Log::debug('MapFile: '.$game->meta['MapFile']);
+            Log::debug('MapCRC: '.$game->meta['MapCRC']);
+            Log::debug('MapSize: '.$game->meta['MapSize']);
 
             return GameStatus::VALID;
         } else {
