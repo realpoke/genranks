@@ -64,9 +64,6 @@ class ReplayParser implements ParsesReplayContract
     // Remove observers from summary and Header->Metadata->Players
     private function removeObservers(Collection $data): Collection
     {
-        Log::debug('Removing observers');
-        Log::debug('Initial header:');
-        Log::debug(collect($data['Header']['Metadata']['Players']));
 
         // Ensure the header players are treated as a collection
         $headerPlayers = collect($data['Header']['Metadata']['Players']);
@@ -75,12 +72,6 @@ class ReplayParser implements ParsesReplayContract
         $filteredHeaderPlayers = $headerPlayers->filter(function ($player) {
             return $player['Faction'] != '-2';
         });
-
-        Log::debug('Final Header:');
-        Log::debug($filteredHeaderPlayers);
-
-        Log::debug('Initial Summary:');
-        Log::debug(collect($data['Summary']));
 
         // Ensure the summary is treated as a collection
         $summary = collect($data['Summary']);
@@ -91,9 +82,6 @@ class ReplayParser implements ParsesReplayContract
                 return $summaryPlayer['Name'] == $headerPlayer['Name'];
             });
         });
-
-        Log::debug('Final Summary:');
-        Log::debug($filteredSummary);
 
         // Update the data with the filtered collections
         $data->put('Header', array_merge($data['Header'], [
@@ -108,25 +96,19 @@ class ReplayParser implements ParsesReplayContract
 
     private function findSurrenderOrder(Collection $data): Collection
     {
-        Log::debug('Finding surrender order');
-
         // Extract the 'Win' attribute from each player and get unique values
         $winValues = collect($data['Summary'])->pluck('Win')->unique();
-        Log::debug('Initial Win Statuses:');
         foreach (collect($data['Summary']) as $player) {
             $winStatus = $player['Win'] ? 'true' : 'false';
-            Log::debug("Player {$player['Name']} Win: {$winStatus}");
         }
 
         // Check if there is only one unique value in the 'Win' attributes
         if ($winValues->count() !== 1) {
-            Log::debug('Not all players have the same win status.');
 
             return $data;
         }
 
         $surrenderedPlayer = null;
-        Log::debug('Summary: '.collect($data['Summary']));
 
         // Process the body to find surrender commands
         foreach ($data['Body'] as $command) {
@@ -148,8 +130,6 @@ class ReplayParser implements ParsesReplayContract
                 return $player;
             })->toArray();
         }
-
-        Log::debug('Summary after surrender: '.collect($data['Summary']));
 
         return $data;
     }

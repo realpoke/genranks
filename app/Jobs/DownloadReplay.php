@@ -28,7 +28,6 @@ class DownloadReplay implements ShouldQueue
     ) {
         $this->file = $file;
         $this->uniqueId = $uniqueId;
-        Log::debug('Initializing DownloadReplay job with file: '.$file.' and uniqueId: '.$uniqueId);
     }
 
     /**
@@ -41,15 +40,11 @@ class DownloadReplay implements ShouldQueue
 
     private function downloadFileWithDelay(CreatesGenToolUserContract $userCreator)
     {
-        Log::debug('Handling DownloadReplay job with file: '.$this->file.' and uniqueId: '.$this->uniqueId);
         $user = explode('/', $this->file)[4];
         $user = $userCreator($user)->first();
-        Log::debug('User: '.$user->name);
 
         $url = "https://www.gentool.net/$this->file";
         $fileName = basename($this->file);
-
-        Log::debug("Uploading: $url");
 
         try {
             $fileContent = file_get_contents($url);
@@ -62,7 +57,6 @@ class DownloadReplay implements ShouldQueue
         }
 
         if ($uploadedReplay != false) {
-            Log::debug('Uploaded replay: '.$fileName);
             ProcessReplay::dispatch($user, $fileName, anticheat: true);
         }
     }
