@@ -26,7 +26,7 @@
                     Anticheat
                 @endif
                 @if ($ranked)
-                    <x-icons icon="trophy" class="h-3 ml-4 -mr-1" />
+                    <x-icons icon="zap" class="h-3 ml-4 -mr-1" />
                     Ranked
                 @endif
                 @if ($done && !$ranked)
