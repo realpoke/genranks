@@ -5,6 +5,7 @@ namespace App\Jobs;
 use App\Contracts\ParsesReplayContract;
 use App\Enums\GameStatus;
 use App\Models\Game;
+use App\Models\Map;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
@@ -89,11 +90,14 @@ class ProcessReplay implements ShouldQueue
             return;
         }
 
+        $mapFound = Map::where('hash', $replayData->get('meta')['MapHash'])->first();
+
         $game = $this->user->games()->create([
             'hash' => $replayData->get('hash'),
             'summary' => $replayData->get('summary'),
             'meta' => $replayData->get('meta'),
             'players' => $replayData->get('players'),
+            'map_id' => $mapFound?->id,
         ], [
             'header' => $replayData->get('header'),
             'anticheat' => $this->anticheat,
