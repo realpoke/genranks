@@ -21,6 +21,10 @@
                 {{ number_format($game->meta['StartingCredits']) }}
                 <x-icons icon="clock" class="h-3 ml-4 -mr-1" />
                 {{ $time }}
+                @if ($anticheat)
+                    <x-icons icon="shield" class="h-3 ml-4 -mr-1" />
+                    Anticheat
+                @endif
             </p>
             <svg viewBox="0 0 1208 1024"
                 class="absolute -top-10 left-1/2 -z-10 h-[64rem] -translate-x-1/2 [mask-image:radial-gradient(closest-side,white,transparent)] sm:-top-12 md:-top-20 lg:-top-12 xl:top-0">

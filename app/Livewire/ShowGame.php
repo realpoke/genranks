@@ -20,6 +20,8 @@ class ShowGame extends Component
 
     public $time;
 
+    public bool $anticheat;
+
     public function mount(Game $game)
     {
         $this->game = $game;
@@ -35,8 +37,17 @@ class ShowGame extends Component
 
         // Calculate the difference
         $this->time = $begin->diffForHumans($end, true);
+        $this->anticheat = $this->getAnticheat();
 
         return view('livewire.show-game');
+    }
+
+    #[Computed()]
+    private function getAnticheat(): bool
+    {
+        return $this->game->users->every(function ($user) {
+            return $user->pivot->anticheat;
+        });
     }
 
     #[Computed()]
