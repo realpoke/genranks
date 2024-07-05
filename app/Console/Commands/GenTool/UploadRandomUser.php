@@ -74,7 +74,7 @@ class UploadRandomUser extends Command
 
                 if ($uploadedReplay != false) {
                     $this->info('Uploaded replay: '.$fileName);
-                    ProcessReplay::dispatch($user, $fileName);
+                    ProcessReplay::dispatch($user, $fileName, anticheat: true);
                 }
             }
 
@@ -102,7 +102,7 @@ class UploadRandomUser extends Command
 
                     if ($uploadedReplay != false) {
                         $this->info('Uploaded opponent replay: '.$fileName);
-                        ProcessReplay::dispatch($userOpponent, $fileName);
+                        ProcessReplay::dispatch($userOpponent, $fileName, anticheat: true);
                     }
                 }
             }

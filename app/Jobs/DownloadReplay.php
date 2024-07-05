@@ -63,7 +63,7 @@ class DownloadReplay implements ShouldQueue
 
         if ($uploadedReplay != false) {
             Log::debug('Uploaded replay: '.$fileName);
-            ProcessReplay::dispatch($user, $fileName);
+            ProcessReplay::dispatch($user, $fileName, anticheat: true);
         }
     }
 }
