@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\GameStatus;
+use App\Enums\GameType;
 use App\Models\Map;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -20,6 +21,7 @@ return new class extends Migration
             $table->json('summary');
             $table->json('meta');
             $table->json('players');
+            $table->enum('type', GameType::values())->default(GameType::UNSUPPORTED);
             $table->foreignIdFor(Map::class)->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });
