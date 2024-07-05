@@ -4,6 +4,7 @@ use App\Http\Controllers\GenLinkDownloadController;
 use App\Livewire\Game;
 use App\Livewire\Landing;
 use App\Livewire\Leaderboard;
+use App\Livewire\Map;
 use App\Livewire\Markdown;
 use App\Livewire\Profile;
 use App\Livewire\ShowGame;
@@ -14,6 +15,8 @@ Route::get('/', Landing::class)->name('home');
 Route::get('/doc/{markdown}', Markdown::class)->name('markdown.show');
 
 Route::get('/profile/{user}', Profile::class)->name('profile.show');
+
+Route::get('/maps', Map::class)->name('maps.index');
 
 Route::get('/games', Game::class)->name('game.index');
 Route::get('/game/{game}', ShowGame::class)->name('game.show');
