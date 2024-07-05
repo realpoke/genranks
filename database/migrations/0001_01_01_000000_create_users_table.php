@@ -21,6 +21,7 @@ return new class extends Migration
             $table->mediumInteger('rank')->unsigned()->nullable();
             $table->boolean('fake')->default(false);
             $table->json('stats')->nullable();
+            $table->json('gentool_ids')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

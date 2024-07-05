@@ -34,6 +34,7 @@ class User extends Authenticatable implements FilamentUser
         'rank',
         'fake',
         'stats',
+        'gentool_ids',
     ];
 
     /**
@@ -57,6 +58,7 @@ class User extends Authenticatable implements FilamentUser
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'stats' => 'array',
+            'gentool_ids' => 'array',
         ];
     }
 

@@ -11,10 +11,17 @@ class CreateGenToolUser implements CreatesGenToolUserContract
     public function __invoke(string ...$nicknames): Collection
     {
         return collect($nicknames)->map(function ($nickname): User {
-            return User::firstOrCreate(
-                ['name' => $nickname],
+            $gentoolId = collect(explode('_', $nickname))->last();
+            $existingUser = User::whereJsonContains('gentool_ids', $gentoolId)->first();
+
+            if ($existingUser) {
+                return $existingUser;
+            }
+
+            return User::Create(
                 [
                     'name' => $nickname,
+                    'gentool_ids' => [$gentoolId],
                     'email' => $nickname.fake()->randomNumber(5, true).'@'.fake()->safeEmailDomain(),
                     'password' => bcrypt(fake()->password),
                     'fake' => true,
