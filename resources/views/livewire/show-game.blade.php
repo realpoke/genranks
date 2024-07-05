@@ -25,6 +25,14 @@
                     <x-icons icon="shield" class="h-3 ml-4 -mr-1" />
                     Anticheat
                 @endif
+                @if ($ranked)
+                    <x-icons icon="trophy" class="h-3 ml-4 -mr-1" />
+                    Ranked
+                @endif
+                @if ($done && !$ranked)
+                    <x-icons icon="coffee" class="h-3 ml-4 -mr-1" />
+                    Unranked
+                @endif
             </p>
             <svg viewBox="0 0 1208 1024"
                 class="absolute -top-10 left-1/2 -z-10 h-[64rem] -translate-x-1/2 [mask-image:radial-gradient(closest-side,white,transparent)] sm:-top-12 md:-top-20 lg:-top-12 xl:top-0">
@@ -44,17 +52,17 @@
             <div class="px-6 mx-auto max-w-7xl lg:px-8">
                 <div class="grid max-w-md grid-cols-1 gap-8 mx-auto lg:max-w-4xl lg:grid-cols-2">
                     <div
-                        class="{{ $game->status->value == 'valid' && $game->summary[0]['Win'] == true ? 'border-l-2 border-r-2 border-indigo-600' : '' }} flex flex-col justify-between p-8 bg-white shadow-xl rounded-3xl ring-1 ring-gray-900/10 sm:p-10">
+                        class="{{ $done && $game->summary[0]['Win'] == true ? 'border-l-2 border-r-2 border-indigo-600' : '' }} flex flex-col justify-between p-8 bg-white shadow-xl rounded-3xl ring-1 ring-gray-900/10 sm:p-10">
                         <div>
                             <h3 id="tier-hobby"
                                 class="flex items-center text-base font-semibold leading-7 text-indigo-600">
-                                @if ($game->status->value == 'valid' && $game->summary[0]['Win'] == true)
+                                @if ($done && $game->summary[0]['Win'] == true)
                                     <x-icons icon="award" />
                                 @endif
                                 {{ $game->summary[0]['Side'] }}
                             </h3>
 
-                            @if ($game->status->value == 'valid')
+                            @if ($ranked)
                                 <div class="flex items-baseline mt-4 gap-x-2">
                                     <span
                                         class="text-5xl font-bold tracking-tight text-gray-900">{{ abs($users->first()->pivot->elo_change) }}</span>
@@ -72,8 +80,10 @@
                             @endif
                             <p class="mt-2 text-xs text-gray-600">
                                 {{ $game->summary[0]['Name'] }}<br>
+                                {{ collect($game->summary[0]) }}
+                                looooooooooooooo
 
-                                @if ($game->status->value == 'valid')
+                                @if ($done && $users->first()->rank)
                                     Rank: {{ $users->first()->rank }}/{{ $users->first()->elo }}
                                 @endif
                             </p>
@@ -121,12 +131,12 @@
                         </div>
                     </div>
                     <div
-                        class="{{ $game->status->value == 'valid' && $game->summary[1]['Win'] == true ? 'border-l-2 border-r-2 border-indigo-600' : '' }} flex flex-col justify-between p-8 bg-white shadow-xl rounded-3xl ring-1 ring-gray-900/10 sm:p-10">
+                        class="{{ $done && $game->summary[1]['Win'] == true ? 'border-l-2 border-r-2 border-indigo-600' : '' }} flex flex-col justify-between p-8 bg-white shadow-xl rounded-3xl ring-1 ring-gray-900/10 sm:p-10">
                         <div>
 
                             <h3 id="tier-team"
                                 class="flex items-center text-base font-semibold leading-7 text-indigo-600">
-                                @if ($game->status->value == 'valid' && $game->summary[1]['Win'] == true)
+                                @if ($done && $game->summary[1]['Win'] == true)
                                     <x-icons icon="award" />
                                 @endif
                                 {{ $game->summary[1]['Side'] }}
@@ -150,7 +160,7 @@
                             <p class="mt-2 text-xs text-gray-600">
                                 {{ $game->summary[1]['Name'] }}<br>
 
-                                @if ($game->status->value == 'valid')
+                                @if ($done && $users->last()->rank)
                                     Rank: {{ $users->last()->rank }}/{{ $users->last()->elo }}
                                 @endif
                             </p>

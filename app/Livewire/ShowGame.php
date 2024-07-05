@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Enums\GameStatus;
 use App\Models\Game;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Carbon;
@@ -22,6 +23,10 @@ class ShowGame extends Component
 
     public bool $anticheat;
 
+    public bool $ranked;
+
+    public bool $done;
+
     public function mount(Game $game)
     {
         $this->game = $game;
@@ -38,6 +43,8 @@ class ShowGame extends Component
         // Calculate the difference
         $this->time = $begin->diffForHumans($end, true);
         $this->anticheat = $this->getAnticheat();
+        $this->ranked = $this->game->status->value == GameStatus::VALID;
+        $this->done = $this->game->status->done();
 
         return view('livewire.show-game');
     }
