@@ -75,13 +75,19 @@ class ValidateGame implements ValidatesGameContract
             return GameStatus::INVALID;
         }
 
-        Log::debug('Map ranked: '.($game->map?->ranked));
+        Log::debug('Map ranked: '.($game->map?->ranked) ? 'true' : 'false');
         if ($playerAUser && $playerBUser && $game->map?->ranked) {
             UpdateEloAndRank::dispatch($playerAUser, $playerBUser, $playerAWon, $game)->onQueue('sequential');
             GiveUserStats::dispatch($game); // TODO: Think about if we should give stats for none-ranked games
 
             return GameStatus::VALID;
         } else {
+            // TODO: Remove when we have enough maps in the pool and added to the database seeder
+            Log::debug('Map could be added: '.$game->meta['MapHash']);
+            Log::debug('MapFile: '.$game->meta['MapFile']);
+            Log::debug('MapCRC: '.$game->meta['MapCRC']);
+            Log::debug('MapSize: '.$game->meta['MapSize']);
+
             return GameStatus::UNRANKED;
         }
 
