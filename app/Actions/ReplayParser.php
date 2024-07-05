@@ -168,6 +168,8 @@ class ReplayParser implements ParsesReplayContract
         $arrayReplayOwnerSlot = (int) ($header->get('ReplayOwnerSlot') - 3000) / 100;
         $header = $header->put('ArrayReplayOwnerSlot', $arrayReplayOwnerSlot);
 
+        $mapHasher = new CreateMapHash();
+
         $meta = collect($data['Header']['Metadata'])->only([
             'MapFile',
             'MapCRC',
@@ -180,7 +182,7 @@ class ReplayParser implements ParsesReplayContract
         ])->merge(collect($data['Header'])->only([
             'TimeStampBegin',
             'TimeStampEnd',
-        ]))->merge(['MapHash' => new CreateMapHash(
+        ]))->merge(['MapHash' => $mapHasher(
             collect(explode('/', $data['Header']['Metadata']['MapFile']))->pop(),
             $data['Header']['Metadata']['MapCRC'],
             $data['Header']['Metadata']['MapSize'],
