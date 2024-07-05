@@ -23,8 +23,6 @@ class ValidateGame implements ValidatesGameContract
 
     private function validCheck(Game $game): GameStatus
     {
-        // TODO: Fix spectator in games
-
         // Check there are two players and they don't have a team
         if (count($game->players) != 2) { // Two players
             return GameStatus::INVALID; // Not exactly two players. Game not valid
