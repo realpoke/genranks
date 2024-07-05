@@ -181,7 +181,7 @@ class ReplayParser implements ParsesReplayContract
             'TimeStampBegin',
             'TimeStampEnd',
         ]))->merge(['MapHash' => new CreateMapHash(
-            $data['Header']['Metadata']['MapFile'],
+            collect(explode('/', $data['Header']['Metadata']['MapFile']))->pop(),
             $data['Header']['Metadata']['MapCRC'],
             $data['Header']['Metadata']['MapSize'],
         )]);
