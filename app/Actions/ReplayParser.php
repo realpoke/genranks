@@ -185,6 +185,7 @@ class ReplayParser implements ParsesReplayContract
         ]);
     }
 
+    // TODO: Sometimes the game hash for the same replay but diffrent uploader is not the same. Fix this.
     private function generateGameHash(Collection $data): ?string
     {
         try {
