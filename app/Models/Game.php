@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\GameStatus;
+use App\Enums\GameType;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -27,6 +28,7 @@ class Game extends Model
         'meta',
         'players',
         'map_id',
+        'type',
     ];
 
     public function route(): string
@@ -41,6 +43,7 @@ class Game extends Model
             'meta' => 'array',
             'players' => 'array',
             'status' => GameStatus::class,
+            'type' => GameType::class,
         ];
     }
 

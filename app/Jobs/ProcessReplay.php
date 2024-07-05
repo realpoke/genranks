@@ -4,6 +4,7 @@ namespace App\Jobs;
 
 use App\Contracts\ParsesReplayContract;
 use App\Enums\GameStatus;
+use App\Enums\GameType;
 use App\Models\Game;
 use App\Models\Map;
 use App\Models\User;
@@ -98,6 +99,7 @@ class ProcessReplay implements ShouldQueue
             'meta' => $replayData->get('meta'),
             'players' => $replayData->get('players'),
             'map_id' => $mapFound?->id,
+            'type' => GameType::ONE_ON_ONE,
         ], [
             'header' => $replayData->get('header'),
             'anticheat' => $this->anticheat,
