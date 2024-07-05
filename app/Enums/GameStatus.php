@@ -12,9 +12,17 @@ enum GameStatus: string
     case VALIDATING = 'validating';
     case VALID = 'valid';
     case UNRANKED = 'unranked';
-    case DRAW = 'draw';
+    case DRAW = 'draw'; // TODO: Remove or fix the draw status
     case CALCULATING = 'calculating results';
     case INVALID = 'invalid';
+
+    public function done(): bool
+    {
+        return match ($this) {
+            self::VALID, self::UNRANKED, self::DRAW => true,
+            default => false,
+        };
+    }
 
     public function classes(): string
     {
