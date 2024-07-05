@@ -43,7 +43,7 @@ class ShowGame extends Component
         // Calculate the difference
         $this->time = $begin->diffForHumans($end, true);
         $this->anticheat = $this->getAnticheat();
-        $this->ranked = $this->game->status->value == GameStatus::VALID;
+        $this->ranked = $this->game->status->value == GameStatus::VALID->value;
         $this->done = $this->game->status->done();
 
         return view('livewire.show-game');
