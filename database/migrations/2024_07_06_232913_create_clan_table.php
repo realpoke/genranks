@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name')->unique();
             $table->string('tag')->unique();
             $table->text('description')->nullable();
-            $table->foreignIdFor(User::class, 'owner_id')->constrained()->onDelete('cascade');
+            $table->foreignIdFor(User::class, 'owner_id')->onDelete('cascade');
             $table->timestamps();
         });
     }
