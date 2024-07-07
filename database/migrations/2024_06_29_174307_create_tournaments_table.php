@@ -17,7 +17,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->text('description')->nullable();
-            $table->foreignIdFor(User::class, 'host_id')->constrained()->onDelete('cascade');
+            $table->foreignIdFor(User::class, 'host_id')->onDelete('cascade');
             $table->timestamp('start_at');
             $table->json('stages')->nullable();
             $table->smallInteger('minimum_elo')->unsigned()->default(0);
