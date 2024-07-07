@@ -11,5 +11,7 @@ enum ClanInviteStatus: string
     case PENDING = 'pending';
     case ACCEPTED = 'accepted';
     case REJECTED = 'rejected';
+    case CANCELLED = 'cancelled';
     case BLOCKED = 'blocked';
+    case LEFT = 'left';
 }
