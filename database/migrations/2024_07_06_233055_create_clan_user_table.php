@@ -16,8 +16,8 @@ return new class extends Migration
     {
         Schema::create('clan_user', function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(Clan::class)->constrained()->onDelete('cascade');
-            $table->foreignIdFor(User::class)->constrained()->onDelete('cascade');
+            $table->foreignIdFor(Clan::class)->onDelete('cascade');
+            $table->foreignIdFor(User::class)->onDelete('cascade');
             $table->enum('status', ClanInviteStatus::values())->default(ClanInviteStatus::PENDING);
             $table->timestamps();
         });
