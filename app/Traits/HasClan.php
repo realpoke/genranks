@@ -24,6 +24,15 @@ trait HasClan
         return $this->hasOne(Clan::class, 'owner_id');
     }
 
+    public function myClan(): ?Clan
+    {
+        if ($this->hasClan()) {
+            return $this->clans()->where('status', ClanInviteStatus::ACCEPTED)->first();
+        }
+
+        return null;
+    }
+
     public function hasClan(): bool
     {
         return $this->clans()->where('status', ClanInviteStatus::ACCEPTED)->exists();
