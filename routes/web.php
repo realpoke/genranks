@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\GenLinkDownloadController;
+use App\Livewire\Clan\ShowClan;
 use App\Livewire\Game;
 use App\Livewire\Landing;
 use App\Livewire\Leaderboard;
@@ -17,6 +18,8 @@ Route::get('/doc/{markdown}', Markdown::class)->name('markdown.show');
 Route::get('/profile/{user}', Profile::class)->name('profile.show');
 
 Route::get('/maps', Map::class)->name('maps.index');
+
+Route::get('/clan/{clan}', ShowClan::class)->name('clan.show');
 
 Route::get('/games', Game::class)->name('game.index');
 Route::get('/game/{game}', ShowGame::class)->name('game.show');

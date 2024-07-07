@@ -42,6 +42,13 @@
                                     {{ __('Profile') }}
                                 </x-menus.dropdown-link>
 
+                                @if (Auth::user()->hasClan())
+                                    <x-menus.dropdown-link wire:navigate
+                                        href="{{ route('clan.show', Auth::user()->myClan()) }}">
+                                        {{ __('My Clan') }}
+                                    </x-menus.dropdown-link>
+                                @endif
+
                                 @can('viewAny:filament')
                                     <x-menus.dropdown-link href="{{ route('filament.admin.pages.dashboard') }}">
                                         {{ __('Admin') }}
@@ -55,6 +62,10 @@
 
                                 <x-menus.dropdown-link wire:navigate href="{{ route('options.create') }}">
                                     {{ __('Options') }}
+                                </x-menus.dropdown-link>
+
+                                <x-menus.dropdown-link wire:navigate href="{{ route('clan.settings') }}">
+                                    {{ __('Clan') }}
                                 </x-menus.dropdown-link>
 
                                 <div class="border-t border-gray-200 dark:border-gray-600"></div>
@@ -131,6 +142,13 @@
                         {{ __('Profile') }}
                     </x-navbars.responsive-nav-link>
 
+                    @if (request()->user()->hasClan())
+                        <x-navbars.responsive-nav-link wire:navigate
+                            href="{{ route('clan.show', request()->user()->myClan()) }}" :active="request()->routeIs('clan.show', request()->user()->myClan())">
+                            {{ __('My Clan') }}
+                        </x-navbars.responsive-nav-link>
+                    @endif
+
                     @can('viewAny:filament')
                         <x-navbars.responsive-nav-link href="{{ route('filament.admin.pages.dashboard') }}">
                             {{ __('Admin') }}
@@ -140,6 +158,10 @@
                     <!-- Account Management -->
                     <x-navbars.responsive-nav-link wire:navigate href="{{ route('options.create') }}" :active="request()->routeIs('options.create')">
                         {{ __('Options') }}
+                    </x-navbars.responsive-nav-link>
+
+                    <x-navbars.responsive-nav-link wire:navigate href="{{ route('clan.settings') }}" :active="request()->routeIs('clan.settings')">
+                        {{ __('Clan') }}
                     </x-navbars.responsive-nav-link>
 
                     <!-- Authentication -->

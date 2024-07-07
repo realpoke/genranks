@@ -16,6 +16,7 @@ use App\Actions\Auth\Password\SendPasswordResetLink;
 use App\Actions\Auth\SendEmailVerification;
 use App\Actions\Auth\VerifyEmail;
 use App\Actions\CalculateElo;
+use App\Actions\Clan\CreateClan;
 use App\Actions\CreateMapHash;
 use App\Actions\GenTool\CreateGenToolUser;
 use App\Actions\GenTool\Get1v1GenToolGames;
@@ -39,6 +40,7 @@ use App\Contracts\Auth\Password\SendsPasswordResetLinkContract;
 use App\Contracts\Auth\SendsEmailVerificationContract;
 use App\Contracts\Auth\VerifyEmailContract;
 use App\Contracts\CalculatesEloContract;
+use App\Contracts\Clan\CreatesClanContract;
 use App\Contracts\CreatesMapHashContract;
 use App\Contracts\GenTool\CreatesGenToolUserContract;
 use App\Contracts\GenTool\Gets1v1GenToolGamesContract;
@@ -84,6 +86,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(Gets1v1GenToolGamesContract::class, Get1v1GenToolGames::class);
         $this->app->bind(SearchesForGenToolUserContract::class, SearchForGenToolUser::class);
         $this->app->bind(GivesUserStatsContract::class, GiveUserStats::class);
+
+        $this->app->bind(CreatesClanContract::class, CreateClan::class);
     }
 
     /**
