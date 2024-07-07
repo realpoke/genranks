@@ -83,6 +83,19 @@ class User extends Authenticatable implements FilamentUser
         return $this->can('viewAny:filament');
     }
 
+    public function clans(): BelongsToMany
+    {
+        return $this->belongsToMany(Clan::class)
+            ->using(ClanUser::class)
+            ->withPivot(ClanUser::FIELDS)
+            ->withTimestamps();
+    }
+
+    public function ownedClasn(): HasMany
+    {
+        return $this->hasMany(Clan::class, 'owner_id');
+    }
+
     public function scopeRanked(Builder $query): Builder
     {
         return $query->whereNotNull('rank');
