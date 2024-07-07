@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Traits\HasClan;
 use App\Traits\HasElo;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
@@ -19,7 +20,7 @@ use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser
 {
-    use HasApiTokens, HasElo, HasFactory, HasRoles, Notifiable;
+    use HasApiTokens, HasClan, HasElo, HasFactory, HasRoles, Notifiable;
 
     private static $defaultRole = 'user';
 
@@ -81,19 +82,6 @@ class User extends Authenticatable implements FilamentUser
     public function canAccessPanel(Panel $panel): bool
     {
         return $this->can('viewAny:filament');
-    }
-
-    public function clans(): BelongsToMany
-    {
-        return $this->belongsToMany(Clan::class)
-            ->using(ClanUser::class)
-            ->withPivot(ClanUser::FIELDS)
-            ->withTimestamps();
-    }
-
-    public function ownedClasn(): HasMany
-    {
-        return $this->hasMany(Clan::class, 'owner_id');
     }
 
     public function scopeRanked(Builder $query): Builder
