@@ -68,7 +68,11 @@ class UploadLatest extends Command
                 continue;
             }
 
-            if ($collecting && Str::endsWith($line, '.rep') && explode('_', explode('/', $line)[5])[1] == '1v1') {
+            if (
+                $collecting &&
+                Str::endsWith($line, '.rep') &&
+                $this->validMode(explode('_', explode('/', $line)[5])[1])
+            ) {
                 $file = trim($line, ' -');
                 $files[] = $file;
                 $this->info("Found file: $file");
@@ -88,5 +92,23 @@ class UploadLatest extends Command
             $this->info("Scheduling download for: $file, delay: $delay");
             DownloadReplay::dispatch($file, $index)->delay(now()->addSeconds($delay));
         }
+    }
+
+    private function validMode(string $mode): bool
+    {
+        return in_array($mode,
+            [
+                '1v1',
+                '2v2',
+                '3v3',
+                '4v4',
+                '1v1v1',
+                '1v1v1v1',
+                '1v1v1v1v1',
+                '1v1v1v1v1v1',
+                '1v1v1v1v1v1v1',
+                '1v1v1v1v1v1v1v1',
+            ]
+        );
     }
 }
