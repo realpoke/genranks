@@ -128,7 +128,7 @@ class MapHashSeeder extends Seeder
             '[RANK] FE NoWall ZH v1' => ['A4CCC78B', '299466', '2v2', GameType::TWO_ON_TWO],
             '[RANK] Final Departure ZH v1' => ['725EDF50', '301903', '2v2', GameType::TWO_ON_TWO],
             '[RANK] Lion Heart ZH v1' => ['A914D75C', '271868', '2v2', GameType::TWO_ON_TWO],
-            // '[RANK] Lost Temple ZH v1' => ['', '', '2v2', GameType::TWO_ON_TWO],
+            '[RANK] Lost Temple ZH v1' => ['6E10F320', '240615', '2v2', GameType::TWO_ON_TWO],
             '[RANK] Maguso ZH v3' => ['EC0FA89E', '129490', '2v2', GameType::TWO_ON_TWO],
             '[RANK] Make Make 4 ZH v2' => ['70305F9A', '288046', '2v2', GameType::TWO_ON_TWO],
             '[RANK] Mountain Path ZH v4' => ['FEADD509', '163068', '2v2', GameType::TWO_ON_TWO],
