@@ -119,7 +119,7 @@ class MapHashSeeder extends Seeder
             '[RANK] ZH Carrier is Over v2' => ['E58C4047', '134899', '1v1', GameType::ONE_ON_ONE],
 
             // 2v2
-            // '[RANK] Burning Deadline ZH v1' => ['', '', '2v2', GameType::TWO_ON_TWO],
+            '[RANK] Burning Deadline ZH v1' => ['DE0DE1DC', '234912', '2v2', GameType::TWO_ON_TWO],
             '[RANK] Combat Encounter ZH v1' => ['BBD50431', '245198', '2v2', GameType::TWO_ON_TWO],
             '[RANK] Conflict Zone ZH v2' => ['F1447B7A', '163037', '2v2', GameType::TWO_ON_TWO],
             '[RANK] Desert Combat ZH v2' => ['1FAEFB10', '188985', '2v2', GameType::TWO_ON_TWO],
