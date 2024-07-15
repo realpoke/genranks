@@ -6,6 +6,7 @@ use App\Actions\CreateMapHash;
 use App\Enums\GameType;
 use App\Models\Map;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class MapHashSeeder extends Seeder
 {
@@ -147,6 +148,7 @@ class MapHashSeeder extends Seeder
         ];
 
         foreach ($maps as $mapName => $mapMeta) {
+            $mapName = Str::lower($mapName);
             $this->command->info("Adding map: {$mapName}");
 
             $map = new Map();
