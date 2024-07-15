@@ -69,7 +69,7 @@ class ValidateGame implements ValidatesGameContract
             }
         }
 
-        if (! $playerAUser || ! $playerBUser) { // TODO: This crashes if one of the players is not valid
+        if (! isset($playerAUser) || ! $playerAUser || ! isset($playerBUser) || ! $playerBUser) {
             Log::error('Players not found for game: '.$game->id);
 
             return GameStatus::INVALID;
