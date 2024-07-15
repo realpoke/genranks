@@ -44,6 +44,13 @@ class ReplayParser implements ParsesReplayContract
             Log::error('Failed to decode json for '.$replay.': '.$e->getMessage());
 
             return collect();
+        } catch (\Error $e) {
+            if (strpos($e->getMessage(), 'Allowed memory size of') !== false) {
+                Log::error('Memory limit exceeded while decoding json for '.$replay.': '.$e->getMessage());
+
+                return collect();
+            }
+            throw $e; // Re-throw if it's not a memory limit error
         }
 
         $gameHash = $this->generateGameHash($decodedData);
