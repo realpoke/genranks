@@ -22,6 +22,7 @@ use App\Actions\GenTool\CreateGenToolUser;
 use App\Actions\GenTool\GetGenToolUsers;
 use App\Actions\GenTool\GetValidGenToolGames;
 use App\Actions\GenTool\SearchForGenToolUser;
+use App\Actions\GetLatestGenLinkDownloadLink;
 use App\Actions\GetMarkdownFile;
 use App\Actions\GiveUserStats;
 use App\Actions\ReplayParser;
@@ -46,6 +47,7 @@ use App\Contracts\GenTool\CreatesGenToolUserContract;
 use App\Contracts\GenTool\GetsGenToolUsersContract;
 use App\Contracts\GenTool\GetsValidGenToolGamesContract;
 use App\Contracts\GenTool\SearchesForGenToolUserContract;
+use App\Contracts\GetsLatestGenLinkDownloadLinkContract;
 use App\Contracts\GetsMarkdownFileContract;
 use App\Contracts\GivesUserStatsContract;
 use App\Contracts\ParsesReplayContract;
@@ -75,6 +77,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(DeletesTokenContract::class, DeleteToken::class);
         $this->app->bind(GetsMarkdownFileContract::class, GetMarkdownFile::class);
         $this->app->bind(VerifyEmailContract::class, VerifyEmail::class);
+
+        $this->app->bind(GetsLatestGenLinkDownloadLinkContract::class, GetLatestGenLinkDownloadLink::class);
 
         $this->app->bind(ParsesReplayContract::class, ReplayParser::class);
         $this->app->bind(ValidatesGameContract::class, ValidateGame::class);
