@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands\GenTool;
 
+use App\Enums\GameType;
 use App\Jobs\DownloadReplay;
 use Illuminate\Console\Command;
 use Illuminate\Support\Carbon;
@@ -71,7 +72,7 @@ class UploadLatest extends Command
             if (
                 $collecting &&
                 Str::endsWith($line, '.rep') &&
-                $this->validMode(explode('_', explode('/', $line)[5])[1])
+                in_array(explode('_', explode('/', $line)[5])[1], GameType::validGenToolGameType())
             ) {
                 $file = trim($line, ' -');
                 $files[] = $file;
@@ -92,23 +93,5 @@ class UploadLatest extends Command
             $this->info("Scheduling download for: $file, delay: $delay");
             DownloadReplay::dispatch($file, $index)->delay(now()->addSeconds($delay));
         }
-    }
-
-    private function validMode(string $mode): bool
-    {
-        return in_array($mode,
-            [
-                '1v1',
-                '2v2',
-                '3v3',
-                '4v4',
-                '1v1v1',
-                '1v1v1v1',
-                '1v1v1v1v1',
-                '1v1v1v1v1v1',
-                '1v1v1v1v1v1v1',
-                '1v1v1v1v1v1v1v1',
-            ]
-        );
     }
 }

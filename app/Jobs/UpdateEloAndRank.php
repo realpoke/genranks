@@ -3,6 +3,7 @@
 namespace App\Jobs;
 
 use App\Contracts\CalculatesEloContract;
+use App\Enums\EloRankType;
 use App\Models\Game;
 use App\Models\User;
 use Illuminate\Bus\Queueable;
@@ -33,15 +34,19 @@ class UpdateEloAndRank implements ShouldQueue
 
     public function handle(CalculatesEloContract $eloCalculator)
     {
-        $newRatings = $eloCalculator($this->playerA, $this->playerB, $this->playerAWon);
+        $newRatingsAll = $eloCalculator($this->playerA, $this->playerB, $this->playerAWon);
 
-        if ($newRatings->isEmpty()) {
+        if ($newRatingsAll->isEmpty()) {
             return;
         }
 
         // TODO: Database transaction this so if one fails both should be reverted
-        $this->playerA->newElo($newRatings->get('playerANewElo'), $this->game);
+        $this->playerA->newElo($newRatingsAll->get('playerANewElo'), $this->game);
+        $this->playerA->changeElo($newRatingsAll->get('playerAChangedElo'), rankType: EloRankType::WEEKLY);
+        $this->playerA->changeElo($newRatingsAll->get('playerAChangedElo'), rankType: EloRankType::MONTHLY);
         $this->playerB->refresh();
-        $this->playerB->newElo($newRatings->get('playerBNewElo'), $this->game);
+        $this->playerB->newElo($newRatingsAll->get('playerBNewElo'), $this->game);
+        $this->playerB->changeElo($newRatingsAll->get('playerBChangedElo'), rankType: EloRankType::WEEKLY);
+        $this->playerB->changeElo($newRatingsAll->get('playerBChangedElo'), rankType: EloRankType::MONTHLY);
     }
 }

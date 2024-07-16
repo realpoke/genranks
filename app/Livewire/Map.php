@@ -15,4 +15,15 @@ class Map extends Component
 
         return view('livewire.map');
     }
+
+    public function downloadMap($mapId)
+    {
+        $map = ModelsMap::findOrFail($mapId);
+        $downloadUrl = $map->downloadURL();
+        dd($map->downloadURL());
+
+        if ($downloadUrl) {
+            $this->redirect($downloadUrl);
+        }
+    }
 }

@@ -14,6 +14,9 @@
                     <x-navbars.nav-link wire:navigate href="{{ route('game.index') }}" :active="request()->routeIs('game.*')">
                         {{ __('Games') }}
                     </x-navbars.nav-link>
+                    <x-navbars.nav-link wire:navigate href="{{ route('map.index') }}" :active="request()->routeIs('map.*')">
+                        {{ __('Maps') }}
+                    </x-navbars.nav-link>
                 </div>
             </div>
 
@@ -123,6 +126,9 @@
             </x-navbars.responsive-nav-link>
             <x-navbars.responsive-nav-link wire:navigate href="{{ route('game.index') }}" :active="request()->routeIs('game.*')">
                 {{ __('Games') }}
+            </x-navbars.responsive-nav-link>
+            <x-navbars.responsive-nav-link wire:navigate href="{{ route('map.index') }}" :active="request()->routeIs('map.*')">
+                {{ __('Maps') }}
             </x-navbars.responsive-nav-link>
         </div>
 

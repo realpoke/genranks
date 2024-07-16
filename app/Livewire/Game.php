@@ -13,7 +13,7 @@ class Game extends Component
     public function render()
     {
         return view('livewire.game', [
-            'games' => ModelsGame::latest()->paginate(12),
+            'games' => ModelsGame::showDefault()->latest()->paginate(12),
         ]);
     }
 }

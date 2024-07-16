@@ -2,11 +2,12 @@
 
 namespace App\Actions\GenTool;
 
-use App\Contracts\GenTool\Gets1v1GenToolGamesContract;
+use App\Contracts\GenTool\GetsValidGenToolGamesContract;
+use App\Enums\GameType;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
 
-class Get1v1GenToolGames implements Gets1v1GenToolGamesContract
+class GetValidGenToolGames implements GetsValidGenToolGamesContract
 {
     protected const BASE_URL = 'https://www.gentool.net/data/zh';
 
@@ -24,7 +25,7 @@ class Get1v1GenToolGames implements Gets1v1GenToolGamesContract
             if ($matchName == '') {
                 continue;
             }
-            if (explode('_', $matchName)[1] != '1v1') {
+            if (in_array(explode('_', $matchName)[1], GameType::validGenToolGameType()) === false) {
                 continue;
             }
 

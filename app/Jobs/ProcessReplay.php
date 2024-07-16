@@ -13,6 +13,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
 
 class ProcessReplay implements ShouldQueue
@@ -55,7 +56,6 @@ class ProcessReplay implements ShouldQueue
         if (! is_null($gameFound)) {
 
             if ($gameFound->users->contains($this->user)) {
-
                 return;
             }
 
@@ -69,22 +69,34 @@ class ProcessReplay implements ShouldQueue
 
             // If a winner is in the new replay replace it.
             $updatedSummary = collect($gameFound->summary)->map(function ($existingData) use ($replayData) {
-                // Find the new player data in the replay data
-                $newPlayer = collect($replayData)->firstWhere('Name', $existingData['Name']);
+                $newSummary = collect($replayData->get('summary'));
 
-                // If the new player data exists, update the existing data
-                if ($newPlayer) {
-                    // Update the 'Win' field to true if either is true
-                    $existingData['Win'] = $existingData['Win'] || $newPlayer['Win'];
+                foreach ($newSummary as $newPlayer) {
+                    if ($newPlayer['Name'] === $existingData['Name']) {
+                        // Update the 'Win' field to true if either is true, never change true to false
+                        $existingData['Win'] = $existingData['Win'] || $newPlayer['Win'];
+                        break;
+                    }
                 }
 
                 return $existingData;
             });
 
+            if ($gameFound->users->count() < $gameFound->type->replaysNeededForValidation()) {
+                $updated = $gameFound->update([
+                    'summary' => $updatedSummary,
+                ]);
+
+                return;
+            }
+
             $updated = $gameFound->update([
                 'summary' => $updatedSummary,
                 'status' => GameStatus::VALIDATING,
             ]);
+
+            Log::debug('Sending game to vlaidation queue');
+            Log::debug('Game status: '.$gameFound->status->value);
 
             ValidateGame::dispatch($gameFound)->onQueue('sequential');
 
@@ -93,16 +105,43 @@ class ProcessReplay implements ShouldQueue
 
         $mapFound = Map::where('hash', $replayData->get('meta')['MapHash'])->first();
 
+        $players = $replayData->get('players');
+        $gameType = $this->determineGameType($players);
+
         $game = $this->user->games()->create([
             'hash' => $replayData->get('hash'),
             'summary' => $replayData->get('summary'),
             'meta' => $replayData->get('meta'),
-            'players' => $replayData->get('players'),
+            'players' => $players,
             'map_id' => $mapFound?->id,
-            'type' => GameType::ONE_ON_ONE,
+            'type' => $gameType,
         ], [
             'header' => $replayData->get('header'),
             'anticheat' => $this->anticheat,
         ]);
+    }
+
+    private function determineGameType(array $players): GameType
+    {
+        // TODO: Remove replays with unsupported game types
+        $playerCount = count($players);
+        $teams = array_unique(array_column($players, 'Team'));
+        $teamCount = count(array_filter($teams, fn ($team) => $team !== '-1'));
+
+        if ($playerCount === 2) {
+            return GameType::ONE_ON_ONE;
+        } elseif ($teamCount === 0) {
+            return GameType::FREE_FOR_ALL;
+        } elseif ($teamCount === 2) {
+            return match ($playerCount) {
+                2 => GameType::ONE_ON_ONE,
+                4 => GameType::TWO_ON_TWO,
+                6 => GameType::THREE_ON_THREE,
+                8 => GameType::FOUR_ON_FOUR,
+                default => GameType::UNSUPPORTED,
+            };
+        }
+
+        return GameType::UNSUPPORTED;
     }
 }

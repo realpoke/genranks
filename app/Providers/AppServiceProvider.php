@@ -19,8 +19,8 @@ use App\Actions\CalculateElo;
 use App\Actions\Clan\CreateClan;
 use App\Actions\CreateMapHash;
 use App\Actions\GenTool\CreateGenToolUser;
-use App\Actions\GenTool\Get1v1GenToolGames;
 use App\Actions\GenTool\GetGenToolUsers;
+use App\Actions\GenTool\GetValidGenToolGames;
 use App\Actions\GenTool\SearchForGenToolUser;
 use App\Actions\GetMarkdownFile;
 use App\Actions\GiveUserStats;
@@ -43,8 +43,8 @@ use App\Contracts\CalculatesEloContract;
 use App\Contracts\Clan\CreatesClanContract;
 use App\Contracts\CreatesMapHashContract;
 use App\Contracts\GenTool\CreatesGenToolUserContract;
-use App\Contracts\GenTool\Gets1v1GenToolGamesContract;
 use App\Contracts\GenTool\GetsGenToolUsersContract;
+use App\Contracts\GenTool\GetsValidGenToolGamesContract;
 use App\Contracts\GenTool\SearchesForGenToolUserContract;
 use App\Contracts\GetsMarkdownFileContract;
 use App\Contracts\GivesUserStatsContract;
@@ -83,7 +83,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind(GetsGenToolUsersContract::class, GetGenToolUsers::class);
         $this->app->bind(CreatesGenToolUserContract::class, CreateGenToolUser::class);
-        $this->app->bind(Gets1v1GenToolGamesContract::class, Get1v1GenToolGames::class);
+        $this->app->bind(GetsValidGenToolGamesContract::class, GetValidGenToolGames::class);
         $this->app->bind(SearchesForGenToolUserContract::class, SearchForGenToolUser::class);
         $this->app->bind(GivesUserStatsContract::class, GiveUserStats::class);
 

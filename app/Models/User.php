@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Enums\EloRankType;
 use App\Traits\HasClan;
 use App\Traits\HasElo;
 use Filament\Models\Contracts\FilamentUser;
@@ -33,6 +34,10 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
+        'weekly_elo',
+        'weekly_rank',
+        'monthly_elo',
+        'monthly_rank',
         'elo',
         'rank',
         'fake',
@@ -62,6 +67,7 @@ class User extends Authenticatable implements FilamentUser
             'password' => 'hashed',
             'stats' => 'array',
             'gentool_ids' => 'array',
+            'fake' => 'boolean',
         ];
     }
 
@@ -84,9 +90,9 @@ class User extends Authenticatable implements FilamentUser
         return $this->can('viewAny:filament');
     }
 
-    public function scopeRanked(Builder $query): Builder
+    public function scopeRanked(Builder $query, EloRankType $rankType = EloRankType::ALL): Builder
     {
-        return $query->whereNotNull('rank');
+        return $query->whereNotNull($rankType->databaseRankField());
     }
 
     public function scopeFake(Builder $query): Builder

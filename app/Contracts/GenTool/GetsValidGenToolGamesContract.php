@@ -4,7 +4,7 @@ namespace App\Contracts\GenTool;
 
 use Illuminate\Support\Collection;
 
-interface Gets1v1GenToolGamesContract
+interface GetsValidGenToolGamesContract
 {
     public function __invoke(string $url): Collection;
 }

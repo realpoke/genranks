@@ -3,8 +3,8 @@
 namespace App\Console\Commands\GenTool;
 
 use App\Contracts\GenTool\CreatesGenToolUserContract;
-use App\Contracts\GenTool\Gets1v1GenToolGamesContract;
 use App\Contracts\GenTool\GetsGenToolUsersContract;
+use App\Contracts\GenTool\GetsValidGenToolGamesContract;
 use App\Contracts\GenTool\SearchesForGenToolUserContract;
 use App\Jobs\ProcessReplay;
 use Illuminate\Console\Command;
@@ -33,7 +33,7 @@ class UploadRandomUser extends Command
     public function handle(
         GetsGenToolUsersContract $userGetter,
         CreatesGenToolUserContract $userCreator,
-        Gets1v1GenToolGamesContract $gameGetter,
+        GetsValidGenToolGamesContract $gameGetter,
         SearchesForGenToolUserContract $userSearcher,
     ) {
         do {
@@ -49,10 +49,10 @@ class UploadRandomUser extends Command
             $userKey = $users->search($userValue);
             $this->info('Processing user: '.$userKey);
 
-            // Find 1v1 replays and store opponents
+            // Find valid replays and store opponents
             $games = $gameGetter($userValue);
             if ($games->isEmpty()) {
-                $this->info('No 1v1 games found.');
+                $this->info('No valid games found.');
 
                 continue;
             }
@@ -65,8 +65,20 @@ class UploadRandomUser extends Command
             foreach ($games as $replayName => $replayURL) {
                 $this->info($replayName);
                 $segments = explode('_', $replayName);
-                $opponent = $segments[2] != explode('_', $userKey)[0] ? $segments[2] : $segments[3];
-                $opponents->add(preg_replace('/[^A-Za-z0-9]/', '', $opponent));
+
+                // Remove the first two segments (timestamp and game type)
+                array_shift($segments);
+                array_shift($segments);
+
+                // Get the user's nickname
+                $userNickname = explode('_', $userKey)[0];
+
+                // Filter out the user's nickname and add remaining unique opponents
+                $gameOpponents = array_filter($segments, function ($segment) use ($userNickname) {
+                    return $segment !== $userNickname;
+                });
+
+                $opponents = $opponents->merge($gameOpponents)->unique();
 
                 $fileContent = file_get_contents($replayURL);
                 $fileName = $user->id.'_'.time().'_'.$opponents->count().'_replay';
@@ -81,10 +93,10 @@ class UploadRandomUser extends Command
             // Get replays from opponents
             foreach ($userSearcher(Carbon::now(), ...$opponents->unique()->toArray()) as $userNickname => $userUrl) {
                 $this->info($userNickname);
-                // Find 1v1 replays and store
+                // Find valid replays and store
                 $opponentGames = $gameGetter($userUrl);
                 if ($opponentGames->isEmpty()) {
-                    $this->info('No opponent 1v1 games found.');
+                    $this->info('No opponent valid games found.');
 
                     continue 2;
                 }

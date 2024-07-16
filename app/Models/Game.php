@@ -79,6 +79,25 @@ class Game extends Model
         ]);
     }
 
+    public function scopeShowDefault(Builder $query): Builder
+    {
+        return $query->whereIn('status', [
+            GameStatus::VALID->value,
+            GameStatus::DRAW->value,
+            GameStatus::UNRANKED->value,
+            GameStatus::VALIDATING->value,
+            GameStatus::CALCULATING->value,
+        ]);
+    }
+
+    public function scopeProcessing(Builder $query): Builder
+    {
+        return $query->whereIn('status', [
+            GameStatus::VALIDATING->value,
+            GameStatus::CALCULATING->value,
+        ]);
+    }
+
     public function scopeFailed(Builder $query): Builder
     {
         return $query->whereIn('status', [

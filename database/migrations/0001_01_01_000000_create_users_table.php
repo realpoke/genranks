@@ -17,8 +17,16 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+
+            $table->smallInteger('weekly_elo')->unsigned()->default(1500);
+            $table->mediumInteger('weekly_rank')->unsigned()->nullable();
+
+            $table->smallInteger('monthly_elo')->unsigned()->default(1500);
+            $table->mediumInteger('monthly_rank')->unsigned()->nullable();
+
             $table->smallInteger('elo')->unsigned()->default(1500);
             $table->mediumInteger('rank')->unsigned()->nullable();
+
             $table->boolean('fake')->default(false);
             $table->json('stats')->nullable();
             $table->json('gentool_ids')->nullable();
