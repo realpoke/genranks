@@ -3,10 +3,14 @@
 namespace App\Livewire;
 
 use App\Models\Map as ModelsMap;
+use App\Traits\WithLimits;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 
 class Map extends Component
 {
+    use WithLimits;
+
     public $maps;
 
     public function render()
@@ -18,12 +22,13 @@ class Map extends Component
 
     public function downloadMap($mapId)
     {
-        $map = ModelsMap::findOrFail($mapId);
-        $downloadUrl = $map->downloadURL();
-        dd($map->downloadURL());
+        $this->limitTo(3, 'map', 'download more maps');
 
-        if ($downloadUrl) {
-            $this->redirect($downloadUrl);
+        $map = ModelsMap::findOrFail($mapId);
+        if (! $map->file || ! Storage::disk('maps')->fileExists($map->file)) {
+            return;
         }
+
+        return Storage::disk('maps')->download($map->file);
     }
 }

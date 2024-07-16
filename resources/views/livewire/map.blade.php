@@ -1,6 +1,9 @@
 <div>
     <x-layouts.container>
         <x-sections.card>
+            <div class="col-span-6 sm:col-span-4">
+                <x-inputs.error for="map" class="mt-2" />
+            </div>
             <ul role="list" class="divide-y divide-gray-200">
                 @forelse ($maps as $map)
                     <li class="flex items-center justify-between py-4">

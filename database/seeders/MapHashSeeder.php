@@ -148,16 +148,16 @@ class MapHashSeeder extends Seeder
         ];
 
         foreach ($maps as $mapName => $mapMeta) {
-            $mapName = Str::lower($mapName);
+            $mapNameLower = Str::lower($mapName);
             $this->command->info("Adding map: {$mapName}");
 
             $map = new Map();
             $map = $map->updateOrCreate([
-                'name' => $mapName,
+                'name' => $mapNameLower,
             ], [
-                'hash' => $hasher($mapName, $mapMeta[0], $mapMeta[1]),
+                'hash' => $hasher($mapNameLower, $mapMeta[0], $mapMeta[1]),
                 'ranked' => true,
-                'file' => $mapMeta[2],
+                'file' => $mapMeta[2].'/'.$mapName.'.zip',
                 'type' => $mapMeta[3],
             ]);
 

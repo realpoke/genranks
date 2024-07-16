@@ -60,7 +60,8 @@ return [
 
         'maps' => [
             'driver' => 'local',
-            'root' => 'maps',
+            'root' => storage_path('maps'),
+            'throw' => false,
             'visibility' => 'private',
         ],
 
