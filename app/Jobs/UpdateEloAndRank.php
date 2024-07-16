@@ -41,12 +41,14 @@ class UpdateEloAndRank implements ShouldQueue
         }
 
         // TODO: Database transaction this so if one fails both should be reverted
+        $this->playerA->refresh();
         $this->playerA->newElo($newRatingsAll->get('playerANewElo'), $this->game);
-        $this->playerA->changeElo($newRatingsAll->get('playerAChangedElo'), rankType: EloRankType::WEEKLY);
-        $this->playerA->changeElo($newRatingsAll->get('playerAChangedElo'), rankType: EloRankType::MONTHLY);
+        // TODO: Add back weekly and monthly ranking
+        // $this->playerA->changeElo($newRatingsAll->get('playerAChangedElo'), rankType: EloRankType::WEEKLY);
+        // $this->playerA->changeElo($newRatingsAll->get('playerAChangedElo'), rankType: EloRankType::MONTHLY);
         $this->playerB->refresh();
         $this->playerB->newElo($newRatingsAll->get('playerBNewElo'), $this->game);
-        $this->playerB->changeElo($newRatingsAll->get('playerBChangedElo'), rankType: EloRankType::WEEKLY);
-        $this->playerB->changeElo($newRatingsAll->get('playerBChangedElo'), rankType: EloRankType::MONTHLY);
+        // $this->playerB->changeElo($newRatingsAll->get('playerBChangedElo'), rankType: EloRankType::WEEKLY);
+        // $this->playerB->changeElo($newRatingsAll->get('playerBChangedElo'), rankType: EloRankType::MONTHLY);
     }
 }
