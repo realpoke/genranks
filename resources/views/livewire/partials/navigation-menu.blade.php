@@ -21,10 +21,10 @@
             </div>
 
             <div class="hidden space-x-4 sm:flex sm:items-center sm:ml-6">
-                <x-buttons.link download class="inline-flex" target="_blank" href="{{ route('genlink.download') }}">
+                <x-buttons.secondary download class="inline-flex" wire:click="downloadGenLink">
                     GenLink
                     <x-icons class="ml-2" icon="download" />
-                </x-buttons.link>
+                </x-buttons.secondary>
                 @auth
                     <!-- Options Dropdown -->
                     <div class="relative ml-3">
@@ -113,8 +113,7 @@
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
 
-            <x-navbars.responsive-nav-link download class="inline-flex" target="_blank"
-                href="{{ route('genlink.download') }}">
+            <x-navbars.responsive-nav-link class="inline-flex cursor-pointer" wire:click="downloadGenLink">
                 GenLink
                 <x-icons class="ml-2" icon="download" />
             </x-navbars.responsive-nav-link>
