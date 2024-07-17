@@ -63,8 +63,8 @@ class ShowGame extends Component
         $comparisonData = [];
 
         foreach ($categories as $category) {
-            $firstData = $this->game->summary[0][$category];
-            $secondData = $this->game->summary[1][$category];
+            $firstData = $this->game->users->first()->pivot->summary[$category];
+            $secondData = $this->game->users->last()->pivot->summary[$category];
 
             // Ensure $firstData and $secondData are arrays
             if (! is_array($firstData) || ! is_array($secondData)) {

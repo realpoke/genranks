@@ -5,13 +5,13 @@
                 {{ collect(explode('/', $game->meta['MapFile']))->last() }}</h2>
             <div class="flex items-baseline space-x-4">
                 <p class="flex-1 mt-2 text-4xl font-bold tracking-tight text-right text-white sm:text-5xl">
-                    {{ $game->summary[0]['Name'] }}
+                    {{ $game->users->first()->pivot->summary['Name'] }}
                 </p>
                 <p class="mt-2 text-sm font-normal tracking-tight text-white sm:text-lg">
                     VS
                 </p>
                 <p class="flex-1 mt-2 text-4xl font-bold tracking-tight text-left text-white sm:text-5xl">
-                    {{ $game->summary[1]['Name'] }}
+                    {{ $game->users->last()->pivot->summary['Name'] }}
                 </p>
             </div>
         </div>
@@ -52,14 +52,14 @@
             <div class="px-6 mx-auto max-w-7xl lg:px-8">
                 <div class="grid max-w-md grid-cols-1 gap-8 mx-auto lg:max-w-4xl lg:grid-cols-2">
                     <div
-                        class="{{ $done && $game->summary[0]['Win'] == true ? 'border-l-2 border-r-2 border-indigo-600' : '' }} flex flex-col justify-between p-8 bg-white shadow-xl rounded-3xl ring-1 ring-gray-900/10 sm:p-10">
+                        class="{{ $done && $game->users->first()->pivot->summary['Win'] == true ? 'border-l-2 border-r-2 border-indigo-600' : '' }} flex flex-col justify-between p-8 bg-white shadow-xl rounded-3xl ring-1 ring-gray-900/10 sm:p-10">
                         <div>
                             <h3 id="tier-hobby"
                                 class="flex items-center text-base font-semibold leading-7 text-indigo-600">
-                                @if ($done && $game->summary[0]['Win'] == true)
+                                @if ($done && $game->users->first()->pivot->summary['Win'] == true)
                                     <x-icons icon="award" />
                                 @endif
-                                {{ $game->summary[0]['Side'] }}
+                                {{ $game->users->first()->pivot->summary['Side'] }}
                             </h3>
 
                             @if ($ranked)
@@ -67,7 +67,7 @@
                                     <span
                                         class="text-5xl font-bold tracking-tight text-gray-900">{{ abs($users->first()->pivot->elo_change) }}</span>
                                     <div>
-                                        @if ($game->summary[0]['Win'])
+                                        @if ($game->users->first()->pivot->summary['Win'])
                                             <span class="text-base font-semibold leading-7 text-gray-600"><x-icons
                                                     class="text-green-500" icon="trend-up" /></span>
                                         @else
@@ -79,7 +79,7 @@
                                 </div>
                             @endif
                             <p class="mt-2 text-xs text-gray-600">
-                                {{ $game->summary[0]['Name'] }}<br>
+                                {{ $game->users->first()->pivot->summary['Name'] }}<br>
 
                                 @if ($done && $users->first()->rank)
                                     Rank: {{ $users->first()->rank }}/{{ $users->first()->elo }}
@@ -91,7 +91,8 @@
                                     <!-- TODO: Add K/D ratio and CASH/MINUTE ratio -->
                                     <div class="flex items-center gap-x-3">
                                         <x-icons class="text-gray-600" icon="activity" />
-                                        Total Spent: {{ number_format($game->summary[0]['MoneySpent']) }}
+                                        Total Spent:
+                                        {{ number_format($game->users->first()->pivot->summary['MoneySpent']) }}
                                     </div>
                                 </li>
                                 @foreach ($categories as $category)
@@ -129,22 +130,22 @@
                         </div>
                     </div>
                     <div
-                        class="{{ $done && $game->summary[1]['Win'] == true ? 'border-l-2 border-r-2 border-indigo-600' : '' }} flex flex-col justify-between p-8 bg-white shadow-xl rounded-3xl ring-1 ring-gray-900/10 sm:p-10">
+                        class="{{ $done && $game->users->last()->pivot->summary['Win'] == true ? 'border-l-2 border-r-2 border-indigo-600' : '' }} flex flex-col justify-between p-8 bg-white shadow-xl rounded-3xl ring-1 ring-gray-900/10 sm:p-10">
                         <div>
 
                             <h3 id="tier-team"
                                 class="flex items-center text-base font-semibold leading-7 text-indigo-600">
-                                @if ($done && $game->summary[1]['Win'] == true)
+                                @if ($done && $game->users->last()->pivot->summary['Win'] == true)
                                     <x-icons icon="award" />
                                 @endif
-                                {{ $game->summary[1]['Side'] }}
+                                {{ $game->users->last()->pivot->summary['Side'] }}
                             </h3>
                             @if ($game->status->value == 'valid')
                                 <div class="flex items-baseline mt-4 gap-x-2">
                                     <span
                                         class="text-5xl font-bold tracking-tight text-gray-900">{{ abs($users->last()->pivot->elo_change) }}</span>
                                     <div>
-                                        @if ($game->summary[1]['Win'])
+                                        @if ($game->users->last()->pivot->summary['Win'])
                                             <span class="text-base font-semibold leading-7 text-gray-600"><x-icons
                                                     class="text-green-500" icon="trend-up" /></span>
                                         @else
@@ -156,7 +157,7 @@
                                 </div>
                             @endif
                             <p class="mt-2 text-xs text-gray-600">
-                                {{ $game->summary[1]['Name'] }}<br>
+                                {{ $game->users->last()->pivot->summary['Name'] }}<br>
 
                                 @if ($done && $users->last()->rank)
                                     Rank: {{ $users->last()->rank }}/{{ $users->last()->elo }}
@@ -168,7 +169,8 @@
 
                                     <div class="flex items-center gap-x-3">
                                         <x-icons class="text-gray-600" icon="activity" />
-                                        Total Spent: {{ number_format($game->summary[1]['MoneySpent']) }}
+                                        Total Spent:
+                                        {{ number_format($game->users->last()->pivot->summary['MoneySpent']) }}
                                     </div>
                                 </li>
                                 @foreach ($categories as $category)
