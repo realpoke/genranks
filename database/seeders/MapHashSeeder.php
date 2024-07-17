@@ -20,20 +20,30 @@ class MapHashSeeder extends Seeder
         $hasher = new CreateMapHash();
         $maps = [
             //'map name' => ['map crc', 'map size', 'map file', GameType::class],
+            // FFA 3
+            // 'Conflict in the Mediterranean [WBC2021]' => ['', '', 'ffa/3', GameType::FREE_FOR_ALL_THREE],
+            // 'Radiation Ultima [WBC2021]' => ['', '', 'ffa/3', GameType::FREE_FOR_ALL_THREE],
+            // 'Sand Islands v5' => ['', '', 'ffa/3', GameType::FREE_FOR_ALL_THREE],
+            // 'Trinity Island X' => ['', '', 'ffa/3', GameType::FREE_FOR_ALL_THREE],
+
             // FFA 4
-            // '[RANK] Bursting Asunder ZH v1' => ['', '', 'ffa/4', GameType::FREE_FOR_ALL],
-            '[RANK] Fall Out ZH v1' => ['7BE5B809', '369961', 'ffa/4', GameType::FREE_FOR_ALL],
-            '[RANK] Hidden Pearls ZH v1' => ['252FD858', '149781', 'ffa/4', GameType::FREE_FOR_ALL],
-            '[RANK] Volcanoe ZH v1' => ['3C26AF7F', '176614', 'ffa/4', GameType::FREE_FOR_ALL],
+            // 'Frontier Rails v2 [WBC2022]' => ['', '', 'ffa/4', GameType::FREE_FOR_ALL_FOUR],
+            // 'Green Goon [WBC2022]' => ['', '', 'ffa/4', GameType::FREE_FOR_ALL_FOUR],
+            // 'Naval Base Mabuhay [WBC2022]' => ['', '', 'ffa/4', GameType::FREE_FOR_ALL_FOUR],
+            // 'Tournament Spaceship [WBC2022]' => ['', '', 'ffa/4', GameType::FREE_FOR_ALL_FOUR],
+            // '[RANK] Bursting Asunder ZH v1' => ['', '', 'ffa/4', GameType::FREE_FOR_ALL_FOUR],
+            '[RANK] Fall Out ZH v1' => ['7BE5B809', '369961', 'ffa/4', GameType::FREE_FOR_ALL_FOUR],
+            '[RANK] Hidden Pearls ZH v1' => ['252FD858', '149781', 'ffa/4', GameType::FREE_FOR_ALL_FOUR],
+            '[RANK] Volcanoe ZH v1' => ['3C26AF7F', '176614', 'ffa/4', GameType::FREE_FOR_ALL_FOUR],
 
             // FFA 6
-            '[RANK] Coral Islands ZH v1' => ['6A559B9C', '322970', 'ffa/6', GameType::FREE_FOR_ALL],
-            '[RANK] Defcon Balanced ZH v1' => ['8E24F910', '312092', 'ffa/6', GameType::FREE_FOR_ALL],
-            '[RANK] Naval Port Reyes ZH v1' => ['9F43E6F5', '260847', 'ffa/6', GameType::FREE_FOR_ALL],
-            '[RANK] Subjugation ZH v1' => ['7FE25E16', '353076', 'ffa/6', GameType::FREE_FOR_ALL],
+            '[RANK] Coral Islands ZH v1' => ['6A559B9C', '322970', 'ffa/6', GameType::FREE_FOR_ALL_SIX],
+            '[RANK] Defcon Balanced ZH v1' => ['8E24F910', '312092', 'ffa/6', GameType::FREE_FOR_ALL_SIX],
+            '[RANK] Naval Port Reyes ZH v1' => ['9F43E6F5', '260847', 'ffa/6', GameType::FREE_FOR_ALL_SIX],
+            '[RANK] Subjugation ZH v1' => ['7FE25E16', '353076', 'ffa/6', GameType::FREE_FOR_ALL_SIX],
 
             // FFA 8
-            '[RANK] Twister Land ZH v1' => ['BA1F5028', '205670', 'ffa/8', GameType::FREE_FOR_ALL],
+            '[RANK] Twister Land ZH v1' => ['BA1F5028', '205670', 'ffa/8', GameType::FREE_FOR_ALL_EIGHT],
 
             // 1v1
             '[RANK] Abandoned Desert ZH v1' => ['A691ED8A', '154830', '1v1', GameType::ONE_ON_ONE],

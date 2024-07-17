@@ -13,7 +13,12 @@ enum GameType: string
     case THREE_ON_THREE = 'three-on-three';
     case FOUR_ON_FOUR = 'four-on-four';
 
-    case FREE_FOR_ALL = 'free-for-all';
+    case FREE_FOR_ALL_THREE = 'free-for-all-3';
+    case FREE_FOR_ALL_FOUR = 'free-for-all-4';
+    case FREE_FOR_ALL_FIVE = 'free-for-all-5';
+    case FREE_FOR_ALL_SIX = 'free-for-all-6';
+    case FREE_FOR_ALL_SEVEN = 'free-for-all-7';
+    case FREE_FOR_ALL_EIGHT = 'free-for-all-8';
 
     case UNSUPPORTED = 'unsupported';
 
@@ -24,7 +29,12 @@ enum GameType: string
             self::TWO_ON_TWO => 4,
             self::THREE_ON_THREE => 6,
             self::FOUR_ON_FOUR => 8,
-            self::FREE_FOR_ALL => 4,
+            self::FREE_FOR_ALL_THREE => 3,
+            self::FREE_FOR_ALL_FOUR => 4,
+            self::FREE_FOR_ALL_FIVE => 5,
+            self::FREE_FOR_ALL_SIX => 6,
+            self::FREE_FOR_ALL_SEVEN => 7,
+            self::FREE_FOR_ALL_EIGHT => 8,
             default => 0,
         };
     }
@@ -36,7 +46,12 @@ enum GameType: string
             self::TWO_ON_TWO => $playerCount == 4,
             self::THREE_ON_THREE => $playerCount == 6,
             self::FOUR_ON_FOUR => $playerCount == 8,
-            self::FREE_FOR_ALL => $playerCount == 4 || $playerCount == 6 || $playerCount == 8,
+            self::FREE_FOR_ALL_THREE => $playerCount == 3,
+            self::FREE_FOR_ALL_FOUR => $playerCount == 4,
+            self::FREE_FOR_ALL_FIVE => $playerCount == 5,
+            self::FREE_FOR_ALL_SIX => $playerCount == 6,
+            self::FREE_FOR_ALL_SEVEN => $playerCount == 7,
+            self::FREE_FOR_ALL_EIGHT => $playerCount == 8,
             default => false,
         };
     }

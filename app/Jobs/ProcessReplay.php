@@ -131,7 +131,15 @@ class ProcessReplay implements ShouldQueue
         if ($playerCount === 2) {
             return GameType::ONE_ON_ONE;
         } elseif ($teamCount === 0) {
-            return GameType::FREE_FOR_ALL;
+            return match ($playerCount) {
+                3 => GameType::FREE_FOR_ALL_THREE,
+                4 => GameType::FREE_FOR_ALL_FOUR,
+                5 => GameType::FREE_FOR_ALL_FIVE,
+                6 => GameType::FREE_FOR_ALL_SIX,
+                7 => GameType::FREE_FOR_ALL_SEVEN,
+                8 => GameType::FREE_FOR_ALL_EIGHT,
+                default => GameType::UNSUPPORTED,
+            };
         } elseif ($teamCount === 2) {
             return match ($playerCount) {
                 2 => GameType::ONE_ON_ONE,
