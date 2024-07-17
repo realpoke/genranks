@@ -24,7 +24,6 @@ class Game extends Model
     protected $fillable = [
         'status',
         'hash',
-        'summary',
         'meta',
         'players',
         'map_id',
@@ -39,7 +38,6 @@ class Game extends Model
     protected function casts(): array
     {
         return [
-            'summary' => 'array',
             'meta' => 'array',
             'players' => 'array',
             'status' => GameStatus::class,

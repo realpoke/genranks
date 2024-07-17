@@ -11,22 +11,14 @@ class GiveUserStats implements GivesUserStatsContract
     {
         foreach ($game->users as $user) {
             $pivot = $user->pivot;
+            $summary = $pivot->summary;
 
-            $header = $pivot->header;
-            $slot = $header['ArrayReplayOwnerSlot'] ?? null;
-            if ($slot === null) {
-
-                continue;
-            }
-
-            $summary = $game->summary[$slot] ?? null;
-            if ($summary === null) {
-
+            if (empty($summary)) {
                 continue;
             }
 
             // Get the user's stats
-            $userStats = $user->stats;
+            $userStats = $user->stats ?? [];
 
             // Handle the 'Name' field
             $name = $summary['Name'];
@@ -38,11 +30,7 @@ class GiveUserStats implements GivesUserStatsContract
             // Handle the 'Side' field
             $side = $summary['Side'];
             $userStats['Sides'] = $userStats['Sides'] ?? [];
-            if (isset($userStats['Sides'][$side])) {
-                $userStats['Sides'][$side] += 1;
-            } else {
-                $userStats['Sides'][$side] = 1;
-            }
+            $userStats['Sides'][$side] = ($userStats['Sides'][$side] ?? 0) + 1;
 
             // Remove 'Name', 'Side', 'Win', and 'Team' fields from summary as they have been handled
             unset($summary['Name'], $summary['Side'], $summary['Win'], $summary['Team']);
@@ -63,8 +51,8 @@ class GiveUserStats implements GivesUserStatsContract
         foreach ($summary as $key => $value) {
             if (is_array($value) && isset($userStats[$key]) && is_array($userStats[$key])) {
                 $userStats[$key] = $this->mergeStats($userStats[$key], $value);
-            } elseif (is_numeric($value) && isset($userStats[$key]) && is_numeric($userStats[$key])) {
-                $userStats[$key] += $value;
+            } elseif (is_numeric($value)) {
+                $userStats[$key] = ($userStats[$key] ?? 0) + $value;
             } else {
                 $userStats[$key] = $value;
             }

@@ -54,48 +54,30 @@ class ProcessReplay implements ShouldQueue
         $gameFound = Game::where('hash', $replayData->get('hash'))->first();
 
         if (! is_null($gameFound)) {
-
             if ($gameFound->users->contains($this->user)) {
                 return;
             }
 
+            $playerSummary = $this->getPlayerSummary($replayData->get('summary'), $replayData->get('header'));
+
             $this->user->games()->attach($gameFound->id, [
                 'header' => $replayData->get('header'),
                 'anticheat' => $this->anticheat,
+                'summary' => $playerSummary,
+                'win' => $playerSummary['Win'] ?? false,
             ]);
 
-            // TODO: Make sure this is actaully needed
-            $gameFound->refresh(); // Make sure the data is updated with both users.
-
-            // If a winner is in the new replay replace it.
-            $updatedSummary = collect($gameFound->summary)->map(function ($existingData) use ($replayData) {
-                $newSummary = collect($replayData->get('summary'));
-
-                foreach ($newSummary as $newPlayer) {
-                    if ($newPlayer['Name'] === $existingData['Name']) {
-                        // Update the 'Win' field to true if either is true, never change true to false
-                        $existingData['Win'] = $existingData['Win'] || $newPlayer['Win'];
-                        break;
-                    }
-                }
-
-                return $existingData;
-            });
+            $gameFound->refresh();
 
             if ($gameFound->users->count() < $gameFound->type->replaysNeededForValidation()) {
-                $updated = $gameFound->update([
-                    'summary' => $updatedSummary,
-                ]);
-
                 return;
             }
 
-            $updated = $gameFound->update([
-                'summary' => $updatedSummary,
+            $gameFound->update([
                 'status' => GameStatus::VALIDATING,
             ]);
 
-            Log::debug('Sending game to vlaidation queue');
+            Log::debug('Sending game to validation queue');
             Log::debug('Game status: '.$gameFound->status->value);
 
             ValidateGame::dispatch($gameFound)->onQueue('sequential');
@@ -108,22 +90,45 @@ class ProcessReplay implements ShouldQueue
         $players = $replayData->get('players');
         $gameType = $this->determineGameType($players);
 
+        $header = $replayData->get('header');
+        $playerSummary = $this->getPlayerSummary($replayData->get('summary'), $header);
+
+        if ($gameType === GameType::UNSUPPORTED) {
+            Log::warning('Unsupported game type detected', [
+                'hash' => $replayData->get('hash'),
+                'players' => $players,
+            ]);
+
+            return;
+        }
+
         $game = $this->user->games()->create([
             'hash' => $replayData->get('hash'),
-            'summary' => $replayData->get('summary'),
             'meta' => $replayData->get('meta'),
             'players' => $players,
             'map_id' => $mapFound?->id,
             'type' => $gameType,
         ], [
-            'header' => $replayData->get('header'),
+            'header' => $header,
             'anticheat' => $this->anticheat,
+            'summary' => $playerSummary,
+            'win' => $playerSummary['Win'] ?? false,
         ]);
+    }
+
+    private function getPlayerSummary(array $gameSummary, array $header): ?array
+    {
+        $ownerSlot = $header['ArrayReplayOwnerSlot'] ?? null;
+
+        if ($ownerSlot === null || ! isset($gameSummary[$ownerSlot])) {
+            return null;
+        }
+
+        return $gameSummary[$ownerSlot];
     }
 
     private function determineGameType(array $players): GameType
     {
-        // TODO: Remove replays with unsupported game types
         $playerCount = count($players);
         $teams = array_unique(array_column($players, 'Team'));
         $teamCount = count(array_filter($teams, fn ($team) => $team !== '-1'));

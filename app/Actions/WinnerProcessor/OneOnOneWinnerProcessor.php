@@ -15,37 +15,28 @@ class OneOnOneWinnerProcessor implements WinnerProcessorContract
     {
         Log::debug('One on One winner processor');
 
-        $playerAUser = null;
-        $playerBUser = null;
+        $users = $game->users->sortBy(function ($user) {
+            return $user->pivot->header['ArrayReplayOwnerSlot'];
+        })->values();
 
-        // Set the 'win' value in the pivot table and assign players
-        foreach ($game->users as $user) {
-            $replayOwnerSlot = $user->pivot->header['ArrayReplayOwnerSlot'];
-            $user->pivot->win = $game->summary[$replayOwnerSlot]['Win'];
-            $user->pivot->save();
-
-            if ($replayOwnerSlot === 0) {
-                $playerAUser = $user;
-            } elseif ($replayOwnerSlot === 1) {
-                $playerBUser = $user;
-            }
-        }
-
-        if (! $playerAUser || ! $playerBUser) {
-            Log::error('Players not found for game: '.$game->id);
+        if ($users->count() !== 2) {
+            Log::error('Incorrect number of players for game: '.$game->id);
 
             return GameStatus::INVALID;
         }
 
+        $playerAUser = $users[0];
+        $playerBUser = $users[1];
+
         $playerAWon = $playerAUser->pivot->win;
         $playerBWon = $playerBUser->pivot->win;
 
-        if ($playerAWon === false && $playerBWon === false) {
+        if (! $playerAWon && ! $playerBWon) {
             return GameStatus::DRAW;
         }
 
-        if ($playerAWon === true && $playerBWon === true) {
-            Log::debug('Both players won. Game not valid'); // TODO: If this is the case in 1v1, then check if we can find a surrender command
+        if ($playerAWon && $playerBWon) {
+            Log::debug('Both players won. Game not valid');
 
             return GameStatus::INVALID;
         }
@@ -53,23 +44,25 @@ class OneOnOneWinnerProcessor implements WinnerProcessorContract
         Log::debug('Map ranked: '.($game->map?->ranked));
         if ($game->map?->ranked) {
             UpdateEloAndRank::dispatch($playerAUser, $playerBUser, $playerAWon, $game)->onQueue('sequential');
-            GiveUserStats::dispatch($game); // TODO: Think about if we should give stats for none-ranked games
+            GiveUserStats::dispatch($game);
 
             // TODO: Remove when we have enough maps in the pool and added to the database seeder
-            Log::debug('Map already in pool and ranked: '.$game->meta['MapHash']);
-            Log::debug('MapFile: '.$game->meta['MapFile']);
-            Log::debug('MapCRC: '.$game->meta['MapCRC']);
-            Log::debug('MapSize: '.$game->meta['MapSize']);
+            $this->logMapDetails($game, 'Map already in pool and ranked');
 
             return GameStatus::VALID;
         } else {
             // TODO: Remove when we have enough maps in the pool and added to the database seeder
-            Log::debug('Map could be added: '.$game->meta['MapHash']);
-            Log::debug('MapFile: '.$game->meta['MapFile']);
-            Log::debug('MapCRC: '.$game->meta['MapCRC']);
-            Log::debug('MapSize: '.$game->meta['MapSize']);
+            $this->logMapDetails($game, 'Map could be added');
 
             return GameStatus::UNRANKED;
         }
+    }
+
+    private function logMapDetails(Game $game, string $message): void
+    {
+        Log::debug($message.': '.$game->meta['MapHash']);
+        Log::debug('MapFile: '.$game->meta['MapFile']);
+        Log::debug('MapCRC: '.$game->meta['MapCRC']);
+        Log::debug('MapSize: '.$game->meta['MapSize']);
     }
 }

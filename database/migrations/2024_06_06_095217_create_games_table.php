@@ -18,7 +18,6 @@ return new class extends Migration
             $table->id();
             $table->enum('status', GameStatus::values())->default(GameStatus::AWAITING);
             $table->string('hash');
-            $table->json('summary');
             $table->json('meta');
             $table->json('players');
             $table->enum('type', GameType::values())->default(GameType::UNSUPPORTED);

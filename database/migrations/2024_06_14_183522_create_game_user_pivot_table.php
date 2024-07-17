@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignIdFor(Game::class)->constrained()->onDelete('cascade');
             $table->integer('elo_change')->nullable();
             $table->json('header');
+            $table->json('summary');
             $table->boolean('win')->default(false);
             $table->boolean('anticheat')->default(false);
             $table->timestamps();
