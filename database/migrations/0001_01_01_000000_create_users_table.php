@@ -27,6 +27,15 @@ return new class extends Migration
             $table->smallInteger('elo')->unsigned()->default(1500);
             $table->mediumInteger('rank')->unsigned()->nullable();
 
+            $table->smallInteger('ffa_weekly_elo')->unsigned()->default(1500);
+            $table->mediumInteger('ffa_weekly_rank')->unsigned()->nullable();
+
+            $table->smallInteger('ffa_monthly_elo')->unsigned()->default(1500);
+            $table->mediumInteger('ffa_monthly_rank')->unsigned()->nullable();
+
+            $table->smallInteger('ffa_elo')->unsigned()->default(1500);
+            $table->mediumInteger('ffa_rank')->unsigned()->nullable();
+
             $table->boolean('fake')->default(false);
             $table->json('stats')->nullable();
             $table->json('gentool_ids')->nullable();
