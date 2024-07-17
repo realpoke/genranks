@@ -63,37 +63,61 @@ class ReplayParser implements ParsesReplayContract
 
         $decodedData = $this->removeObservers($decodedData);
 
+        if ($decodedData->isEmpty()) {
+            Log::info('Skipping replay parsing as the uploader was an observer.');
+
+            return collect();
+        }
+
         $decodedData = $this->findSurrenderOrder($decodedData);
 
         return $this->cleanData($decodedData, $gameHash);
     }
 
     // Remove observers from summary and Header->Metadata->Players
+    // Then reassign slot numbers and adjust ReplayOwnerSlot
     private function removeObservers(Collection $data): Collection
     {
+        // Check if the replay uploader is an observer
+        $replayOwnerSlot = ($data['Header']['ReplayOwnerSlot'] - 3000) / 100;
+        $uploaderPlayer = $data['Header']['Metadata']['Players'][$replayOwnerSlot];
+        if ($uploaderPlayer['Faction'] == '-2') {
+            Log::warning('Replay uploader is an observer. Skipping parsing.');
 
-        // Ensure the header players are treated as a collection
+            return collect();
+        }
+
         $headerPlayers = collect($data['Header']['Metadata']['Players']);
-
-        // Filter out observers from the header players
         $filteredHeaderPlayers = $headerPlayers->filter(function ($player) {
             return $player['Faction'] != '-2';
         });
 
-        // Ensure the summary is treated as a collection
         $summary = collect($data['Summary']);
-
-        // Filter out summary players who are not in the filtered header players
         $filteredSummary = $summary->filter(function ($summaryPlayer) use ($filteredHeaderPlayers) {
             return $filteredHeaderPlayers->contains(function ($headerPlayer) use ($summaryPlayer) {
                 return $summaryPlayer['Name'] == $headerPlayer['Name'];
             });
         });
 
+        // Reassign slot numbers and adjust ReplayOwnerSlot
+        $newReplayOwnerSlot = null;
+        $filteredHeaderPlayers = $filteredHeaderPlayers->values()->map(function ($player, $index) use ($uploaderPlayer, &$newReplayOwnerSlot) {
+            $newSlot = 3000 + ($index * 100);
+            if ($player['Name'] == $uploaderPlayer['Name']) {
+                $newReplayOwnerSlot = $newSlot;
+            }
+
+            return $player;
+        });
+
+        if ($newReplayOwnerSlot !== null) {
+            $data['Header']['ReplayOwnerSlot'] = $newReplayOwnerSlot;
+        }
+
         // Update the data with the filtered collections
         $data->put('Header', array_merge($data['Header'], [
             'Metadata' => array_merge($data['Header']['Metadata'], [
-                'Players' => $filteredHeaderPlayers->values()->toArray(),
+                'Players' => $filteredHeaderPlayers->toArray(),
             ]),
         ]));
         $data->put('Summary', $filteredSummary->values()->toArray());
