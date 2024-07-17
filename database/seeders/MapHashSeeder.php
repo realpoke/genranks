@@ -36,13 +36,53 @@ class MapHashSeeder extends Seeder
             '[RANK] Hidden Pearls ZH v1' => ['252FD858', '149781', 'ffa/4', GameType::FREE_FOR_ALL_FOUR],
             '[RANK] Volcanoe ZH v1' => ['3C26AF7F', '176614', 'ffa/4', GameType::FREE_FOR_ALL_FOUR],
 
+            // FFA 5
+            // 'Allstars v3' => ['', '', 'ffa/5', GameType::FREE_FOR_ALL_FIVE],
+            // "At Doom's Gate [WBC2023]" => ['', '', 'ffa/5', GameType::FREE_FOR_ALL_FIVE],
+            // 'Chunk Island [WBC2023]' => ['', '', 'ffa/5', GameType::FREE_FOR_ALL_FIVE],
+            // 'Echo Isle [WBC2023]' => ['', '', 'ffa/5', GameType::FREE_FOR_ALL_FIVE],
+            // 'Mortal Temptation ZH v1' => ['', '', 'ffa/5', GameType::FREE_FOR_ALL_FIVE],
+            // 'Sylt v5' => ['', '', 'ffa/5', GameType::FREE_FOR_ALL_FIVE],
+            // 'taal lake final' => ['', '', 'ffa/5', GameType::FREE_FOR_ALL_FIVE],
+            // 'Volcano Rush v3 [WBC2020]' => ['', '', 'ffa/5', GameType::FREE_FOR_ALL_FIVE],
+
             // FFA 6
+            // 'Armored Fury ZH v2' => ['', '', 'ffa/6', GameType::FREE_FOR_ALL_SIX],
+            // 'Coastal Shock [WBC2023]' => ['', '', 'ffa/6', GameType::FREE_FOR_ALL_SIX],
+            // 'Coral Islands [WBC2020]' => ['', '', 'ffa/6', GameType::FREE_FOR_ALL_SIX],
+            // 'Instant-Shock Arena v2' => ['', '', 'ffa/6', GameType::FREE_FOR_ALL_SIX],
+            // '[RANK] Glacier 6 ZH v1' => ['', '', 'ffa/6', GameType::FREE_FOR_ALL_SIX],
+            // '[RANK] Medieval Era ZH v1' => ['', '', 'ffa/6', GameType::FREE_FOR_ALL_SIX],
+            // '[RANK] Pagasa Fortress ZH v1' => ['', '', 'ffa/6', GameType::FREE_FOR_ALL_SIX],
+            // '[RANK] Taiga Terror ZH v1' => ['', '', 'ffa/6', GameType::FREE_FOR_ALL_SIX],
+            // 'Volcano Revenge v2' => ['', '', 'ffa/6', GameType::FREE_FOR_ALL_SIX],
+
             '[RANK] Coral Islands ZH v1' => ['6A559B9C', '322970', 'ffa/6', GameType::FREE_FOR_ALL_SIX],
             '[RANK] Defcon Balanced ZH v1' => ['8E24F910', '312092', 'ffa/6', GameType::FREE_FOR_ALL_SIX],
             '[RANK] Naval Port Reyes ZH v1' => ['9F43E6F5', '260847', 'ffa/6', GameType::FREE_FOR_ALL_SIX],
             '[RANK] Subjugation ZH v1' => ['7FE25E16', '353076', 'ffa/6', GameType::FREE_FOR_ALL_SIX],
 
+            // FFA 7
+            // '7 pointed star v2' => ['', '', 'ffa/7', GameType::FREE_FOR_ALL_SEVEN],
+            // 'Ancient Keep Bal [WBC2021]' => ['', '', 'ffa/7', GameType::FREE_FOR_ALL_SEVEN],
+            // "Fergi's Revenge v2" => ['', '', 'ffa/7', GameType::FREE_FOR_ALL_SEVEN],
+            // 'Flower Oases' => ['', '', 'ffa/7', GameType::FREE_FOR_ALL_SEVEN],
+            // 'himalaya (tk edit)' => ['', '', 'ffa/7', GameType::FREE_FOR_ALL_SEVEN],
+            // 'Outpost 7 v2' => ['', '', 'ffa/7', GameType::FREE_FOR_ALL_SEVEN],
+            // 'Purple Hearts [WBC2021]' => ['', '', 'ffa/7', GameType::FREE_FOR_ALL_SEVEN],
+            // 'Storming Harvest v2 [WBC2021]' => ['', '', 'ffa/7', GameType::FREE_FOR_ALL_SEVEN],
+            // 'Swamp Assault v3 [WBC2021]' => ['', '', 'ffa/7', GameType::FREE_FOR_ALL_SEVEN],
+            // 'Twenty4Seven [WBC2021]' => ['', '', 'ffa/7', GameType::FREE_FOR_ALL_SEVEN],
+
             // FFA 8
+            // 'Defcon 51' => ['', '', 'ffa/8', GameType::FREE_FOR_ALL_EIGHT],
+            // 'Defcon 51 Winter' => ['', '', 'ffa/8', GameType::FREE_FOR_ALL_EIGHT],
+            // 'Forgotten Valley [WBC2022]' => ['', '', 'ffa/8', GameType::FREE_FOR_ALL_EIGHT],
+            // '[RANK] Battle Between Them ZH v1' => ['', '', 'ffa/8', GameType::FREE_FOR_ALL_EIGHT],
+            // '[RANK] Desert Vortex ZH v1' => ['', '', 'ffa/8', GameType::FREE_FOR_ALL_EIGHT],
+            // '[RANK] Muddy Madness ZH v1' => ['', '', 'ffa/8', GameType::FREE_FOR_ALL_EIGHT],
+            // '[RANK] Wastelands Dust ZH v1' => ['', '', 'ffa/8', GameType::FREE_FOR_ALL_EIGHT],
+            // 'Thy Kingdom Lagoon [WBC2022]' => ['', '', 'ffa/8', GameType::FREE_FOR_ALL_EIGHT],
             '[RANK] Twister Land ZH v1' => ['BA1F5028', '205670', 'ffa/8', GameType::FREE_FOR_ALL_EIGHT],
 
             // 1v1
