@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Badge;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
@@ -20,18 +21,20 @@ class RolesAndPermissionsSeeder extends Seeder
         $this->command->info('Seeding roles and permissions');
 
         $generateData = [
-            'user' => [],
+            // 'role' => [['permissions'], ['Badge description', 'Badge image']],
+            'user' => [[], ['A real gamer', null]],
             'admin' => [
-                'user',
-                'role',
-                'permission',
-                'filament',
+                ['user', 'role', 'permission', 'filament'],
+                ['Administrator of the website', null],
             ],
+            'alpha tester' => [[], ['Someone who helped test in the alpha', null]],
         ];
 
-        foreach ($generateData as $role => $permissions) {
-            $this->command->info("Seeding role: $role");
-            $role = Role::findOrCreate($role);
+        foreach ($generateData as $roleName => $data) {
+            $this->command->info("Seeding role: $roleName");
+            $role = Role::findOrCreate($roleName);
+
+            $permissions = $data[0];
             foreach ($permissions as $permission) {
                 $this->command->info("Seeding permission: $permission");
                 Permission::findOrCreate('viewAny:'.$permission);
@@ -46,6 +49,17 @@ class RolesAndPermissionsSeeder extends Seeder
                 $this->command->info("Giving permission to role: $role->name");
                 $role->givePermissionTo(Permission::whereLike('name', $permission)->get());
             }
+
+            $badgeData = $data[1];
+            $badge = Badge::updateOrCreate(
+                ['role_id' => $role->id],
+                [
+                    'description' => $badgeData[0],
+                    'image' => $badgeData[1],
+                ]
+            );
+
+            $this->command->info("Created badge for role: $role->name");
             $this->command->info("Done seeding role: $role->name");
         }
 
