@@ -15,11 +15,30 @@ class OneOnOneWinnerProcessor implements WinnerProcessorContract
     {
         Log::debug('One on One winner processor');
 
-        $playerA = $game->summary[0];
-        $playerB = $game->summary[1];
+        $playerAUser = null;
+        $playerBUser = null;
 
-        $playerAWon = $playerA['Win'];
-        $playerBWon = $playerB['Win'];
+        // Set the 'win' value in the pivot table and assign players
+        foreach ($game->users as $user) {
+            $replayOwnerSlot = $user->pivot->header['ArrayReplayOwnerSlot'];
+            $user->pivot->win = $game->summary[$replayOwnerSlot]['Win'];
+            $user->pivot->save();
+
+            if ($replayOwnerSlot === 0) {
+                $playerAUser = $user;
+            } elseif ($replayOwnerSlot === 1) {
+                $playerBUser = $user;
+            }
+        }
+
+        if (! $playerAUser || ! $playerBUser) {
+            Log::error('Players not found for game: '.$game->id);
+
+            return GameStatus::INVALID;
+        }
+
+        $playerAWon = $playerAUser->pivot->win;
+        $playerBWon = $playerBUser->pivot->win;
 
         if ($playerAWon === false && $playerBWon === false) {
             return GameStatus::DRAW;
@@ -31,26 +50,8 @@ class OneOnOneWinnerProcessor implements WinnerProcessorContract
             return GameStatus::INVALID;
         }
 
-        foreach ($game->users as $user) {
-            $replayOwnerSlot = $user->pivot->header['ArrayReplayOwnerSlot'];
-
-            if ($replayOwnerSlot === 0) {
-                // Match found for Player A
-                $playerAUser = $user;
-            } elseif ($replayOwnerSlot === 1) {
-                // Match found for Player B
-                $playerBUser = $user;
-            }
-        }
-
-        if (! isset($playerAUser) || ! $playerAUser || ! isset($playerBUser) || ! $playerBUser) {
-            Log::error('Players not found for game: '.$game->id);
-
-            return GameStatus::INVALID;
-        }
-
         Log::debug('Map ranked: '.($game->map?->ranked));
-        if ($playerAUser && $playerBUser && $game->map?->ranked) {
+        if ($game->map?->ranked) {
             UpdateEloAndRank::dispatch($playerAUser, $playerBUser, $playerAWon, $game)->onQueue('sequential');
             GiveUserStats::dispatch($game); // TODO: Think about if we should give stats for none-ranked games
 
@@ -70,10 +71,5 @@ class OneOnOneWinnerProcessor implements WinnerProcessorContract
 
             return GameStatus::UNRANKED;
         }
-
-        // If players are not found
-        Log::error('Players not found for game: '.$game->id);
-
-        return GameStatus::INVALID;
     }
 }

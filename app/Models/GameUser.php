@@ -15,16 +15,18 @@ class GameUser extends Pivot
         'elo_change',
         'header',
         'anticheat',
+        'win',
     ];
 
     protected function casts(): array
     {
         return [
             'header' => 'array',
+            'win' => 'boolean',
         ];
     }
 
-    public const FIELDS = ['elo_change', 'header', 'anticheat'];
+    public const FIELDS = ['elo_change', 'header', 'anticheat', 'win'];
 
     public function game(): BelongsTo
     {
