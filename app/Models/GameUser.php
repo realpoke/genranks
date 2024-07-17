@@ -16,7 +16,6 @@ class GameUser extends Pivot
         'header',
         'summary',
         'anticheat',
-        'win',
     ];
 
     protected function casts(): array
@@ -24,11 +23,10 @@ class GameUser extends Pivot
         return [
             'header' => 'array',
             'summary' => 'array',
-            'win' => 'boolean',
         ];
     }
 
-    public const FIELDS = ['elo_change', 'header', 'summary', 'anticheat', 'win'];
+    public const FIELDS = ['elo_change', 'header', 'summary', 'anticheat'];
 
     public function game(): BelongsTo
     {

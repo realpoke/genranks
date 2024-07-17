@@ -28,8 +28,8 @@ class OneOnOneWinnerProcessor implements WinnerProcessorContract
         $playerAUser = $users[0];
         $playerBUser = $users[1];
 
-        $playerAWon = $playerAUser->pivot->win;
-        $playerBWon = $playerBUser->pivot->win;
+        $playerAWon = $playerAUser->pivot->summary['Win'] ?? false;
+        $playerBWon = $playerBUser->pivot->summary['Win'] ?? false;
 
         if (! $playerAWon && ! $playerBWon) {
             return GameStatus::DRAW;
