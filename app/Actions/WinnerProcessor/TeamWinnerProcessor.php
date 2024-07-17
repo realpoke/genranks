@@ -13,6 +13,10 @@ class TeamWinnerProcessor implements WinnerProcessorContract
     {
         Log::debug('Team winner processor');
 
+        // TODO: Combine all team members elo into one for both teams
+        // then do a normal elo calculation on that like its 1v1
+        // Then take the lost and gained elo and divide it by the number of players on each team
+
         return GameStatus::INVALID;
     }
 }

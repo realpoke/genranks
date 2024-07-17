@@ -13,6 +13,12 @@ class FreeForAllWinnerProcessor implements WinnerProcessorContract
     {
         Log::debug('Free for all winner processor');
 
+        // TODO: Calculate elo as many 1v1 games
+        // When the first player loses, then its like losing a 1v1 against all the other players.
+        // When the second player loses, then its like losing a 1v1 against all the remaining players.
+        // ETC
+        // Then divide it by the number of 1v1s simulated to normalize it.
+
         return GameStatus::INVALID;
     }
 }
