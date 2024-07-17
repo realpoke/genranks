@@ -48,6 +48,8 @@ class ProcessReplay implements ShouldQueue
         Storage::disk('replays')->delete($this->fileName);
 
         if ($replayData->isEmpty()) {
+            Log::info('Skipping replay processing: empty data or observer upload');
+
             return;
         }
 
