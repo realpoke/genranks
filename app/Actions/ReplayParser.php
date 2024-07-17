@@ -110,15 +110,12 @@ class ReplayParser implements ParsesReplayContract
             return $player;
         });
 
-        if ($newReplayOwnerSlot !== null) {
-            $data['Header']['ReplayOwnerSlot'] = $newReplayOwnerSlot;
-        }
-
         // Update the data with the filtered collections
         $data->put('Header', array_merge($data['Header'], [
             'Metadata' => array_merge($data['Header']['Metadata'], [
                 'Players' => $filteredHeaderPlayers->toArray(),
             ]),
+            'ReplayOwnerSlot' => $newReplayOwnerSlot ?? $data['Header']['ReplayOwnerSlot'],
         ]));
         $data->put('Summary', $filteredSummary->values()->toArray());
 
