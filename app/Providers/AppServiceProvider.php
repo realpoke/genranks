@@ -26,6 +26,7 @@ use App\Actions\GetLatestGenLinkDownloadLink;
 use App\Actions\GetMarkdownFile;
 use App\Actions\GiveUserStats;
 use App\Actions\ReplayParser;
+use App\Actions\UpdateArmyMatchup;
 use App\Actions\ValidateGame;
 use App\Contracts\Auth\AuthenticatesUserContract;
 use App\Contracts\Auth\CreatesNewUserContract;
@@ -51,6 +52,7 @@ use App\Contracts\GetsLatestGenLinkDownloadLinkContract;
 use App\Contracts\GetsMarkdownFileContract;
 use App\Contracts\GivesUserStatsContract;
 use App\Contracts\ParsesReplayContract;
+use App\Contracts\UpdatesArmyMatchupContract;
 use App\Contracts\ValidatesGameContract;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Arr;
@@ -92,6 +94,8 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(GivesUserStatsContract::class, GiveUserStats::class);
 
         $this->app->bind(CreatesClanContract::class, CreateClan::class);
+
+        $this->app->bind(UpdatesArmyMatchupContract::class, UpdateArmyMatchup::class);
     }
 
     /**

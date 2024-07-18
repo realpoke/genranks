@@ -5,6 +5,7 @@ namespace App\Actions\WinnerProcessor;
 use App\Contracts\Factory\WinnerProcessorContract;
 use App\Enums\GameStatus;
 use App\Jobs\GiveUserStats;
+use App\Jobs\UpdateArmy;
 use App\Jobs\UpdateEloAndRank;
 use App\Models\Game;
 use Illuminate\Support\Facades\Log;
@@ -45,6 +46,11 @@ class OneOnOneWinnerProcessor implements WinnerProcessorContract
         if ($game->map?->ranked) {
             UpdateEloAndRank::dispatch($playerAUser, $playerBUser, $playerAWon, $game)->onQueue('sequential');
             GiveUserStats::dispatch($game);
+            UpdateArmy::dispatch(
+                $playerAWon ? $playerAUser->pivot->summary['Side'] : $playerBUser->pivot->summary['Side'],
+                $playerAWon ? $playerBUser->pivot->summary['Side'] : $playerAUser->pivot->summary['Side'],
+                $game->type,
+            );
 
             // TODO: Remove when we have enough maps in the pool and added to the database seeder
             $this->logMapDetails($game, 'Map already in pool and ranked');
