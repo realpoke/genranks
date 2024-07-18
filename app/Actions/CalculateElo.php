@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Contracts\CalculatesEloContract;
 use App\Enums\EloRankType;
+use App\Enums\GameType;
 use App\Models\User;
 use Illuminate\Support\Collection;
 
@@ -13,7 +14,7 @@ class CalculateElo implements CalculatesEloContract
 
     public function __invoke(User $playerA, User $playerB, bool $playerAWon, EloRankType $rankType = EloRankType::ALL): Collection
     {
-        $eloField = $rankType->databaseEloField();
+        $eloField = $rankType->databaseEloField(GameType::ONE_ON_ONE);
 
         $expectedA = 1 / (1 + pow(10, ($playerB->$eloField - $playerA->$eloField) / 400));
         $expectedB = 1 / (1 + pow(10, ($playerA->$eloField - $playerB->$eloField) / 400));
