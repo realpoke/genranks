@@ -80,9 +80,16 @@ class ReplayParser implements ParsesReplayContract
     {
         // Check if the replay uploader is an observer
         $replayOwnerSlot = ($data['Header']['ReplayOwnerSlot'] - 3000) / 100;
-        $uploaderPlayer = $data['Header']['Metadata']['Players'][$replayOwnerSlot];
-        if ($uploaderPlayer['Faction'] == '-2') {
-            Log::warning('Replay uploader is an observer. Skipping parsing.');
+
+        if (isset($data['Header']['Metadata']['Players'][$replayOwnerSlot])) {
+            $uploaderPlayer = $data['Header']['Metadata']['Players'][$replayOwnerSlot];
+            if ($uploaderPlayer['Faction'] == '-2') {
+                Log::warning('Replay uploader is an observer. Skipping parsing.');
+
+                return collect();
+            }
+        } else {
+            Log::warning('ReplayOwnerSlot is out of range. Skipping parsing.');
 
             return collect();
         }
