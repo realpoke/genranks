@@ -8,18 +8,18 @@ enum Army: string
 {
     use EnumArray;
 
-    case GLA = 'gla';
-    case GLAStealth = 'gla-stealth';
-    case GLAToxic = 'gla-toxic';
-    case GLADemolition = 'gla-demolition';
+    case GLA = 'GLA';
+    case GLAStealth = 'GLA Stealth';
+    case GLAToxic = 'GLA Toxin';
+    case GLADemolition = 'GLA Demo';
 
-    case USA = 'usa';
-    case USAAirforce = 'usa-airforce';
-    case USALaser = 'usa-laser';
-    case USASuperweapon = 'usa-superweapon';
+    case USA = 'USA';
+    case USAAirforce = 'USA Airforce';
+    case USALaser = 'USA Lazr';
+    case USASuperweapon = 'USA Superweapon';
 
-    case China = 'china';
-    case ChinaInfantry = 'china-infantry';
-    case ChinaNuke = 'china-nuke';
-    case ChinaTank = 'china-tank';
+    case China = 'China';
+    case ChinaInfantry = 'China Infantry';
+    case ChinaNuke = 'China Nuke';
+    case ChinaTank = 'China Tank';
 }
