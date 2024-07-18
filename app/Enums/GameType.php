@@ -22,6 +22,18 @@ enum GameType: string
 
     case UNSUPPORTED = 'unsupported';
 
+    public function isFreeForAll(): bool
+    {
+        return in_array($this, [
+            self::FREE_FOR_ALL_THREE,
+            self::FREE_FOR_ALL_FOUR,
+            self::FREE_FOR_ALL_FIVE,
+            self::FREE_FOR_ALL_SIX,
+            self::FREE_FOR_ALL_SEVEN,
+            self::FREE_FOR_ALL_EIGHT,
+        ]);
+    }
+
     public function replaysNeededForValidation(): int
     {
         return match ($this) {

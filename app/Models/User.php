@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 use App\Enums\EloRankType;
+use App\Enums\GameType;
 use App\Traits\HasClan;
 use App\Traits\HasElo;
 use Filament\Models\Contracts\FilamentUser;
@@ -96,9 +97,12 @@ class User extends Authenticatable implements FilamentUser
         return $this->can('viewAny:filament');
     }
 
-    public function scopeRanked(Builder $query, EloRankType $rankType = EloRankType::ALL): Builder
-    {
-        return $query->whereNotNull($rankType->databaseRankField());
+    public function scopeRanked(
+        Builder $query,
+        EloRankType $rankType = EloRankType::ALL,
+        GameType $gameType = GameType::ONE_ON_ONE
+    ): Builder {
+        return $query->whereNotNull($rankType->databaseRankField($gameType));
     }
 
     public function scopeFake(Builder $query): Builder
