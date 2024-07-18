@@ -130,12 +130,16 @@ class ProcessReplay implements ShouldQueue
     private function determineGameType(array $players): GameType
     {
         $playerCount = count($players);
-        $teams = array_unique(array_column($players, 'Team'));
-        $teamCount = count(array_filter($teams, fn ($team) => $team !== '-1'));
+        $teams = array_column($players, 'Team');
+        $uniqueTeams = array_unique($teams);
 
         if ($playerCount === 2) {
             return GameType::ONE_ON_ONE;
-        } elseif ($teamCount === 0) {
+        }
+
+        // Check for FFA: either all unique teams, all on team "-1", or all but one player on team "-1"
+        $nonDefaultTeamCount = count(array_filter($teams, fn ($team) => $team !== '-1'));
+        if (count($uniqueTeams) === $playerCount || $nonDefaultTeamCount === 0 || ($nonDefaultTeamCount <= 1 && in_array('-1', $teams))) {
             return match ($playerCount) {
                 3 => GameType::FREE_FOR_ALL_THREE,
                 4 => GameType::FREE_FOR_ALL_FOUR,
@@ -145,14 +149,19 @@ class ProcessReplay implements ShouldQueue
                 8 => GameType::FREE_FOR_ALL_EIGHT,
                 default => GameType::UNSUPPORTED,
             };
-        } elseif ($teamCount === 2) {
-            return match ($playerCount) {
-                2 => GameType::ONE_ON_ONE,
-                4 => GameType::TWO_ON_TWO,
-                6 => GameType::THREE_ON_THREE,
-                8 => GameType::FOUR_ON_FOUR,
-                default => GameType::UNSUPPORTED,
-            };
+        }
+
+        // Check for team games
+        if (count($uniqueTeams) === 2) {
+            $teamCounts = array_count_values($teams);
+            if (count($teamCounts) === 2 && $teamCounts[array_key_first($teamCounts)] === $teamCounts[array_key_last($teamCounts)]) {
+                return match ($playerCount) {
+                    4 => GameType::TWO_ON_TWO,
+                    6 => GameType::THREE_ON_THREE,
+                    8 => GameType::FOUR_ON_FOUR,
+                    default => GameType::UNSUPPORTED,
+                };
+            }
         }
 
         return GameType::UNSUPPORTED;
