@@ -56,6 +56,7 @@ class ReplayParser implements ParsesReplayContract
         $gameHash = $this->generateGameHash($decodedData);
 
         if (is_null($gameHash)) {
+            // TODO: This seems to fail too often, make it better
             Log::error('Failed to generate game hash');
 
             return collect();
@@ -225,13 +226,22 @@ class ReplayParser implements ParsesReplayContract
     {
         try {
             $hash = md5(
-                $data['Body'][32]['TimeCode'].
-                $data['Body'][50]['TimeCode'].
+                $data['Body'][5]['TimeCode'].
+                $data['Body'][10]['OrderCode'].
                 $data['Header']['Hash'].
                 $data['Header']['Metadata']['MapSize'].
                 $data['Header']['Metadata']['Seed']
             );
         } catch (\Throwable $th) {
+
+            Log::debug('Failed to generate game hash');
+            Log::debug('Body: '.collect($data['Body']));
+            Log::debug('TimeCode: '.$data['Body'][5]['TimeCode']);
+            Log::debug('OrderCode: '.$data['Body'][10]['OrderCode']);
+            Log::debug('Hash: '.$data['Header']['Hash']);
+            Log::debug('MapSize: '.$data['Header']['Metadata']['MapSize']);
+            Log::debug('Seed: '.$data['Header']['Metadata']['Seed']);
+
             return null;
         }
 
