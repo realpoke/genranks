@@ -3,6 +3,7 @@
 namespace App\Actions\WinnerProcessor;
 
 use App\Contracts\Factory\WinnerProcessorContract;
+use App\Enums\Army;
 use App\Enums\GameStatus;
 use App\Jobs\GiveUserStats;
 use App\Jobs\UpdateArmy;
@@ -47,8 +48,8 @@ class OneOnOneWinnerProcessor implements WinnerProcessorContract
             UpdateEloAndRank::dispatch($playerAUser, $playerBUser, $playerAWon, $game)->onQueue('sequential');
             GiveUserStats::dispatch($game);
             UpdateArmy::dispatch(
-                $playerAWon ? $playerAUser->pivot->summary['Side'] : $playerBUser->pivot->summary['Side'],
-                $playerAWon ? $playerBUser->pivot->summary['Side'] : $playerAUser->pivot->summary['Side'],
+                Army::from($playerAWon ? $playerAUser->pivot->summary['Side'] : $playerBUser->pivot->summary['Side']),
+                Army::from($playerAWon ? $playerBUser->pivot->summary['Side'] : $playerAUser->pivot->summary['Side']),
                 $game->type,
             );
 
