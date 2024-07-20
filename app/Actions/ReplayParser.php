@@ -236,8 +236,8 @@ class ReplayParser implements ParsesReplayContract
 
             Log::debug('Failed to generate game hash');
             Log::debug('Body: '.collect($data['Body']));
-            Log::debug('TimeCode: '.$data['Body'][5]['TimeCode']);
-            Log::debug('OrderCode: '.$data['Body'][10]['OrderCode']);
+            Log::debug('TimeCode: '.(isset($data['Body'][5]) && isset($data['Body'][5]['TimeCode']) ? $data['Body'][5]['TimeCode'] : 'TimeCode not found'));
+            Log::debug('OrderCode: '.(isset($data['Body'][10]) && isset($data['Body'][10]['OrderCode']) ? $data['Body'][10]['OrderCode'] : 'OrderCode not found'));
             Log::debug('Hash: '.$data['Header']['Hash']);
             Log::debug('MapSize: '.$data['Header']['Metadata']['MapSize']);
             Log::debug('Seed: '.$data['Header']['Metadata']['Seed']);
