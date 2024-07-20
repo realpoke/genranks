@@ -10,24 +10,33 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class UpdateArmy implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected Army $winningArmy;
+    protected array $winningArmies;
 
-    protected Army $opponentArmy;
+    protected array $losingArmies;
 
     protected GameType $gameType;
 
     /**
      * Create a new job instance.
      */
-    public function __construct(Army $winningArmy, Army $opponentArmy, GameType $gameType)
+    public function __construct(array|Army $winningArmies, array|Army $losingArmies, GameType $gameType)
     {
-        $this->winningArmy = $winningArmy;
-        $this->opponentArmy = $opponentArmy;
+        if (! is_array($winningArmies)) {
+            $winningArmies = [$winningArmies];
+        }
+
+        if (! is_array($losingArmies)) {
+            $losingArmies = [$losingArmies];
+        }
+
+        $this->winningArmies = $winningArmies;
+        $this->losingArmies = $losingArmies;
         $this->gameType = $gameType;
     }
 
@@ -36,6 +45,27 @@ class UpdateArmy implements ShouldQueue
      */
     public function handle(UpdatesArmyMatchupContract $armyUpdater): void
     {
-        $armyUpdater($this->winningArmy, $this->opponentArmy, $this->gameType);
+        if (empty($this->winningArmies) || empty($this->losingArmies)) {
+            Log::error('Both winning and losing armies must be provided');
+
+            return;
+        }
+
+        foreach ($this->winningArmies as $winningArmy) {
+            if (! ($winningArmy instanceof Army)) {
+                Log::error('Invalid winning army: '.$winningArmy);
+
+                return;
+            }
+        }
+
+        foreach ($this->losingArmies as $losingArmy) {
+            if (! ($losingArmy instanceof Army)) {
+                Log::error('Invalid losing army: '.$losingArmy);
+
+                return;
+            }
+        }
+        $armyUpdater($this->winningArmies, $this->losingArmies, $this->gameType);
     }
 }

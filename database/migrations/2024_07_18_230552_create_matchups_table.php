@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\Army;
 use App\Enums\GameType;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -15,8 +14,8 @@ return new class extends Migration
     {
         Schema::create('matchups', function (Blueprint $table) {
             $table->id();
-            $table->enum('army', Army::values());
-            $table->enum('opponent', Army::values());
+            $table->json('armies');
+            $table->json('opponents');
             $table->integer('score')->default(0);
             $table->enum('game_type', GameType::values());
             $table->timestamps();

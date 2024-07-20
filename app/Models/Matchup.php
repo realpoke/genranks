@@ -10,9 +10,17 @@ class Matchup extends Model
     use HasFactory;
 
     protected $fillable = [
-        'army',
-        'opponent',
+        'armies',
+        'opponents',
         'score',
         'game_type',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'armies' => 'array',
+            'opponents' => 'array',
+        ];
+    }
 }
