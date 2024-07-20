@@ -4,9 +4,12 @@ namespace App\Livewire;
 
 use App\Models\User;
 use Livewire\Component;
+use Livewire\WithPagination;
 
 class Profile extends Component
 {
+    use WithPagination;
+
     public User $user;
 
     public function mount(User $user)

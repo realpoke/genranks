@@ -7,7 +7,6 @@
     </x-sections.card>
     <x-sections.card class="pt-12">
         <h3 class="text-2xl">My games:</h3>
-        <x-tables.games :games="$games">
-        </x-tables.games>
+        <x-tables.games :games="$games" />
     </x-sections.card>
 </x-layouts.container>
