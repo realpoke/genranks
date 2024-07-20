@@ -121,5 +121,18 @@ class AppServiceProvider extends ServiceProvider
                 }
             });
         });
+
+        Builder::macro('whereJsonHas', function ($column, $values) {
+            if (! is_array($values)) {
+                $values = [$values];
+            }
+
+            $valuesJson = json_encode($values);
+
+            return $this->whereRaw(
+                'JSON_CONTAINS(?, ?, 0) AND JSON_CONTAINS(?, ?, 0)',
+                [$column, $valuesJson, $valuesJson, $column]
+            );
+        });
     }
 }
