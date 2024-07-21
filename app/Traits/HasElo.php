@@ -48,13 +48,11 @@ trait HasElo
         $oldElo = $this->{$rankType->databaseEloField($gameType)};
         $this->{$rankType->databaseEloField($gameType)} = max(0, $oldElo + $changeElo);
 
-        // TODO: Use database transaction to make sure rank and elo is in sync
         return $this->save() && $this->adjustRanks($oldElo, $this->{$rankType->databaseEloField($gameType)}, $rankType, $gameType);
     }
 
     private function adjustRanks(int $oldElo, int $newElo, EloRankType $rankType, GameType $gameType): bool
     {
-        // TODO: Adjusting ranks are messing up the rankings many users have the same rank and there are gaps in the ranks
         if ($this->{$rankType->databaseRankField($gameType)} === null) {
             return $this->setInitialRank($newElo, $rankType, $gameType);
         }
