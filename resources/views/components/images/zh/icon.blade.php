@@ -9,8 +9,11 @@
     $filePath = 'zh/' . $name . $type;
     $fullPath = $imageDisk->path($filePath);
 
-    if (!is_null($subFolder) && Storage::disk('images')->exists('zh' . $subFolder . '/' . $name . $type)) {
-        $url = Storage::disk('images')->url('zh' . $subFolder . '/' . $name . $type);
+    if (
+        !is_null($subFolder) &&
+        Storage::disk('images')->exists('zh' . $subFolder . '/' . $subFolder . '_' . $name . $type)
+    ) {
+        $url = Storage::disk('images')->url('zh' . $subFolder . '/' . $subFolder . '_' . $name . $type);
     } elseif (Storage::disk('images')->exists('zh/' . $name . $type)) {
         $url = Storage::disk('images')->url('zh/' . $name . $type);
     } else {
