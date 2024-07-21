@@ -12,8 +12,10 @@ class GiveUserElo implements GivesUserEloContract
 {
     public function __invoke(Game $game): bool
     {
+        // We refresh to get the up to date elo_change values
+        $game->refresh();
         try {
-            return DB::transaction(function () use ($game) {
+            DB::transaction(function () use ($game) {
                 foreach ($game->users as $user) {
                     if (is_null($user->pivot->elo_change)) {
                         throw new Exception('Elo change field is null for user: '.$user->id.' in game: '.$game->id);
@@ -33,7 +35,7 @@ class GiveUserElo implements GivesUserEloContract
                             gameType: $game->type
                         );
 
-                    if ($success === false) {
+                    if (! $success) {
                         throw new Exception('Failed to give/take elo for user: '.$user->id.' in game: '.$game->id);
                     }
                 }
