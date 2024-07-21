@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\EloRankType;
 use App\Enums\GameStatus;
 use App\Enums\GameType;
 use Illuminate\Database\Eloquent\Builder;
@@ -28,6 +29,7 @@ class Game extends Model
         'players',
         'map_id',
         'type',
+        'rank_type',
     ];
 
     public function route(): string
@@ -42,6 +44,7 @@ class Game extends Model
             'players' => 'array',
             'status' => GameStatus::class,
             'type' => GameType::class,
+            'rank_type' => EloRankType::class,
         ];
     }
 
