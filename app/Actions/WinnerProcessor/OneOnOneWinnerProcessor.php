@@ -45,7 +45,7 @@ class OneOnOneWinnerProcessor implements WinnerProcessorContract
 
         Log::debug('Map ranked: '.($game->map?->ranked));
         if ($game->map?->ranked) {
-            UpdateEloAndRank::dispatch($playerAUser, $playerBUser, $playerAWon, $game)->onQueue('sequential');
+            UpdateEloAndRank::dispatch($game)->onQueue('sequential');
             GiveUserStats::dispatch($game);
             UpdateArmy::dispatch(
                 Army::from($playerAWon ? $playerAUser->pivot->summary['Side'] : $playerBUser->pivot->summary['Side']),

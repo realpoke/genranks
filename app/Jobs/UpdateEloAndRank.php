@@ -2,53 +2,48 @@
 
 namespace App\Jobs;
 
-use App\Contracts\CalculatesEloContract;
-use App\Enums\EloRankType;
+use App\Contracts\GivesUserEloContract;
+use App\Factories\EloCalculatorFactory;
 use App\Models\Game;
-use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\Log;
 
 class UpdateEloAndRank implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
-    protected User $playerA;
-
-    protected User $playerB;
-
     protected Game $game;
 
-    protected bool $playerAWon;
-
-    public function __construct(User $playerA, User $playerB, bool $playerAWon, ?Game $game = null)
+    public function __construct(Game $game)
     {
-        $this->playerA = $playerA;
-        $this->playerB = $playerB;
-        $this->playerAWon = $playerAWon;
         $this->game = $game;
     }
 
-    public function handle(CalculatesEloContract $eloCalculator)
+    public function handle(GivesUserEloContract $eloGiver)
     {
-        $newRatingsAll = $eloCalculator($this->playerA, $this->playerB, $this->playerAWon);
+        // TODO: Check if we need to do this refreash
+        $this->game->refresh();
 
-        if ($newRatingsAll->isEmpty()) {
+        $eloCalculator = EloCalculatorFactory::getProcessor($this->game);
+
+        if (! $eloCalculator($this->game)) {
+            Log::error('Failed to calculate elo for game: '.$this->game->id);
+
             return;
         }
 
-        // TODO: Database transaction this so if one fails both should be reverted
-        $this->playerA->refresh();
-        $this->playerA->newElo($newRatingsAll->get('playerANewElo'), $this->game);
-        // TODO: Add back weekly and monthly ranking
-        // $this->playerA->changeElo($newRatingsAll->get('playerAChangedElo'), rankType: EloRankType::WEEKLY);
-        // $this->playerA->changeElo($newRatingsAll->get('playerAChangedElo'), rankType: EloRankType::MONTHLY);
-        $this->playerB->refresh();
-        $this->playerB->newElo($newRatingsAll->get('playerBNewElo'), $this->game);
-        // $this->playerB->changeElo($newRatingsAll->get('playerBChangedElo'), rankType: EloRankType::WEEKLY);
-        // $this->playerB->changeElo($newRatingsAll->get('playerBChangedElo'), rankType: EloRankType::MONTHLY);
+        if (! $eloGiver($this->game)) {
+            Log::error('Failed to give elo/take for game: '.$this->game->id);
+            $this->game->users->each(function ($user) {
+                $user->pivot->elo_change = 0;
+                $user->save();
+            });
+
+            return;
+        }
     }
 }
