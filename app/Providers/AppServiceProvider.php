@@ -24,6 +24,7 @@ use App\Actions\GenTool\GetValidGenToolGames;
 use App\Actions\GenTool\SearchForGenToolUser;
 use App\Actions\GetLatestGenLinkDownloadLink;
 use App\Actions\GetMarkdownFile;
+use App\Actions\GiveUserElo;
 use App\Actions\GiveUserStats;
 use App\Actions\ReplayParser;
 use App\Actions\UpdateArmyMatchup;
@@ -50,6 +51,7 @@ use App\Contracts\GenTool\GetsValidGenToolGamesContract;
 use App\Contracts\GenTool\SearchesForGenToolUserContract;
 use App\Contracts\GetsLatestGenLinkDownloadLinkContract;
 use App\Contracts\GetsMarkdownFileContract;
+use App\Contracts\GivesUserEloContract;
 use App\Contracts\GivesUserStatsContract;
 use App\Contracts\ParsesReplayContract;
 use App\Contracts\UpdatesArmyMatchupContract;
@@ -86,6 +88,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(ValidatesGameContract::class, ValidateGame::class);
         $this->app->bind(CalculatesEloContract::class, CalculateElo::class);
         $this->app->bind(CreatesMapHashContract::class, CreateMapHash::class);
+        $this->app->bind(GivesUserEloContract::class, GiveUserElo::class);
 
         $this->app->bind(GetsGenToolUsersContract::class, GetGenToolUsers::class);
         $this->app->bind(CreatesGenToolUserContract::class, CreateGenToolUser::class);
