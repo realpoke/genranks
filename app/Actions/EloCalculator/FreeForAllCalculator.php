@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Actions\EloCalculator\EloCalculator;
+namespace App\Actions\EloCalculator;
 
 use App\Contracts\Factory\EloCalculatorContract;
 use App\Models\Game;

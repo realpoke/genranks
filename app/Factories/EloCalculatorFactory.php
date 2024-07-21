@@ -2,9 +2,9 @@
 
 namespace App\Factories;
 
-use App\Actions\EloCalculator\EloCalculator\FreeForAllCalculator;
-use App\Actions\EloCalculator\EloCalculator\OneOnOneCalculator;
-use App\Actions\EloCalculator\EloCalculator\TeamCalculator;
+use App\Actions\EloCalculator\FreeForAllCalculator;
+use App\Actions\EloCalculator\OneOnOneCalculator;
+use App\Actions\EloCalculator\TeamCalculator;
 use App\Contracts\Factory\EloCalculatorContract;
 use App\Enums\GameType;
 use App\Models\Game;
