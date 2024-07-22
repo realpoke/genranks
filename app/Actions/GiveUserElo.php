@@ -37,10 +37,15 @@ class GiveUserElo implements GivesUserEloContract
                     if (is_null($pivotData->elo_change)) {
                         throw new Exception('Elo change field is null for user: '.$user->id.' in game: '.$game->id);
                     }
+                    $summary = json_decode($pivotData->summary, true);
+
+                    Log::debug('Pivot data: '.collect($pivotData));
+                    Log::debug('Summary: '.$pivotData->summary);
+                    Log::debug('Win: '.$summary['Win']);
 
                     foreach (EloRankType::values() as $rankType) {
                         Log::debug('Changing elo for rank type: '.$rankType);
-                        $success = $pivotData->summary['Win']
+                        $success = $summary['Win']
                             ? $user->giveElo(
                                 $pivotData->elo_change,
                                 game: null,
