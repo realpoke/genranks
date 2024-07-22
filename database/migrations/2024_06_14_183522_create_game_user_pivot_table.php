@@ -21,6 +21,7 @@ return new class extends Migration
             $table->json('header');
             $table->json('summary');
             $table->boolean('win')->default(false);
+            $table->unsignedTinyInteger('ffa_elimination_order')->nullable();
             $table->boolean('anticheat')->default(false);
             $table->timestamps();
         });

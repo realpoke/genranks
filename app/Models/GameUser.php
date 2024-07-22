@@ -16,6 +16,7 @@ class GameUser extends Pivot
         'header',
         'summary',
         'anticheat',
+        'ffa_elimination_order',
     ];
 
     protected function casts(): array
@@ -26,7 +27,13 @@ class GameUser extends Pivot
         ];
     }
 
-    public const FIELDS = ['elo_change', 'header', 'summary', 'anticheat'];
+    public const FIELDS = [
+        'elo_change',
+        'header',
+        'summary',
+        'anticheat',
+        'ffa_elimination_order',
+    ];
 
     public function game(): BelongsTo
     {
