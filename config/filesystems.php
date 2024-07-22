@@ -67,8 +67,8 @@ return [
 
         'images' => [
             'driver' => 'local',
-            'root' => public_path('storage/images'),
-            'url' => '/storage/images',
+            'root' => public_path('images'),
+            'url' => '/images',
             'throw' => false,
             'visibility' => 'public',
         ],

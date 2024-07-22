@@ -4,11 +4,6 @@
     $name = $explodedIcon->pop();
     $subFolder = $explodedIcon->pop();
 
-    $imageDisk = Storage::disk('images');
-
-    $filePath = 'zh/' . $name . $type;
-    $fullPath = $imageDisk->path($filePath);
-
     if (
         !is_null($subFolder) &&
         Storage::disk('images')->exists('zh' . $subFolder . '/' . $subFolder . '_' . $name . $type)
