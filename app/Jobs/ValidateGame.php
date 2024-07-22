@@ -8,6 +8,7 @@ use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
+use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
 
 class ValidateGame implements ShouldQueue
@@ -24,11 +25,16 @@ class ValidateGame implements ShouldQueue
         $this->game = $game;
     }
 
+    public function middleware()
+    {
+        return [new WithoutOverlapping];
+    }
+
     /**
      * Execute the job.
      */
     public function handle(ValidatesGameContract $validator): void
     {
-        $validated = $validator($this->game);
+        $validator($this->game);
     }
 }
