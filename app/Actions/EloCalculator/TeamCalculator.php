@@ -94,6 +94,14 @@ class TeamCalculator implements EloCalculatorContract
         try {
             Log::debug('Updating Elo');
             DB::transaction(function () use ($game, $winningTeam, $losingTeam, $winningTeamEloChange, $losingTeamEloChange) {
+                // Lock rows for the users in both teams and the game
+                $userIds = $winningTeam->pluck('id')->merge($losingTeam->pluck('id'))->unique();
+                DB::table('game_user')
+                    ->whereIn('user_id', $userIds)
+                    ->where('game_id', $game->id)
+                    ->lockForUpdate()
+                    ->get(); // Acquire locks for the rows
+
                 foreach ($winningTeam as $user) {
                     $game->users()->updateExistingPivot($user->id, ['elo_change' => $winningTeamEloChange]);
                 }

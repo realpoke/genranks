@@ -42,6 +42,10 @@ class OneOnOneCalculator implements EloCalculatorContract
         try {
             Log::debug('Updating Elo');
             DB::transaction(function () use ($game, $winner, $loser, $winnerEloChange, $loserEloChange) {
+                // Locking the relevant game-user pivot rows
+                $game->users()->where('user_id', $winner->id)->lockForUpdate()->first();
+                $game->users()->where('user_id', $loser->id)->lockForUpdate()->first();
+
                 $game->users()->updateExistingPivot($winner->id, ['elo_change' => $winnerEloChange]);
                 $game->users()->updateExistingPivot($loser->id, ['elo_change' => $loserEloChange]);
             }, 3);
