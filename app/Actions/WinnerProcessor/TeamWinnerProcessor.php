@@ -3,8 +3,11 @@
 namespace App\Actions\WinnerProcessor;
 
 use App\Contracts\Factory\WinnerProcessorContract;
+use App\Enums\Army;
 use App\Enums\GameStatus;
 use App\Jobs\GiveUserStats;
+use App\Jobs\UpdateArmy;
+use App\Jobs\UpdateEloAndRank;
 use App\Models\Game;
 use Log;
 
@@ -76,8 +79,7 @@ class TeamWinnerProcessor implements WinnerProcessorContract
 
             // TODO: Remove when we have enough maps in the pool and added to the database seeder
             $this->logMapDetails($game, 'Map already in pool and ranked');
-
-            // TODO: Calculate elo and update ranks / elo for all users in the game
+            UpdateEloAndRank::dispatch($game)->onQueue('sequential');
             GiveUserStats::dispatch($game);
 
             // Create arrays of armies for each team
