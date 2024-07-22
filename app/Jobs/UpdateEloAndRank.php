@@ -11,6 +11,7 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\Middleware\WithoutOverlapping;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class UpdateEloAndRank implements ShouldQueue
@@ -46,10 +47,12 @@ class UpdateEloAndRank implements ShouldQueue
 
         if (! $eloGiver($this->game)) {
             Log::error('Failed to give elo/take for game: '.$this->game->id);
-            $this->game->users->each(function ($user) {
-                $user->pivot->elo_change = 0;
-                $user->save();
-            });
+            DB::transaction(function () {
+                $this->game->users()->lockForUpdate()->get()->each(function ($user) {
+                    $user->pivot->elo_change = 0;
+                    $user->save();
+                });
+            }, 3);
 
             return;
         }
