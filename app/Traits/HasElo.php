@@ -5,7 +5,10 @@ namespace App\Traits;
 use App\Enums\EloRankType;
 use App\Enums\GameType;
 use App\Models\Game;
+use App\Models\User;
 use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 trait HasElo
 {
@@ -19,15 +22,9 @@ trait HasElo
             return true;
         }
 
-        if ($newElo > $this->{$rankType->databaseEloField($gameType)}) {
-            return $this->giveElo($newElo - $this->{$rankType->databaseEloField($gameType)}, $game, $rankType, $gameType);
-        }
+        $changeElo = $newElo - $this->{$rankType->databaseEloField($gameType)};
 
-        if ($newElo < $this->{$rankType->databaseEloField($gameType)}) {
-            return $this->takeElo($this->{$rankType->databaseEloField($gameType)} - $newElo, $game, $rankType, $gameType);
-        }
-
-        return false;
+        return $this->changeElo($changeElo, $game, $rankType, $gameType);
     }
 
     public function giveElo(int $elo, ?Game $game, EloRankType $rankType, GameType $gameType): bool
@@ -42,13 +39,32 @@ trait HasElo
 
     public function changeElo(int $changeElo, ?Game $game, EloRankType $rankType, GameType $gameType): bool
     {
-        if (! is_null($game)) {
-            $this->games()->updateExistingPivot($game->id, ['elo_change' => $changeElo]);
-        }
-        $oldElo = $this->{$rankType->databaseEloField($gameType)};
-        $this->{$rankType->databaseEloField($gameType)} = max(0, $oldElo + $changeElo);
+        return DB::transaction(function () use ($changeElo, $game, $rankType, $gameType) {
+            // Lock the current user's record
+            $this->lockForUpdate();
 
-        return $this->save() && $this->adjustRanks($oldElo, $this->{$rankType->databaseEloField($gameType)}, $rankType, $gameType);
+            if (! is_null($game)) {
+                $this->games()->updateExistingPivot($game->id, ['elo_change' => $changeElo]);
+            }
+
+            // Update Elo
+            $oldElo = $this->{$rankType->databaseEloField($gameType)};
+            $newElo = max(0, $oldElo + $changeElo);
+
+            $this->{$rankType->databaseEloField($gameType)} = $newElo;
+            $saveSuccess = $this->save();
+
+            if (! $saveSuccess) {
+                Log::error("Failed to save user {$this->id}");
+
+                return false;
+            }
+
+            // Adjust ranks based on up-to-date data
+            $adjustSuccess = $this->adjustRanks($oldElo, $newElo, $rankType, $gameType);
+
+            return $adjustSuccess;
+        });
     }
 
     private function adjustRanks(int $oldElo, int $newElo, EloRankType $rankType, GameType $gameType): bool
@@ -65,53 +81,65 @@ trait HasElo
             return $this->rankDown($oldElo, $newElo, $rankType, $gameType);
         }
 
-        return false;
+        return true;
     }
 
     private function setInitialRank(int $elo, EloRankType $rankType, GameType $gameType): bool
     {
-        $usersToUpdate = $this->queryUsersToUpdate(0, $elo, $rankType, $gameType);
-        $bestRank = $usersToUpdate->min($rankType->databaseRankField($gameType));
+        return DB::transaction(function () use ($elo, $rankType, $gameType) {
+            $usersToUpdate = $this->queryUsersToUpdate(0, $elo, $rankType, $gameType);
+            $usersToUpdate->lockForUpdate();
 
-        if ($bestRank !== null) {
-            $this->rank = $bestRank;
-            $usersToUpdate->increment($rankType->databaseRankField($gameType));
-        } else {
-            $maxRank = self::where('id', '!=', $this->id)
-                ->ranked($rankType)
-                ->max($rankType->databaseRankField($gameType));
-            $this->{$rankType->databaseRankField($gameType)} = $maxRank === null ? 1 : ($maxRank + 1);
-        }
+            $bestRank = $usersToUpdate->min($rankType->databaseRankField($gameType));
 
-        return $this->save();
+            if ($bestRank !== null) {
+                $this->{$rankType->databaseRankField($gameType)} = $bestRank;
+                $usersToUpdate->increment($rankType->databaseRankField($gameType));
+            } else {
+                $maxRank = self::where('id', '!=', $this->id)
+                    ->ranked($rankType, $gameType)
+                    ->max($rankType->databaseRankField($gameType));
+                $this->{$rankType->databaseRankField($gameType)} = $maxRank === null ? 1 : ($maxRank + 1);
+            }
+
+            return $this->save();
+        });
     }
 
     private function rankUp(int $oldElo, int $newElo, EloRankType $rankType, GameType $gameType): bool
     {
-        $usersToUpdate = $this->queryUsersToUpdate($oldElo, $newElo, $rankType, $gameType);
-        $rankChange = $usersToUpdate->count();
-        $usersToUpdate->increment($rankType->databaseRankField($gameType));
+        return DB::transaction(function () use ($oldElo, $newElo, $rankType, $gameType) {
+            $usersToUpdate = $this->queryUsersToUpdate($oldElo, $newElo, $rankType, $gameType);
+            $usersToUpdate->lockForUpdate();
 
-        $this->{$rankType->databaseRankField($gameType)} = $this->{$rankType->databaseRankField($gameType)} - $rankChange;
+            $rankChange = $usersToUpdate->count();
+            $usersToUpdate->increment($rankType->databaseRankField($gameType));
 
-        return $this->save();
+            $this->{$rankType->databaseRankField($gameType)} = $this->{$rankType->databaseRankField($gameType)} - $rankChange;
+
+            return $this->save();
+        });
     }
 
     private function rankDown(int $oldElo, int $newElo, EloRankType $rankType, GameType $gameType): bool
     {
-        $usersToUpdate = $this->queryUsersToUpdate($oldElo, $newElo, $rankType, $gameType);
-        $rankChange = $usersToUpdate->count();
-        $usersToUpdate->decrement($rankType->databaseRankField($gameType));
+        return DB::transaction(function () use ($oldElo, $newElo, $rankType, $gameType) {
 
-        $this->{$rankType->databaseRankField($gameType)} = $this->{$rankType->databaseRankField($gameType)} + $rankChange;
+            $usersToUpdate = $this->queryUsersToUpdate($oldElo, $newElo, $rankType, $gameType);
+            $usersToUpdate->lockForUpdate();
 
-        return $this->save();
+            $rankChange = $usersToUpdate->count();
+            $usersToUpdate->decrement($rankType->databaseRankField($gameType));
+
+            $this->{$rankType->databaseRankField($gameType)} = $this->{$rankType->databaseRankField($gameType)} + $rankChange;
+
+            return $this->save();
+        });
     }
 
     private function queryUsersToUpdate(int $oldElo, int $newElo, EloRankType $rankType, GameType $gameType): Builder
     {
-        $query = self::where('id', '!=', $this->id)
-            ->ranked($rankType);
+        $query = User::where('id', '!=', $this->id)->ranked($rankType, $gameType);
 
         if ($this->{$rankType->databaseRankField($gameType)} === null) {
             return $query->where($rankType->databaseEloField($gameType), '<=', $newElo);
@@ -128,6 +156,6 @@ trait HasElo
                 ->whereBetween($rankType->databaseEloField($gameType), $eloRange);
         }
 
-        return self::query();
+        return $query;
     }
 }
