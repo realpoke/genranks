@@ -1,6 +1,5 @@
 <?php
 
-use App\Enums\EloRankType;
 use App\Enums\GameStatus;
 use App\Enums\GameType;
 use App\Models\Map;
@@ -22,7 +21,6 @@ return new class extends Migration
             $table->json('meta');
             $table->json('players');
             $table->enum('type', GameType::values())->default(GameType::UNSUPPORTED);
-            $table->enum('rank_type', EloRankType::values())->default(EloRankType::ALL);
             $table->foreignIdFor(Map::class)->nullable()->constrained()->onDelete('cascade');
             $table->timestamps();
         });

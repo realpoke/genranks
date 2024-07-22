@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Contracts\GivesUserEloContract;
+use App\Enums\EloRankType;
 use App\Models\Game;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -21,22 +22,25 @@ class GiveUserElo implements GivesUserEloContract
                         throw new Exception('Elo change field is null for user: '.$user->id.' in game: '.$game->id);
                     }
 
-                    $success = $user->pivot->summary['Win']
-                        ? $user->giveElo(
-                            $user->pivot->elo_change,
-                            game: null,
-                            rankType: $game->rank_type,
-                            gameType: $game->type
-                        )
-                        : $user->takeElo(
-                            $user->pivot->elo_change,
-                            game: null,
-                            rankType: $game->rank_type,
-                            gameType: $game->type
-                        );
+                    foreach (EloRankType::values() as $rankType) {
+                        Log::debug('Changing elo for rank type: '.$rankType);
+                        $success = $user->pivot->summary['Win']
+                            ? $user->giveElo(
+                                $user->pivot->elo_change,
+                                game: null,
+                                rankType: EloRankType::from($rankType),
+                                gameType: $game->type
+                            )
+                            : $user->takeElo(
+                                $user->pivot->elo_change,
+                                game: null,
+                                rankType: EloRankType::from($rankType),
+                                gameType: $game->type
+                            );
 
-                    if (! $success) {
-                        throw new Exception('Failed to give/take elo for user: '.$user->id.' in game: '.$game->id);
+                        if (! $success) {
+                            throw new Exception('Failed to give/take elo for user: '.$user->id.' in game: '.$game->id);
+                        }
                     }
                 }
             });

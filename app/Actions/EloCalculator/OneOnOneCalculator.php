@@ -3,6 +3,7 @@
 namespace App\Actions\EloCalculator;
 
 use App\Contracts\Factory\EloCalculatorContract;
+use App\Enums\EloRankType;
 use App\Enums\GameType;
 use App\Models\Game;
 use Exception;
@@ -16,7 +17,7 @@ class OneOnOneCalculator implements EloCalculatorContract
     public function __invoke(Game $game): bool
     {
         Log::debug('One on One calculator');
-        $eloField = $game->rank_type->databaseEloField(GameType::ONE_ON_ONE);
+        $eloField = EloRankType::ALL->databaseEloField(GameType::ONE_ON_ONE);
 
         Log::debug('Elo field: '.$eloField);
 
