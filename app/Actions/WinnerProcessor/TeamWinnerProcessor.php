@@ -50,11 +50,6 @@ class TeamWinnerProcessor implements WinnerProcessorContract
         Log::debug('Team1: '.collect($team1));
         Log::debug('Team2: '.collect($team2));
 
-        $team1Elo = $team1->avg('elo');
-        $team2Elo = $team2->avg('elo');
-        Log::debug('Team1 Elo: '.$team1Elo);
-        Log::debug('Team2 Elo: '.$team2Elo);
-
         $team1Won = $team1->every(function ($user) {
             return $user->pivot->summary['Win'] ?? false;
         });
