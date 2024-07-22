@@ -44,7 +44,7 @@ class Game extends Model
             'players' => 'array',
             'status' => GameStatus::class,
             'type' => GameType::class,
-            'rank_type' => EloRankType::class,
+            'rank_type' => EloRankType::class, // TODO: Find a better way to do this, should not be on the game model
         ];
     }
 
