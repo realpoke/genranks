@@ -32,9 +32,6 @@ class UpdateEloAndRank implements ShouldQueue
     public function handle(GivesUserEloContract $eloGiver)
     {
         Log::debug('Update Elo and Rank');
-        // TODO: Check if we need to do this refreash
-        $this->game->refresh();
-
         Log::debug('Game ID: '.$this->game->id);
 
         $eloCalculator = EloCalculatorFactory::getProcessor($this->game);
