@@ -80,6 +80,19 @@ class TeamWinnerProcessor implements WinnerProcessorContract
             // TODO: Calculate elo and update ranks / elo for all users in the game
             GiveUserStats::dispatch($game);
 
+            // Create arrays of armies for each team
+            $team1Armies = $team1->map(function ($user) {
+                return Army::from($user->pivot->summary['Side']);
+            })->toArray();
+            $team2Armies = $team2->map(function ($user) {
+                return Army::from($user->pivot->summary['Side']);
+            })->toArray();
+            UpdateArmy::dispatch(
+                $team1Won ? $team1Armies : $team2Armies,
+                $team1Won ? $team2Armies : $team1Armies,
+                $game->type
+            );
+
             return GameStatus::VALID;
         } else {
             Log::debug('Unranked game');
