@@ -16,6 +16,8 @@ class TeamWinnerProcessor implements WinnerProcessorContract
     public function __invoke(Game $game): GameStatus
     {
         Log::debug('Team winner processor');
+        Log::debug('Game type: '.$game->type->name);
+        Log::debug('Game id: '.$game->id);
 
         // Order users same as game players field
         $users = $game->users->sortBy(function ($user) {
