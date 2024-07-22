@@ -19,13 +19,16 @@ class CreateImageSymlink extends Command
         $this->info('Creating symbolic link from [resources/images] to [public/storage/images]...');
 
         if (file_exists($linkFolder)) {
-            $this->error('The "public/storage/images" directory already exists.');
-
-            return;
+            $this->warn('The "public/storage/images" directory already exists. Removing it...');
+            if (is_link($linkFolder)) {
+                unlink($linkFolder);
+            } else {
+                File::deleteDirectory($linkFolder);
+            }
         }
 
         if (! file_exists(public_path('storage'))) {
-            File::makeDirectory(public_path('storage'));
+            File::makeDirectory(public_path('storage'), 0755, true);
         }
 
         $this->laravel->make('files')->link($targetFolder, $linkFolder);
