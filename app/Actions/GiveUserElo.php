@@ -43,11 +43,10 @@ class GiveUserElo implements GivesUserEloContract
             });
         } catch (\Exception $e) {
             Log::error('Elo calculation transaction failed: '.$e->getMessage());
-
-            $game->users->each(function ($user) {
-                $user->pivot->elo_change = 0;
-                $user->save();
-            });
+            Log::debug('Rolling back Elo changes');
+            foreach ($game->users as $user) {
+                $game->users()->updateExistingPivot($user->id, ['elo_change' => 0]);
+            }
 
             return false;
         }

@@ -109,7 +109,7 @@ trait HasElo
         Log::info("Setting initial rank for user {$this->id}: New Elo: $newElo, RankField: $rankField");
         $usersToUpdate = $this->queryUsersToUpdate(0, $newElo, $rankField);
 
-        $bestRank = $usersToUpdate->min($rankField);
+        $bestRank = $usersToUpdate->count() > 0 ? $usersToUpdate->min($rankField) : null;
         Log::info("Best rank found for user {$this->id}: ".($bestRank ?? 'null'));
 
         if ($bestRank !== null) {
@@ -139,16 +139,17 @@ trait HasElo
         Log::info("Ranking up user {$this->id}: Old Elo: $oldElo, New Elo: $newElo, RankField: $rankField");
         $usersToUpdate = $this->queryUsersToUpdate($oldElo, $newElo, $rankField);
 
-        $bestRank = $usersToUpdate->min($rankField) ?? 1;
-        Log::info("Best rank found for user {$this->id}: $bestRank");
+        $usersToUpdateCount = $usersToUpdate->count();
+        Log::info('Ranks to decrement: '.$usersToUpdateCount);
+        if (! is_null($usersToUpdateCount)) {
+            $this->decrement($rankField, $usersToUpdateCount);
+        }
 
-        $this->$rankField = $bestRank;
         if (! $this->save()) {
             Log::error("Failed to save rank up for user: {$this->id}");
 
             return false;
         }
-        Log::info("Saved new rank for user {$this->id}: $bestRank");
 
         $affected = $usersToUpdate->increment($rankField);
         Log::info("Incremented rank for $affected users");
@@ -161,16 +162,17 @@ trait HasElo
         Log::info("Ranking down user {$this->id}: Old Elo: $oldElo, New Elo: $newElo, RankField: $rankField");
         $usersToUpdate = $this->queryUsersToUpdate($oldElo, $newElo, $rankField);
 
-        $worstRank = $usersToUpdate->max($rankField) ?? 1;
-        Log::info("Worst rank found for user {$this->id}: $worstRank");
+        $usersToUpdateCount = $usersToUpdate->count();
+        Log::info('Amount to increment: '.$usersToUpdateCount);
+        if (! is_null($usersToUpdateCount)) {
+            $this->increment($rankField, $usersToUpdateCount);
+        }
 
-        $this->$rankField = $worstRank;
         if (! $this->save()) {
             Log::error("Failed to save rank down for user: {$this->id}");
 
             return false;
         }
-        Log::info("Saved new rank for user {$this->id}: $worstRank");
 
         $affected = $usersToUpdate->decrement($rankField);
         Log::info("Decremented rank for $affected users");
@@ -189,9 +191,9 @@ trait HasElo
         if (! empty($this->$rankField)) {
             $query->where(function ($q) use ($rankField, $oldElo, $newElo) {
                 if ($newElo > $oldElo) {
-                    $q->where('rank', '>=', $this->$rankField);
-                } else {
                     $q->where('rank', '<=', $this->$rankField);
+                } else {
+                    $q->where('rank', '>=', $this->$rankField);
                 }
             });
         }
