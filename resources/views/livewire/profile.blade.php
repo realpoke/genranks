@@ -23,6 +23,10 @@
                             <div
                                 class="relative flex items-center space-x-3 bg-white border border-gray-300 shadow-sm hover:border-gray-400">
                                 <div class="flex-shrink-0">
+                                    <div
+                                        class="absolute inset-0 items-center content-center w-5 h-5 pointer-events-none -left-2 -top-2">
+                                        <x-images.zh.team :unit="$unit" />
+                                    </div>
                                     <x-images.zh.icon :icon="$unit" :alt="$unit" />
                                 </div>
                                 <div class="flex-1 min-w-0">
