@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -18,22 +19,22 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
 
-            $table->smallInteger('weekly_elo')->unsigned()->default(1500);
+            $table->smallInteger('weekly_elo')->unsigned()->default(User::DEFAULT_ELO);
             $table->mediumInteger('weekly_rank')->unsigned()->nullable();
 
-            $table->smallInteger('monthly_elo')->unsigned()->default(1500);
+            $table->smallInteger('monthly_elo')->unsigned()->default(User::DEFAULT_ELO);
             $table->mediumInteger('monthly_rank')->unsigned()->nullable();
 
-            $table->smallInteger('elo')->unsigned()->default(1500);
+            $table->smallInteger('elo')->unsigned()->default(User::DEFAULT_ELO);
             $table->mediumInteger('rank')->unsigned()->nullable();
 
-            $table->smallInteger('ffa_weekly_elo')->unsigned()->default(1500);
+            $table->smallInteger('ffa_weekly_elo')->unsigned()->default(User::DEFAULT_ELO);
             $table->mediumInteger('ffa_weekly_rank')->unsigned()->nullable();
 
-            $table->smallInteger('ffa_monthly_elo')->unsigned()->default(1500);
+            $table->smallInteger('ffa_monthly_elo')->unsigned()->default(User::DEFAULT_ELO);
             $table->mediumInteger('ffa_monthly_rank')->unsigned()->nullable();
 
-            $table->smallInteger('ffa_elo')->unsigned()->default(1500);
+            $table->smallInteger('ffa_elo')->unsigned()->default(User::DEFAULT_ELO);
             $table->mediumInteger('ffa_rank')->unsigned()->nullable();
 
             $table->boolean('fake')->default(false);

@@ -11,6 +11,29 @@ use Illuminate\Support\Facades\Log;
 
 trait HasElo
 {
+    public const DEFAULT_ELO = 1500;
+
+    public function resetRank(string|array $rankField, string|array $eloField): bool
+    {
+        if (! is_array($rankField)) {
+            $rankField = [$rankField];
+        }
+
+        if (! is_array($eloField)) {
+            $eloField = [$eloField];
+        }
+
+        $updates = [];
+        foreach ($rankField as $field) {
+            $updates[$field] = null;
+        }
+        foreach ($eloField as $field) {
+            $updates[$field] = self::DEFAULT_ELO;
+        }
+
+        return $this->update($updates);
+    }
+
     public function giveElo(int $elo, EloRankType $rankType, GameType $gameType): bool
     {
         Log::info("Giving Elo to user {$this->id}: $elo, RankType: {$rankType->value}, GameType: {$gameType->value}");
