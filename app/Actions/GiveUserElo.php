@@ -40,7 +40,7 @@ class GiveUserElo implements GivesUserEloContract
                 }
 
                 return true;
-            }, 3);
+            });
         } catch (\Exception $e) {
             Log::error('Elo calculation transaction failed: '.$e->getMessage());
 

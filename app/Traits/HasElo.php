@@ -36,51 +36,46 @@ trait HasElo
     private function changeElo(int $eloChange, string $rankField, string $eloField): bool
     {
         Log::info("Changing Elo for user {$this->id}: EloChange: $eloChange, RankField: $rankField, EloField: $eloField");
-        try {
-            return DB::transaction(function () use ($eloChange, $rankField, $eloField) {
-                // Validate Elo field
-                if (! in_array($eloField, $this->getFillable(), true)) {
-                    Log::error("Elo field $eloField does not exist for user: {$this->id}");
-                    throw new \Exception("Invalid Elo field: $eloField");
-                }
 
-                // Validate rank field
-                if (! in_array($rankField, $this->getFillable(), true)) {
-                    Log::error("Rank field $rankField does not exist for user: {$this->id}");
-                    throw new \Exception("Invalid rank field: $rankField");
-                }
+        return DB::transaction(function () use ($eloChange, $rankField, $eloField) {
+            // Validate Elo field
+            if (! in_array($eloField, $this->getFillable(), true)) {
+                Log::error("Elo field $eloField does not exist for user: {$this->id}");
+                throw new \Exception("Invalid Elo field: $eloField");
+            }
 
-                // Lock the current user row
-                $this->lockForUpdate();
-                Log::info("Locked user {$this->id} for update");
+            // Validate rank field
+            if (! in_array($rankField, $this->getFillable(), true)) {
+                Log::error("Rank field $rankField does not exist for user: {$this->id}");
+                throw new \Exception("Invalid rank field: $rankField");
+            }
 
-                // Update Elo
-                $oldElo = $this->$eloField;
-                $newElo = max(1, $this->$eloField + $eloChange);
-                Log::info("User {$this->id}: Old Elo: $oldElo, New Elo: $newElo");
+            // Lock the current user row
+            $this->lockForUpdate();
+            Log::info("Locked user {$this->id} for update");
 
-                $this->$eloField = $newElo;
-                if (! $this->save()) {
-                    Log::error("Failed to save user: {$this->id}");
-                    throw new \Exception("Failed to save user: {$this->id}");
-                }
-                Log::info("Saved new Elo for user {$this->id}");
+            // Update Elo
+            $oldElo = $this->$eloField;
+            $newElo = max(1, $this->$eloField + $eloChange);
+            Log::info("User {$this->id}: Old Elo: $oldElo, New Elo: $newElo");
 
-                // Adjust ranks based on up-to-date data
-                if (! $this->adjustRanks($oldElo, $newElo, $rankField)) {
-                    Log::error("Failed to adjust ranks for user: {$this->id}");
-                    throw new \Exception('Failed to adjust ranks');
-                }
+            $this->$eloField = $newElo;
+            if (! $this->save()) {
+                Log::error("Failed to save user: {$this->id}");
+                throw new \Exception("Failed to save user: {$this->id}");
+            }
+            Log::info("Saved new Elo for user {$this->id}");
 
-                Log::info("Successfully changed Elo for user {$this->id}");
+            // Adjust ranks based on up-to-date data
+            if (! $this->adjustRanks($oldElo, $newElo, $rankField)) {
+                Log::error("Failed to adjust ranks for user: {$this->id}");
+                throw new \Exception('Failed to adjust ranks');
+            }
 
-                return true; // Indicate success
-            }, 3);
-        } catch (\Exception $e) {
-            Log::error("Elo calculation transaction failed for user {$this->id}: ".$e->getMessage());
+            Log::info("Successfully changed Elo for user {$this->id}");
 
-            return false; // Transaction failed
-        }
+            return true; // Indicate success
+        });
     }
 
     private function adjustRanks(int $oldElo, int $newElo, string $rankField): bool
