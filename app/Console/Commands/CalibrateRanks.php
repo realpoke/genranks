@@ -65,7 +65,7 @@ class CalibrateRanks extends Command
         $eloField = $timePeriod->databaseEloField($gameType);
 
         $subQuery = User::query()
-            ->ranked($timePeriod, $gameType)
+            ->ranked($rankField)
             ->select('id')
             ->selectRaw("@rank := @rank + 1 as new_rank, $eloField")
             ->orderByDesc($eloField)
