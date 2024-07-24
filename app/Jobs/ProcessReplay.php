@@ -66,6 +66,7 @@ class ProcessReplay implements ShouldQueue
                 'header' => $replayData->get('header'),
                 'anticheat' => $this->anticheat,
                 'summary' => $playerSummary,
+                'commands' => $replayData->get('commands'),
             ]);
 
             $gameFound->refresh();
@@ -113,6 +114,7 @@ class ProcessReplay implements ShouldQueue
             'header' => $header,
             'anticheat' => $this->anticheat,
             'summary' => $playerSummary,
+            'commands' => $replayData->get('commands'),
         ]);
     }
 

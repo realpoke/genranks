@@ -170,6 +170,18 @@ class ReplayParser implements ParsesReplayContract
         return $data;
     }
 
+    private function clearBody(Collection $data): Collection
+    {
+        $keptCommands = collect($data['Body'])->filter(function ($command) {
+            return ($command['OrderCode'] == 27 && $command['OrderName'] == 'EndReplay') ||
+                   ($command['OrderCode'] == 1093 && $command['OrderName'] == 'Surrender');
+        });
+
+        $data['Body'] = $keptCommands->values()->all();
+
+        return $data;
+    }
+
     private function cleanData(Collection $data, string $hash): Collection
     {
         $summary = collect($data['Summary']);
@@ -218,6 +230,7 @@ class ReplayParser implements ParsesReplayContract
             'header' => $header->all(),
             'meta' => $meta->all(),
             'players' => $players->all(),
+            'commands' => $this->clearBody($data)->all(),
         ]);
     }
 

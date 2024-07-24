@@ -17,6 +17,7 @@ class GameUser extends Pivot
         'summary',
         'anticheat',
         'ffa_elimination_order',
+        'commands',
     ];
 
     protected function casts(): array
@@ -24,6 +25,7 @@ class GameUser extends Pivot
         return [
             'header' => 'array',
             'summary' => 'array',
+            'commands' => 'array',
         ];
     }
 
@@ -33,6 +35,7 @@ class GameUser extends Pivot
         'summary',
         'anticheat',
         'ffa_elimination_order',
+        'commands',
     ];
 
     public function game(): BelongsTo

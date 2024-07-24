@@ -20,6 +20,7 @@ return new class extends Migration
             $table->integer('elo_change')->nullable();
             $table->json('header');
             $table->json('summary');
+            $table->json('commands')->nullable();
             $table->unsignedTinyInteger('ffa_elimination_order')->nullable();
             $table->boolean('anticheat')->default(false);
             $table->timestamps();
