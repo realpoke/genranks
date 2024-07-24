@@ -175,11 +175,17 @@ class ReplayParser implements ParsesReplayContract
         $keptCommands = collect($data['Body'])->filter(function ($command) {
             return ($command['OrderCode'] == 27 && $command['OrderName'] == 'EndReplay') ||
                    ($command['OrderCode'] == 1093 && $command['OrderName'] == 'Surrender');
+        })->map(function ($command) {
+            return [
+                'TimeCode' => $command['TimeCode'],
+                'OrderCode' => $command['OrderCode'],
+                'OrderName' => $command['OrderName'],
+                'PlayerName' => $command['PlayerName'],
+                'Arguments' => $command['Arguments'],
+            ];
         });
 
-        $data['Body'] = $keptCommands->values()->all();
-
-        return $data;
+        return $keptCommands;
     }
 
     private function cleanData(Collection $data, string $hash): Collection
