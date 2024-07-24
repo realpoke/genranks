@@ -9,7 +9,7 @@ use App\Jobs\GiveUserStats;
 use App\Jobs\UpdateArmy;
 use App\Jobs\UpdateEloAndRank;
 use App\Models\Game;
-use Log;
+use Illuminate\Support\Facades\Log;
 
 class TeamWinnerProcessor implements WinnerProcessorContract
 {
