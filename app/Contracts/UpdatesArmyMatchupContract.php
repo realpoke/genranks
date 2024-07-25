@@ -7,5 +7,5 @@ use App\Enums\GameType;
 
 interface UpdatesArmyMatchupContract
 {
-    public function __invoke(Army|array $army, Army|array $opponent, GameType $gameType): void;
+    public function __invoke(Army|array $armies, Army|array $opponents, GameType $gameType, ?int $score = null): void;
 }

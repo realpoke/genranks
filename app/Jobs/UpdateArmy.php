@@ -22,10 +22,12 @@ class UpdateArmy implements ShouldQueue
 
     protected GameType $gameType;
 
+    protected ?int $score = null;
+
     /**
      * Create a new job instance.
      */
-    public function __construct(array|Army $winningArmies, array|Army $losingArmies, GameType $gameType)
+    public function __construct(array|Army $winningArmies, array|Army $losingArmies, GameType $gameType, ?int $score = null)
     {
         if (! is_array($winningArmies)) {
             $winningArmies = [$winningArmies];
@@ -38,6 +40,7 @@ class UpdateArmy implements ShouldQueue
         $this->winningArmies = $winningArmies;
         $this->losingArmies = $losingArmies;
         $this->gameType = $gameType;
+        $this->score = $score;
     }
 
     /**
@@ -66,6 +69,6 @@ class UpdateArmy implements ShouldQueue
                 return;
             }
         }
-        $armyUpdater($this->winningArmies, $this->losingArmies, $this->gameType);
+        $armyUpdater($this->winningArmies, $this->losingArmies, $this->gameType, $this->score);
     }
 }
