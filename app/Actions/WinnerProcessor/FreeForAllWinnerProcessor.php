@@ -3,10 +3,13 @@
 namespace App\Actions\WinnerProcessor;
 
 use App\Contracts\Factory\WinnerProcessorContract;
+use App\Enums\Army;
 use App\Enums\GameStatus;
 use App\Jobs\GiveUserStats;
+use App\Jobs\UpdateArmy;
 use App\Jobs\UpdateEloAndRank;
 use App\Models\Game;
+use App\Models\Matchup;
 use Illuminate\Support\Facades\Log;
 
 class FreeForAllWinnerProcessor implements WinnerProcessorContract
@@ -71,9 +74,9 @@ class FreeForAllWinnerProcessor implements WinnerProcessorContract
         }
 
         if ($game->map?->ranked) {
-            // Armies should be calculated in the updateEloAndRank job for ffa games
             UpdateEloAndRank::dispatch($game)->onQueue('sequential');
             GiveUserStats::dispatch($game);
+            $this->processFFAMatchupAndDispatch($game);
 
             // TODO: Remove when we have enough maps in the pool and added to the database seeder
             $this->logMapDetails($game, 'Map already in pool and ranked');
@@ -84,6 +87,39 @@ class FreeForAllWinnerProcessor implements WinnerProcessorContract
             $this->logMapDetails($game, 'Map could be added');
 
             return GameStatus::UNRANKED;
+        }
+    }
+
+    private function processFFAMatchupAndDispatch(Game $game)
+    {
+        $users = $game->users;
+
+        // Collect army and placement information
+        $playerInfo = $users->map(function ($user) {
+            return [
+                'id' => $user->id,
+                'army' => Army::from($user->pivot->summary['Side']),
+                'placement' => $user->pivot->ffa_elimination_order,
+            ];
+        });
+
+        // Get the total number of players
+        $totalPlayers = $playerInfo->count();
+
+        // Create a matchup entry for each player
+        foreach ($playerInfo as $player) {
+            $opponents = $playerInfo->where('id', '!=', $player['id'])->pluck('army')->toArray();
+
+            // Calculate score based on placement
+            $score = ($totalPlayers - $player['placement']) - ($player['placement'] - 1);
+
+            // Dispatch the UpdateArmy job
+            UpdateArmy::dispatch(
+                $player['army'],
+                $opponents,
+                $game->type,
+                $score
+            )->onQueue('sequential');
         }
     }
 
