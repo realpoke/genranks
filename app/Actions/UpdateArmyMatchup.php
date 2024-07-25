@@ -67,10 +67,12 @@ class UpdateArmyMatchup implements UpdatesArmyMatchupContract
             return;
         }
 
-        if ($matchup->armies === $winningArmies) {
-            $matchup->increment('score', abs($score ?? 1));
+        if ($score != null) {
+            $matchup->increment('score', $score);
+        } elseif ($matchup->armies === $winningArmies) {
+            $matchup->increment('score');
         } else {
-            $matchup->decrement('score', abs($score ?? 1));
+            $matchup->decrement('score');
         }
 
         $matchup->save();
