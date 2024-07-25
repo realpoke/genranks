@@ -54,12 +54,8 @@ class FreeForAllWinnerProcessor implements WinnerProcessorContract
 
         // Update elimination order and set winner
         $eliminationOrder = 1;
-        $lastUserId = array_key_last($surrenderTimes);
         foreach ($surrenderTimes as $userId => $time) {
             $updateData = ['ffa_elimination_order' => $eliminationOrder];
-            if ($userId === $lastUserId) {
-                $updateData['summary'] = ['Win' => true];
-            }
             $game->users()->updateExistingPivot($userId, $updateData);
             $eliminationOrder++;
         }
@@ -93,6 +89,8 @@ class FreeForAllWinnerProcessor implements WinnerProcessorContract
     private function processFFAMatchupAndDispatch(Game $game)
     {
         $users = $game->users;
+        Log::debug('Summary: '.$users->pluck('pivot.summary')->toJson());
+        Log::debug('Users: '.collect($users));
 
         // Collect army and placement information
         $playerInfo = $users->map(function ($user) {

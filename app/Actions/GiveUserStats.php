@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Contracts\GivesUserStatsContract;
 use App\Models\Game;
+use Illuminate\Support\Facades\Log;
 
 class GiveUserStats implements GivesUserStatsContract
 {
@@ -19,6 +20,9 @@ class GiveUserStats implements GivesUserStatsContract
 
             // Get the user's stats
             $userStats = $user->stats ?? [];
+
+            Log::debug('Pivot: '.$pivot);
+            Log::debug('Summary: '.collect($summary));
 
             // Handle the 'Name' field
             $name = $summary['Name'];
