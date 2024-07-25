@@ -30,7 +30,7 @@ class GiveUserElo implements GivesUserEloContract
 
                     foreach (EloRankType::values() as $rankType) {
                         $eloChange = $pivotData->elo_change;
-                        $eloMethod = $pivotData->summary['Win'] ? 'giveElo' : 'takeElo';
+                        $eloMethod = $pivotData->elo_change > 0 ? 'giveElo' : 'takeElo';
 
                         if (! $user->$eloMethod($eloChange, EloRankType::from($rankType), $game->type)) {
                             Log::error('Failed to '.$eloMethod.' Elo for user: '.$user->id);
