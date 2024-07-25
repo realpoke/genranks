@@ -69,7 +69,7 @@ class FreeForAllWinnerProcessor implements WinnerProcessorContract
         if ($winnerId) {
             $game->users()->updateExistingPivot($winnerId, [
                 'ffa_elimination_order' => $eliminationOrder,
-                'summary' => ['Win' => true],
+                'summary' => array_merge($game->users()->find($winnerId)->pivot->summary, ['Win' => true]),
             ]);
         }
 
