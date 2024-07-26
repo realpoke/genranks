@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Notifications\WelcomeNotification;
 use App\Traits\HasClan;
 use App\Traits\HasElo;
 use Filament\Models\Contracts\FilamentUser;
@@ -22,7 +23,7 @@ class User extends Authenticatable implements FilamentUser
 {
     use HasApiTokens, HasClan, HasElo, HasFactory, HasRoles, Notifiable;
 
-    private static $defaultRole = 'user';
+    public const DEFAULT_ROLE = 'user';
 
     /**
      * The attributes that are mass assignable.
@@ -81,7 +82,9 @@ class User extends Authenticatable implements FilamentUser
         parent::boot();
 
         static::created(function ($user) {
-            $user->assignRole($user->defaultRole);
+            $user->assignRole(self::DEFAULT_ROLE);
+
+            $user->notify((new WelcomeNotification())->delay(now()->addMinutes(15)));
         });
     }
 

@@ -20,6 +20,8 @@ class NavigationMenu extends Component
 
     public ?string $email;
 
+    public ?int $unreadNotificationsCount;
+
     #[On('update-navigation-name')]
     public function updateName($name)
     {
@@ -30,6 +32,12 @@ class NavigationMenu extends Component
     public function updateEmail($email)
     {
         $this->email = $email;
+    }
+
+    #[On('notification-marked-as-read')]
+    public function updateUnreadNotificationsCount(int $unreadNotificationsCount)
+    {
+        $this->unreadNotificationsCount = $unreadNotificationsCount;
     }
 
     public function logout(LogoutUserContract $logouter)
@@ -57,6 +65,7 @@ class NavigationMenu extends Component
     {
         $this->name = $this->user()?->name;
         $this->email = $this->user()?->email;
+        $this->unreadNotificationsCount = $this->user()?->unreadNotifications()->count();
     }
 
     #[Computed]

@@ -56,8 +56,11 @@ use App\Contracts\GivesUserStatsContract;
 use App\Contracts\ParsesReplayContract;
 use App\Contracts\UpdatesArmyMatchupContract;
 use App\Contracts\ValidatesGameContract;
+use App\Policies\NotificationPolicy;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Notifications\DatabaseNotification;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -106,6 +109,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Gate::policy(DatabaseNotification::class, NotificationPolicy::class);
+
         Builder::macro('whereLike', function (string|array $attributes, string $searchTerm): Builder {
             return $this->where(function (Builder $query) use ($attributes, $searchTerm): void {
                 foreach (Arr::wrap($attributes) as $attribute) {

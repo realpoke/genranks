@@ -36,6 +36,12 @@
 
                                         <x-icons icon='chevron-down' class="ml-1" />
                                     </x-buttons.invisible>
+                                    @if ($unreadNotificationsCount > 0)
+                                        <span x-show="!open"
+                                            class="absolute inset-0 top-0 left-0 block w-4 h-4 bg-yellow-400 rounded-full pointer-events-none ring-2 ring-white"></span>
+                                        <span x-show="!open"
+                                            class="absolute inset-0 top-0 left-0 block w-4 h-4 bg-yellow-400 rounded-full pointer-events-none animate-ping"></span>
+                                    @endif
                                 </span>
                             </x-slot>
 
@@ -57,6 +63,17 @@
                                         {{ __('Admin') }}
                                     </x-menus.dropdown-link>
                                 @endcan
+
+                                <x-menus.dropdown-link wire:navigate class="relative inline-block"
+                                    href="{{ route('notifications.index') }}">
+                                    {{ __('Notifications') }}
+                                    @if ($unreadNotificationsCount > 0)
+                                        <span
+                                            class="absolute inset-0 top-0 left-0 block w-4 h-4 bg-yellow-400 rounded-full pointer-events-none ring-2 ring-white"></span>
+                                        <span
+                                            class="absolute inset-0 top-0 left-0 block w-4 h-4 bg-yellow-400 rounded-full pointer-events-none animate-ping"></span>
+                                    @endif
+                                </x-menus.dropdown-link>
 
                                 <!-- Account Management -->
                                 <div class="block px-4 py-2 text-xs text-gray-400">

@@ -8,6 +8,7 @@ use App\Livewire\Auth\Password\Reset;
 use App\Livewire\Auth\Register;
 use App\Livewire\Auth\Verify;
 use App\Livewire\Clan;
+use App\Livewire\Notification;
 use App\Livewire\Option;
 use Illuminate\Support\Facades\Route;
 
@@ -39,4 +40,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/options', Option::class)->name('options.create');
 
     Route::get('/clan', Clan::class)->name('clan.settings');
+
+    Route::get('/notifications', Notification::class)->name('notifications.index');
 });

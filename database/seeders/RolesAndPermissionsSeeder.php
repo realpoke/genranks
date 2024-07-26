@@ -22,7 +22,7 @@ class RolesAndPermissionsSeeder extends Seeder
 
         $generateData = [
             // 'role' => [['permissions'], ['Badge description', 'Badge image']],
-            'user' => [[], ['A real gamer', null]],
+            'user' => [['notification'], ['A real gamer', null]],
             'admin' => [
                 ['user', 'role', 'permission', 'filament'],
                 ['Administrator of the website', null],
@@ -66,12 +66,12 @@ class RolesAndPermissionsSeeder extends Seeder
         if (User::whereEmail('admin@mail.com')->exists()) {
             return;
         }
-        $user = new User();
-        $user->name = 'Admin';
-        $user->email = 'admin@mail.com';
-        $user->password = 'password';
-        $user->save();
+        $admin = new User();
+        $admin->name = 'Admin';
+        $admin->email = 'admin@mail.com';
+        $admin->password = 'password';
+        $admin->save();
 
-        $user->assignRole('admin');
+        $admin->assignRole('admin');
     }
 }
