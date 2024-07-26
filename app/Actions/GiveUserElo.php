@@ -46,7 +46,9 @@ class GiveUserElo implements GivesUserEloContract
             Log::debug('Rolling back Elo changes');
             foreach ($game->users as $user) {
                 $game->users()->updateExistingPivot($user->id, ['elo_change' => 0]);
+                $user->refresh();
             }
+            $game->refresh();
 
             return false;
         }
