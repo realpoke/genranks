@@ -90,7 +90,7 @@ trait HasElo
             Log::info("Saved new Elo for user {$this->id}");
 
             // Adjust ranks based on up-to-date data
-            if (! $this->adjustRanks($oldElo, $newElo, $rankField)) {
+            if (! $this->adjustRanks($oldElo, $newElo, $rankField, $eloField)) {
                 Log::error("Failed to adjust ranks for user: {$this->id}");
                 throw new \Exception('Failed to adjust ranks');
             }
@@ -101,25 +101,25 @@ trait HasElo
         });
     }
 
-    private function adjustRanks(int $oldElo, int $newElo, string $rankField): bool
+    private function adjustRanks(int $oldElo, int $newElo, string $rankField, string $eloField): bool
     {
         Log::info("Adjusting ranks for user {$this->id}: Old Elo: $oldElo, New Elo: $newElo, RankField: $rankField");
         if ($this->$rankField === null) {
             Log::info("No rank found for user {$this->id}, setting initial rank");
 
-            return $this->setInitialRank($newElo, $rankField);
+            return $this->setInitialRank($newElo, $rankField, $eloField);
         }
 
         if ($oldElo < $newElo) {
             Log::info("Ranking up user {$this->id}");
 
-            return $this->rankUp($oldElo, $newElo, $rankField);
+            return $this->rankUp($oldElo, $newElo, $rankField, $eloField);
         }
 
         if ($oldElo > $newElo) {
             Log::info("Ranking down user {$this->id}");
 
-            return $this->rankDown($oldElo, $newElo, $rankField);
+            return $this->rankDown($oldElo, $newElo, $rankField, $eloField);
         }
 
         Log::info("No rank change for user {$this->id}");
@@ -127,10 +127,10 @@ trait HasElo
         return true;
     }
 
-    private function setInitialRank(int $newElo, string $rankField): bool
+    private function setInitialRank(int $newElo, string $rankField, string $eloField): bool
     {
         Log::info("Setting initial rank for user {$this->id}: New Elo: $newElo, RankField: $rankField");
-        $usersToUpdate = $this->queryUsersToUpdate(0, $newElo, $rankField);
+        $usersToUpdate = $this->queryUsersToUpdate(0, $newElo, $rankField, $eloField);
 
         $bestRank = $usersToUpdate->count() > 0 ? $usersToUpdate->min($rankField) : null;
         Log::info("Best rank found for user {$this->id}: ".($bestRank ?? 'null'));
@@ -157,10 +157,10 @@ trait HasElo
         return true;
     }
 
-    private function rankUp(int $oldElo, int $newElo, string $rankField): bool
+    private function rankUp(int $oldElo, int $newElo, string $rankField, string $eloField): bool
     {
         Log::info("Ranking up user {$this->id}: Old Elo: $oldElo, New Elo: $newElo, RankField: $rankField");
-        $usersToUpdate = $this->queryUsersToUpdate($oldElo, $newElo, $rankField);
+        $usersToUpdate = $this->queryUsersToUpdate($oldElo, $newElo, $rankField, $eloField);
 
         $usersToUpdateCount = $usersToUpdate->count();
         Log::info('Ranks to decrement: '.$usersToUpdateCount);
@@ -180,10 +180,10 @@ trait HasElo
         return true;
     }
 
-    private function rankDown(int $oldElo, int $newElo, string $rankField): bool
+    private function rankDown(int $oldElo, int $newElo, string $rankField, string $eloField): bool
     {
         Log::info("Ranking down user {$this->id}: Old Elo: $oldElo, New Elo: $newElo, RankField: $rankField");
-        $usersToUpdate = $this->queryUsersToUpdate($oldElo, $newElo, $rankField);
+        $usersToUpdate = $this->queryUsersToUpdate($oldElo, $newElo, $rankField, $eloField);
 
         $usersToUpdateCount = $usersToUpdate->count();
         Log::info('Amount to increment: '.$usersToUpdateCount);
@@ -203,20 +203,20 @@ trait HasElo
         return true;
     }
 
-    private function queryUsersToUpdate(int $oldElo, int $newElo, string $rankField): Builder
+    private function queryUsersToUpdate(int $oldElo, int $newElo, string $rankField, string $eloField): Builder
     {
         Log::debug("QueryUsersToUpdate params: oldElo = $oldElo, newElo = $newElo, rankField = $rankField, currentRank = {$this->$rankField}");
 
         $query = User::where('id', '!=', $this->id)
             ->ranked($rankField)
-            ->whereBetween('elo', [min($oldElo, $newElo), max($oldElo, $newElo)]);
+            ->whereBetween($eloField, [min($oldElo, $newElo), max($oldElo, $newElo)]);
 
         if (! empty($this->$rankField)) {
             $query->where(function ($q) use ($rankField, $oldElo, $newElo) {
                 if ($newElo > $oldElo) {
-                    $q->where('rank', '<=', $this->$rankField);
+                    $q->where($rankField, '<=', $this->$rankField);
                 } else {
-                    $q->where('rank', '>=', $this->$rankField);
+                    $q->where($rankField, '>=', $this->$rankField);
                 }
             });
         }
