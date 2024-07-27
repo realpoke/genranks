@@ -32,9 +32,9 @@ class ValidateGame implements ValidatesGameContract
         }
 
         // If any player is not on a valid side, the game is invalid
-        foreach ($game->players as $player) {
-            if (! Side::isValidSide($player['Side'])) {
-                Log::debug('Invalid side: '.$player['Side'].'. Game not valid');
+        foreach ($game->users as $user) {
+            if (! Side::isValidSide($user['pivot']['summary']['Side'])) {
+                Log::debug('Invalid side: '.$user['pivot']['summary']['Side'].'. Game not valid');
 
                 return GameStatus::INVALID;
             }
