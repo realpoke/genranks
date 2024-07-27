@@ -4,6 +4,7 @@ namespace App\Actions;
 
 use App\Contracts\ValidatesGameContract;
 use App\Enums\GameStatus;
+use App\Enums\Side;
 use App\Factories\WinnerProcessorFactory;
 use App\Models\Game;
 use Illuminate\Support\Facades\Log;
@@ -28,6 +29,15 @@ class ValidateGame implements ValidatesGameContract
             Log::debug('Game type: '.$game->type->name.' - Invalid player count ('.count($game->players).'). Game not valid');
 
             return GameStatus::INVALID;
+        }
+
+        // If any player is not on a valid side, the game is invalid
+        foreach ($game->players as $player) {
+            if (! Side::isValidSide($player['Side'])) {
+                Log::debug('Invalid side: '.$player['Side'].'. Game not valid');
+
+                return GameStatus::INVALID;
+            }
         }
 
         Log::debug('Game Players:');
