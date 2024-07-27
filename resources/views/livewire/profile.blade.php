@@ -1,9 +1,12 @@
 <x-layouts.container>
     <x-sections.card>
-        <h1 class="text-4xl text-gray-900 dark:text-gray-100">{{ $user->name }}</h1>
+        <img src="{{ $profilePicture }}" alt="{{ $favoriteSide->value . ' ' . ucwords(strtolower($bracket->name)) }}"
+            title="{{ $favoriteSide->value . ' ' . ucwords(strtolower($bracket->name)) }}"
+            class="object-cover w-24 h-24 rounded-lg" />
+        <h1 class="text-4xl text-gray-900 dark:text-gray-100">{{ $user->name }} <span
+                class="text-sm font-light">{{ ucwords(strtolower($bracket->name)) }}</span></h1>
         <p>Welcome to my profile!</p>
 
-        <p>stats: {{ collect($user->stats) }}</p>
 
         <div> {{-- TODO: Make this a component --}}
             @foreach (collect($user->stats) as $stat => $value)
@@ -46,6 +49,7 @@
             @endforeach
         </div>
     </x-sections.card>
+    <x-sections.border />
     <x-sections.card class="pt-12">
         <h3 class="text-2xl">My games:</h3>
         <x-tables.games :games="$games" />

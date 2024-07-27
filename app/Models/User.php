@@ -4,6 +4,8 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
+use App\Enums\RankBracket;
+use App\Enums\Side;
 use App\Notifications\WelcomeNotification;
 use App\Traits\HasClan;
 use App\Traits\HasElo;
@@ -16,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
@@ -91,6 +94,47 @@ class User extends Authenticatable implements FilamentUser
     public function route(): string
     {
         return route('profile.show', ['user' => $this]);
+    }
+
+    public function badgeUrl(string $rankField = 'rank', string $eloField = 'elo'): string
+    {
+        if ($this->games->isEmpty()) {
+            return Storage::disk('images')->url('brackets/badge/unranked.png');
+        }
+
+        if ($this->{$rankField} == null) {
+            return Storage::disk('images')->url('brackets/badge/unranked.png');
+        }
+
+        return $this->favoriteSide()->getBadgeImageUrl($this->bracket($eloField));
+    }
+
+    public function pictureUrl(string $rankField = 'rank', string $eloField = 'elo'): string
+    {
+        if ($this->games->isEmpty()) {
+            return Storage::disk('images')->url('brackets/profile/unranked.png');
+        }
+
+        if ($this->{$rankField} == null) {
+            return Storage::disk('images')->url('brackets/profile/unranked.png');
+        }
+
+        return $this->favoriteSide()->getProfileImageUrl($this->bracket($eloField));
+    }
+
+    public function favoriteSide(): Side
+    {
+        if ($this->stats['Sides'] == null) {
+
+            return Side::RANDOM;
+        }
+
+        return Side::favoriteSide($this->stats['Sides']);
+    }
+
+    public function bracket(string $eloField = 'elo'): RankBracket
+    {
+        return RankBracket::getRankBracketByElo($this->{$eloField});
     }
 
     public function canAccessPanel(Panel $panel): bool

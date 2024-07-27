@@ -3,14 +3,19 @@
         <li class="relative flex justify-between px-4 py-5 gap-x-6 hover:bg-gray-50 sm:px-6 lg:px-8">
             <div class="flex min-w-0 gap-x-4">
                 <div class="flex-auto min-w-0">
-                    <p class="text-sm font-semibold leading-6 text-gray-900">
-                        <a wire:navigate href="{{ $user->route() }}">
+                    <p class="flex text-sm font-semibold leading-6 text-gray-900">
+                        <a class="flex items-center" wire:navigate href="{{ $user->route() }}">
                             <span class="absolute inset-x-0 bottom-0 -top-px"></span>
-                            {{ $user->name }}
+                            <div class="items-center gap-x-1">
+                                <img class="object-cover w-4 h-4 mr-1" href="{{ $user->route() }}"
+                                    src="{{ $user->badgeUrl() }}" />
+                                <div class="">{{ $user->name }}</div>
+                            </div>
                         </a>
                     </p>
-                    <p class="flex mt-1 text-xs leading-5 text-gray-500">
+                    <p class="flex items-center mt-1 text-xs leading-5 text-gray-500">
                         {{ $user->elo }}
+                        <span class="ml-1 text-xs font-light">{{ ucwords(strtolower($user->bracket()->name)) }}</span>
                     </p>
                 </div>
             </div>
