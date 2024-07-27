@@ -44,11 +44,6 @@ enum Side: string
 
     public static function favoriteSide(array $sides): self
     {
-        dd($sides);
-        if (count($sides) == 0) {
-            return self::RANDOM;
-        }
-
         // Initialize counts
         $sideCounts = [
             self::GLA->value => 0,
