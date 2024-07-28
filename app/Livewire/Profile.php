@@ -23,7 +23,7 @@ class Profile extends Component
     public function mount(User $user)
     {
         $this->user = $user;
-        $this->favoriteSide = Side::favoriteSide($this->user->stats['Sides']);
+        $this->favoriteSide = Side::favoriteSide($this->user->stats['Sides'] ?? []);
         $this->bracket = RankBracket::getRankBracketByElo($this->user->elo);
         $this->profilePicture = $this->user->pictureUrl();
     }
