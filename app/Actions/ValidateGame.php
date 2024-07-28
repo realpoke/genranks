@@ -3,6 +3,7 @@
 namespace App\Actions;
 
 use App\Contracts\ValidatesGameContract;
+use App\Enums\EloRankType;
 use App\Enums\GameStatus;
 use App\Enums\RankMode;
 use App\Enums\Side;
@@ -96,7 +97,7 @@ class ValidateGame implements ValidatesGameContract
     private function checkBalanced(Game $game): GameStatus
     {
         // Get the difference between the highest and lowest elo for all users in the game
-        $userElos = $game->users->pluck('elo')->toArray();
+        $userElos = $game->users->pluck(EloRankType::ALL->databaseEloField($game->type))->toArray();
 
         $highestElo = max($userElos);
         $lowestElo = min($userElos);
