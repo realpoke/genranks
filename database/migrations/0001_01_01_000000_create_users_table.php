@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\RankMode;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -18,6 +19,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+            $table->enum('rank_mode', RankMode::values())->default(RankMode::ALL);
 
             $table->smallInteger('weekly_elo')->unsigned()->default(User::DEFAULT_ELO);
             $table->mediumInteger('weekly_rank')->unsigned()->nullable();

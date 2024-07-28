@@ -2,6 +2,9 @@
     <livewire:auth.option.update-user />
     <x-sections.border />
 
+    <livewire:auth.option.rank-mode />
+    <x-sections.border />
+
     <livewire:auth.option.update-password />
     <x-sections.border />
 

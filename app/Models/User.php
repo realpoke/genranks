@@ -37,6 +37,7 @@ class User extends Authenticatable implements FilamentUser
         'name',
         'email',
         'password',
+        'rank_mode',
         'weekly_elo',
         'weekly_rank',
         'monthly_elo',

@@ -2,6 +2,7 @@
 
 namespace App\Traits\Rules;
 
+use App\Enums\RankMode;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rule;
@@ -69,5 +70,10 @@ trait AuthRules
     public static function termsRules(): array
     {
         return ['accepted'];
+    }
+
+    public static function rankModeRules(): array
+    {
+        return ['required', 'rank_mode' => [Rule::enum(RankMode::class)]];
     }
 }
