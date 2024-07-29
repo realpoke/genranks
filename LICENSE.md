@@ -24,6 +24,12 @@ THE SOFTWARE.
 
 ### Custom Non-Compete Open Source License (NCOSL)
 
+Version 1.0, July 29, 2024
+
+Copyright (c) 2024 realpoke
+
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to use, copy, modify, and distribute the Software, subject to the following conditions:
+
 In addition to the MIT License that applies to the core framework, any modifications and additions made by realpoke are licensed under the Non-Compete Open Source License (NCOSL). The conditions of this license are as follows:
 
 1. The Software shall not be used, modified, or distributed for any purpose
