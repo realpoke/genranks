@@ -85,6 +85,16 @@ These resources provide comprehensive guides, tutorials, and references for each
 
 As part of our development process, we are utilizing proprietary binary code for ELO calculation and replay parsing. However, to ensure the security of our intellectual property, the actual proprietary binaries are not shared in this repository. Instead, there is dummy binaries that simulate the behavior for development purposes.
 
+## License
+
+The core framework of this project is based on [Laravel](https://laravel.com/), which is licensed under the [MIT License](https://opensource.org/license/MIT).
+
+In addition to the MIT License that applies to the core framework, any modifications and additions made by realpoke and contributors are licensed under the [Non-Compete Open Source License (NCOSL)](LICENSE.md).
+
+### Images and Other Assets
+
+Some images and assets in this project are not covered by the NCOSL and are subject to their own respective licenses. Please refer to their specific licenses for usage rights and restrictions.
+
 ## Contribution
 
 Contributions to the development of the website are highly valued. If you're a team member working on this project, you can contribute to the codebase, testing, bug fixing, and feature implementation. The use of dummy binaries helps facilitate collaborative development without exposing the actual proprietary code.
