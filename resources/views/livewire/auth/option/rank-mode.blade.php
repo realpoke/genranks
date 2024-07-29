@@ -11,12 +11,17 @@
         <!-- Rank Mode -->
         <div class="col-span-6 sm:col-span-4">
             <x-inputs.label for="form.mode" value="{{ __('Rank Mode') }}" />
-            <x-inputs.select id="form.mode" type="select" wire:model="form.mode">
+            <x-inputs.select id="form.mode" wire:model.live="form.mode">
                 @foreach ($modes as $mode)
-                    <option {{ $mode == $form->mode ? 'selected' : '' }}>{{ $mode }}</option>
+                    <option {{ $mode == $form->mode ? 'selected' : '' }} value="{{ $mode }}">
+                        {{ ucfirst($mode) }}{{ $mode == 'balanced' ? ' (Premium)' : '' }}
+                    </option>
                 @endforeach
             </x-inputs.select>
             <x-inputs.error for="form.mode" class="mt-2" />
+            <p class="mt-2 text-sm text-gray-600">
+                {{ $modeText }}
+            </p>
         </div>
     </x-slot>
 

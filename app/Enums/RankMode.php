@@ -11,4 +11,6 @@ enum RankMode: string
     case ALL = 'all';
     case BALANCED = 'balanced';
     case FUN = 'fun';
+
+    public const MAX_ELO_DIFFERENCE_FOR_BALANCED = 500;
 }

@@ -19,10 +19,18 @@ class RankMode extends Component
 
     public array $modes;
 
+    public string $modeText;
+
+    public function updatedFormMode()
+    {
+        $this->setModeText();
+    }
+
     public function mount()
     {
         $this->modes = EnumsRankMode::values();
         $this->form->mode = $this->user()->rank_mode;
+        $this->setModeText();
     }
 
     public function setRankMode(SetsRankModeContract $changer)
@@ -38,5 +46,16 @@ class RankMode extends Component
     public function user()
     {
         return Auth::user();
+    }
+
+    private function setModeText()
+    {
+        if ($this->form->mode == 'all') {
+            $this->modeText = 'All your games will be counted as ranked. This is the default.';
+        } elseif ($this->form->mode == 'balanced') {
+            $this->modeText = 'Your games will be counted as ranked if they are balanced, where all players have elo within '.EnumsRankMode::MAX_ELO_DIFFERENCE_FOR_BALANCED.'. This is a premium feature.';
+        } elseif ($this->form->mode == 'fun') {
+            $this->modeText = 'Your games will be counted as unranked, you\'r rank and elo will not be updated.';
+        }
     }
 }

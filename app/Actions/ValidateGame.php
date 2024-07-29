@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Log;
 
 class ValidateGame implements ValidatesGameContract
 {
-    private const MAX_ELO_DIFFERENCE_FOR_BALANCED = 500;
-
     public function __invoke(Game $game): bool
     {
         if ($game->status != GameStatus::VALIDATING) {
@@ -103,8 +101,8 @@ class ValidateGame implements ValidatesGameContract
         $lowestElo = min($userElos);
         $eloDifference = $highestElo - $lowestElo;
 
-        if ($eloDifference > self::MAX_ELO_DIFFERENCE_FOR_BALANCED) {
-            Log::debug('Elo difference too high, game not balanced, max allowed: '.self::MAX_ELO_DIFFERENCE_FOR_BALANCED.' elo difference: '.$eloDifference);
+        if ($eloDifference > RankMode::MAX_ELO_DIFFERENCE_FOR_BALANCED) {
+            Log::debug('Elo difference too high, game not balanced, max allowed: '.RankMode::MAX_ELO_DIFFERENCE_FOR_BALANCED.' elo difference: '.$eloDifference);
 
             return GameStatus::INVALID;
         }
