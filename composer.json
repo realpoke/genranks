@@ -9,18 +9,20 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "fakerphp/faker": "^1.23",
         "filament/filament": "^3.2",
         "jenssegers/agent": "^2.6",
+        "laravel/cashier-paddle": "^2.5",
         "laravel/framework": "^11.0",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.4",
         "spatie/laravel-permission": "^6.4",
         "symfony/http-client": "^7.1",
-        "symfony/mailgun-mailer": "^7.1",
-        "fakerphp/faker": "^1.23"
+        "symfony/mailgun-mailer": "^7.1"
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.13",
         "barryvdh/laravel-ide-helper": "^3.0",
         "laravel/pint": "^1.13",
         "laravel/sail": "^1.26",
