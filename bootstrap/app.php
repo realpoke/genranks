@@ -4,6 +4,7 @@ use App\Console\Commands\ClearGames;
 use App\Console\Commands\ClearReplays;
 use App\Console\Commands\GenTool\UploadLatest;
 use App\Console\Commands\GenTool\UploadRandomUser;
+use App\Http\Middleware\LanguageMiddleware;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -26,7 +27,7 @@ return Application::configure(basePath: dirname(__DIR__))
         ClearGames::class,
     ])
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        $middleware->append(LanguageMiddleware::class);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
