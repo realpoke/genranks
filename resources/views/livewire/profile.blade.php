@@ -3,7 +3,8 @@
         <img src="{{ $profilePicture }}" alt="{{ $favoriteSide->value . ' ' . ucwords(strtolower($bracket->name)) }}"
             title="{{ $favoriteSide->value . ' ' . ucwords(strtolower($bracket->name)) }}"
             class="object-cover w-24 h-24 rounded-lg" />
-        <h1 class="text-4xl text-gray-900 dark:text-gray-100">{{ $user->name }} <span
+        <h1 class="text-4xl text-gray-900 dark:text-gray-100">{{ $user->name }}
+            {{ $user->stats != null ? 'aka ' . implode(', ', $user->stats['Names']) : '' }} <span
                 class="text-sm font-light">{{ ucwords(strtolower($bracket->name)) }}</span></h1>
         <p>Welcome to my profile!</p>
 
