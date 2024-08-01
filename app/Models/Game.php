@@ -16,10 +16,14 @@ class Game extends Model
 
     private static $maxValidationAttempts = 6;
 
-    public static $allowedTableFields = [
-        'status',
-        'hash',
-    ];
+    public static function getAllowedListFields(): array
+    {
+        return [
+            'status',
+            'hash',
+            'created_at',
+        ];
+    }
 
     protected $fillable = [
         'status',
@@ -105,7 +109,7 @@ class Game extends Model
 
     public function scopeSearch(Builder $query, string $searchTerm): Builder
     {
-        return $query->whereLike(['hash'], $searchTerm);
+        return $query->whereLike(['hash', 'users.name', 'id'], $searchTerm);
     }
 
     public function tournaments(): BelongsToMany

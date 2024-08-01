@@ -28,6 +28,16 @@ class User extends Authenticatable implements FilamentUser
 
     public const DEFAULT_ROLE = 'user';
 
+    public static function getAllowedListFields(): array
+    {
+        return [
+            'name',
+            'rank',
+            'elo',
+            'rank_mode',
+        ];
+    }
+
     /**
      * The attributes that are mass assignable.
      *
@@ -95,6 +105,15 @@ class User extends Authenticatable implements FilamentUser
     public function route(): string
     {
         return route('profile.show', ['user' => $this]);
+    }
+
+    public function scopeSearch(Builder $query, string $searchTerm): Builder
+    {
+        return $query->whereLike([
+            'name',
+            'gentool_ids',
+            'id',
+        ], $searchTerm);
     }
 
     public function badgeUrl(string $rankField = 'rank', string $eloField = 'elo'): string

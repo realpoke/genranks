@@ -9,17 +9,22 @@ use Livewire\Attributes\Url;
 use Livewire\Component;
 use Livewire\WithPagination;
 
-class DynamicTable extends Component
+class DynamicList extends Component
 {
     use WithPagination;
 
-    public $model;
+    public Model $model;
 
-    public $tableFields = [];
+    public $listFields = [];
 
     private $filters = [];
 
-    protected $viewName = 'livewire.dynamic-table';
+    // Override these properties in child components to change the view name and row view
+    protected $viewName = 'livewire.dynamic-list';
+
+    protected $rowView = 'items.default';
+
+    protected $extraFiltersView = null;
 
     #[Url]
     public $sortBy = '';
@@ -33,10 +38,10 @@ class DynamicTable extends Component
     #[Url]
     public $perPage = 20;
 
-    public function mount(string $model)
+    public function mount()
     {
-        $this->model = $model;
-        $this->tableFields = $this->getModel()::$allowedTableFields ?? [];
+        $this->model = $this->getModel();
+        $this->listFields = method_exists($this->model, 'getAllowedListFields') ? $this->model::getAllowedListFields() : [];
     }
 
     private function setupFilters(): void
@@ -57,8 +62,11 @@ class DynamicTable extends Component
 
     protected function setupExtraFilters(): void
     {
-        // This method can be overridden by child components
-        // To add more filters
+        // Override this method in child components to add extra filters
+        // Example:
+        // $this->addFilter(function ($query) {
+        //     return $query->where('some_column', 'some_value');
+        // });
     }
 
     public function updatedSearch(): void
@@ -71,10 +79,14 @@ class DynamicTable extends Component
         $this->resetPage();
     }
 
+    // This method must be overridden in child components to return the model
     #[Computed()]
-    private function getModel(): Model
+    protected function getModel(): Model
     {
-        return new $this->model;
+        throw new \LogicException(sprintf(
+            'The %s::getModel() method must be overridden in child components',
+            static::class
+        ));
     }
 
     public function orderBy(string $field): void
@@ -124,16 +136,20 @@ class DynamicTable extends Component
 
     public function render()
     {
-        if (count($this->tableFields) <= 0) {
+        if (count($this->listFields) <= 0) {
             return view($this->viewName, ['data' => []]);
         }
 
-        $model = $this->getModel();
+        $model = $this->model;
 
         $query = $this->applyFilters($model);
 
         $data = $query->paginate($this->perPage);
 
-        return view($this->viewName, ['data' => $data]);
+        return view($this->viewName, [
+            'data' => $data,
+            'rowView' => $this->rowView,
+            'extraFiltersView' => $this->extraFiltersView,
+        ]);
     }
 }
