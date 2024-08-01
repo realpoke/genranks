@@ -9,7 +9,7 @@ use Livewire\Attributes\Computed;
 
 class Game extends DynamicList
 {
-    protected $rowView = 'items.games';
+    protected $itemView = 'items.games';
 
     #[Computed()]
     protected function getModel(): Model

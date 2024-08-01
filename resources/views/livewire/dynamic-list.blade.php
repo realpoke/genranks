@@ -32,7 +32,7 @@
 
     <ul role="list" class="divide-y divide-gray-100">
         @foreach ($data as $model)
-            <x-dynamic-component :component="$rowView" :model="$model" />
+            <x-dynamic-component :component="$itemView" :model="$model" />
         @endforeach
     </ul>
 

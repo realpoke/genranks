@@ -9,7 +9,7 @@ use Livewire\Attributes\Computed;
 
 class Leaderboard extends DynamicList
 {
-    protected $rowView = 'items.users';
+    protected $itemView = 'items.users';
 
     #[Computed()]
     protected function getModel(): Model

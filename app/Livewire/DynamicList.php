@@ -22,7 +22,7 @@ class DynamicList extends Component
     // Override these properties in child components to change the view name and row view
     protected $viewName = 'livewire.dynamic-list';
 
-    protected $rowView = 'items.default';
+    protected $itemView = 'items.default';
 
     protected $extraFiltersView = null;
 
@@ -38,8 +38,11 @@ class DynamicList extends Component
     #[Url]
     public $perPage = 20;
 
-    public function mount()
+    public array $passthrough;
+
+    public function mount(array $passthrough = [])
     {
+        $this->passthrough = $passthrough;
         $this->model = $this->getModel();
         $this->listFields = method_exists($this->model, 'getAllowedListFields') ? $this->model::getAllowedListFields() : [];
     }
@@ -101,7 +104,7 @@ class DynamicList extends Component
         $this->resetPage();
     }
 
-    private function addFilter(callable $filter): void
+    public function addFilter(callable $filter): void
     {
         $this->filters[] = $filter;
     }
@@ -148,7 +151,7 @@ class DynamicList extends Component
 
         return view($this->viewName, [
             'data' => $data,
-            'rowView' => $this->rowView,
+            'itemView' => $this->itemView,
             'extraFiltersView' => $this->extraFiltersView,
         ]);
     }

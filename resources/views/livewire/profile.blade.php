@@ -53,6 +53,6 @@
     <x-sections.border />
     <x-sections.card class="pt-12">
         <h3 class="text-2xl">My games:</h3>
-        <x-tables.games :games="$games" />
+        <livewire:lists.profile-games :passthrough="['userid' => $user->id]" />
     </x-sections.card>
 </x-layouts.container>
