@@ -5,7 +5,7 @@
         "username": "genranks",
         "port": "22",
         "path": "/var/www/genranks",
-        "beforeHooks": "",
-        "afterHooks": "php artisan migrate:fresh --force --seed && php artisan queue:restart && php artisan optimize && php artisan icons:cache && php artisan filament:cache-components"
+        "beforeHooks": "php artisan down",
+        "afterHooks": "php artisan migrate:fresh --force --seed && php artisan queue:restart && php artisan optimize && php artisan icons:cache && php artisan filament:cache-components && php artisan up"
     }
 ]
