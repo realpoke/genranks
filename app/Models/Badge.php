@@ -12,6 +12,7 @@ class Badge extends Model
     public $timestamps = false;
 
     protected $fillable = [
+        'name',
         'description',
         'image',
     ];
