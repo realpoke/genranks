@@ -48,7 +48,7 @@ After doing the following steps, you should be setup and ready to develop locall
 8. Make sure your database is running.
 9. Generate app key `php artisan key:generate`.
 10. Run database migrations with `php artisan migrate`.
-11. Seed roles, permissions and admin `php artisan db:seed`.
+11. Seed database `php artisan db:seed`.
 11. Start vite with `yarn dev` or the NPM equivalent.
 12. Start your website `php artisan serve`, and go to the URL shown.
 13. Login with the admin user `admin@mail.com`, password `password`.

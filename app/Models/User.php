@@ -21,13 +21,10 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
 use Laravel\Paddle\Billable;
 use Laravel\Sanctum\HasApiTokens;
-use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser
 {
-    use Billable, HasApiTokens, HasClan, HasElo, HasFactory, HasRoles, Notifiable;
-
-    public const DEFAULT_ROLE = 'user';
+    use Billable, HasApiTokens, HasClan, HasElo, HasFactory, Notifiable;
 
     public static function getAllowedListFields(): array
     {
@@ -97,8 +94,6 @@ class User extends Authenticatable implements FilamentUser
         parent::boot();
 
         static::created(function ($user) {
-            $user->assignRole(self::DEFAULT_ROLE);
-
             $user->notify((new WelcomeNotification())->delay(now()->addMinutes(15)));
         });
     }
