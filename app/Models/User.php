@@ -19,12 +19,13 @@ use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Storage;
+use Laravel\Paddle\Billable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements FilamentUser
 {
-    use HasApiTokens, HasClan, HasElo, HasFactory, HasRoles, Notifiable;
+    use Billable, HasApiTokens, HasClan, HasElo, HasFactory, HasRoles, Notifiable;
 
     public const DEFAULT_ROLE = 'user';
 
